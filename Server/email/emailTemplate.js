@@ -159,7 +159,7 @@ export const welcomeEmailTemplate = `
     <body>
       <div class="email-container">
         <div class="header">
-          Welcome to Ardonyx!
+          Welcome to Career Mentor!
         </div>
         <div class="content">
           <h1>Hello, {firstName}!</h1>
