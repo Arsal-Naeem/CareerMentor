@@ -1,53 +1,86 @@
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
-import { useNavigate } from 'react-router-dom'; // <-- import this if you're using react-router-dom
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { navLinks } from "../constants";
+import Logo from "../assets/icons/logo.svg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate(); // <-- hook to navigate
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleGetStarted = () => {
-    navigate('/signup');
+    navigate("/signup");
   };
 
+  const location = useLocation();
+  const isAuthPage = location.pathname.startsWith("/auth/");
+
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white shadow-sm z-10">
-      <nav className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <div className="text-2xl font-bold">CareerMentor</div>
-        
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6">
-          <a href="/" className="text-gray-600 hover:text-gray-900">Home</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">About</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">Steps</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">Feature</a>
-          <a href="#" className="text-gray-600 hover:text-gray-900">Testimonials</a>
-          <button
-            onClick={handleGetStarted}
-            className="border border-gray-800 rounded-full px-6 py-2 hover:bg-gray-100 transition-colors"
+    <header className="sticky top-0 bg-white z-10">
+      <nav className="z-10 py-6 px-4 md:px-6 lg:px-10 w-full flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <img src={Logo} alt="logo" />
+          <h1
+            className="text-2xl hidden md:block font-medium anonymous-font text-logo"
+            to="/"
           >
-            Get Started
-          </button>
+            <span className="font-semibold">C</span>areer
+            <span className="font-semibold">M</span>entor
+          </h1>
         </div>
-        
+
+        {/* Desktop Navigation */}
+
+        {!isAuthPage && (
+          <>
+            <div className="hidden md:flex items-center space-x-6 text-custom-gray-dark">
+              {navLinks.map((link, index) => (
+                <a
+                  key={index}
+                  href={link.href}
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+
+            <button
+              onClick={handleGetStarted}
+              className="border border-custom-black-dark text-sm md:text-base font-normal rounded-full text-custom-black-dark anonymous-font px-3 py-1 md:px-6 md:py-2"
+            >
+              Get Started
+            </button>
+          </>
+        )}
+
         {/* Mobile Menu Button */}
-        <button className="md:hidden text-gray-800" onClick={toggleMenu}>
+        {/* <button className="md:hidden text-gray-800" onClick={toggleMenu}>
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-        
+        </button> */}
+
         {/* Mobile Navigation */}
-        {isMenuOpen && (
+        {/* {isMenuOpen && (
           <div className="absolute top-16 left-0 right-0 bg-white shadow-md py-4 md:hidden">
             <div className="flex flex-col space-y-4 px-4">
-              <a href="/" className="text-gray-600 hover:text-gray-900 py-2">Home</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">About</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">Steps</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">Feature</a>
-              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">Testimonials</a>
+              <a href="/" className="text-gray-600 hover:text-gray-900 py-2">
+                Home
+              </a>
+              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">
+                About
+              </a>
+              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">
+                Steps
+              </a>
+              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">
+                Feature
+              </a>
+              <a href="#" className="text-gray-600 hover:text-gray-900 py-2">
+                Testimonials
+              </a>
               <button
                 onClick={handleGetStarted}
                 className="border border-gray-800 rounded-full py-2 hover:bg-gray-100 transition-colors"
@@ -56,10 +89,11 @@ const Header = () => {
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </nav>
+      <hr className="bg-custom-gray-dark w-11/12 block md:hidden mx-auto" />
     </header>
   );
-}
+};
 
 export default Header;
