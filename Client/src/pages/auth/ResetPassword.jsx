@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import BackButton from "@/components/buttons/BackButton";
 
 export const ResetPassword = () => {
-  usePageTitle("CareerMentor - Reset Password");
+  usePageTitle("Reset Password");
   return (
     <AuthLayout
       mainHeading="Create a New Password"

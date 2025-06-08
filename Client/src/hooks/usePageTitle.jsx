@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 
-const usePageTitle = (title) => {
+const usePageTitle = (pageTitle = "") => {
   useEffect(() => {
-    document.title = title;
-  }, [title]);
+    const fullTitle = `Career Mentor${pageTitle ? "-" + pageTitle : ""}`;
+    document.title = fullTitle;
+  }, [pageTitle]);
 };
 
 export default usePageTitle;

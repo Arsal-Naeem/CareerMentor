@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import BackButton from "@/components/buttons/BackButton";
 
 export const ForgotPassword = () => {
-  usePageTitle("CareerMentor - Forgot Password");
+  usePageTitle("Forgot Password");
   return (
     <AuthLayout
       mainHeading="Forgot Your Password?"

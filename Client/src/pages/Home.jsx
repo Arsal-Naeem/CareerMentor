@@ -8,7 +8,7 @@ import Footer from "../components/Footer";
 import usePageTitle from "../hooks/usePageTitle";
 
 const Home = () => {
-  usePageTitle("CareerMentor - Home");
+  usePageTitle();
   return (
     <MainLayout>
       <Hero />

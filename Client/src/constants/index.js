@@ -2,6 +2,21 @@ import PersonOne from "../assets/icons/person1.svg";
 import PersonTwo from "../assets/icons/person2.svg";
 import PersonThree from "../assets/icons/person3.svg";
 import PersonFour from "../assets/icons/person4.svg";
+import {
+  BadgeCheck,
+  BarChart3,
+  Calendar,
+  Compass,
+  Home,
+  LayoutDashboard,
+  Newspaper,
+  Trophy,
+  User,
+  Users,
+} from "lucide-react";
+import Brain from "@/assets/icons/brain.svg";
+import CircleCheck from "@/assets/icons/circle-check.svg";
+import Timer from "@/assets/icons/timer.svg";
 
 export const floatingTestimonialsData = [
   {
@@ -56,11 +71,10 @@ export const floatingTestimonialsData = [
 ];
 
 export const navLinks = [
-  { label: "Home", href: "#" },
-  { label: "About", href: "#about" },
-  { label: "Steps", href: "#steps" },
-  { label: "Feature", href: "#feature" },
-  { label: "Testimonials", href: "#testimonials" },
+  { label: "Home", href: "/", icon: Home },
+  { label: "Blogs", href: "/blogs", icon: Newspaper },
+  { label: "Events", href: "/events", icon: User },
+  { label: "Career Exploration", href: "/careers", icon: Compass },
 ];
 
 export const stepsData = [
@@ -129,5 +143,296 @@ export const testimonials = [
     name: "Anas from GIKI",
     image: PersonFour,
     borderColor: "#8CD4FF",
+  },
+];
+
+export const sidebarItems = [
+  { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+  {
+    label: "Career Assessment",
+    icon: BadgeCheck,
+    href: "/dashboard/career-assessment",
+  },
+  { label: "Career Explorer", icon: Compass, href: "/careers" },
+  {
+    label: "Skill Tracker",
+    icon: BarChart3,
+    href: "/dashboard/skill-tracker",
+  },
+  { label: "Mentorship", icon: Users, href: "/dashboard/mentorship" },
+  {
+    label: "Events",
+    icon: Calendar,
+    href: "/events",
+  },
+  {
+    label: "Blogs",
+    icon: Newspaper,
+    href: "/blogs",
+  },
+  { label: "Achievements", icon: Trophy, href: "/dashboard/achievements" },
+];
+
+export const initialAssessmentFeaturesListData = [
+  {
+    title: "10–15 mins",
+    text: "Quick and easy",
+    icon: Timer,
+  },
+  {
+    title: "No wrong answers",
+    text: "Answer honestly – it’s about you.",
+    icon: CircleCheck,
+  },
+  {
+    title: "Smart Suggestions",
+    text: "Backed by career data & AI models.",
+    icon: Brain,
+  },
+];
+
+export const assessmentSections = [
+  {
+    sectionId: 1,
+    sectionTitle: "Self Discovery",
+    questions: [
+      {
+        id: "q1-s1",
+        text: "This is question 1",
+        options: [
+          { id: "o1-q1-s1", text: "Option 1" },
+          { id: "o2-q1-s1", text: "Option 2" },
+          { id: "o3-q1-s1", text: "Option 3" },
+          { id: "o4-q1-s1", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q2-s1",
+        text: "This is question 2",
+        options: [
+          { id: "o1-q2-s1", text: "Option 1" },
+          { id: "o2-q2-s1", text: "Option 2" },
+          { id: "o3-q2-s1", text: "Option 3" },
+          { id: "o4-q2-s1", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q3-s1",
+        text: "This is question 3",
+        options: [
+          { id: "o1-q3-s1", text: "Option 1" },
+          { id: "o2-q3-s1", text: "Option 2" },
+          { id: "o3-q3-s1", text: "Option 3" },
+          { id: "o4-q3-s1", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q4-s1",
+        text: "This is question 4",
+        options: [
+          { id: "o1-q4-s1", text: "Option 1" },
+          { id: "o2-q4-s1", text: "Option 2" },
+          { id: "o3-q4-s1", text: "Option 3" },
+          { id: "o4-q4-s1", text: "Option 4" },
+        ],
+      },
+    ],
+  },
+  {
+    sectionId: 2,
+    sectionTitle: "Technical Interests",
+    questions: [
+      {
+        id: "q1-s2",
+        text: "This is question 1",
+        options: [
+          { id: "o1-q1-s2", text: "Option 1" },
+          { id: "o2-q1-s2", text: "Option 2" },
+          { id: "o3-q1-s2", text: "Option 3" },
+          { id: "o4-q1-s2", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q2-s2",
+        text: "This is question 2",
+        options: [
+          { id: "o1-q2-s2", text: "Option 1" },
+          { id: "o2-q2-s2", text: "Option 2" },
+          { id: "o3-q2-s2", text: "Option 3" },
+          { id: "o4-q2-s2", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q3-s2",
+        text: "This is question 3",
+        options: [
+          { id: "o1-q3-s2", text: "Option 1" },
+          { id: "o2-q3-s2", text: "Option 2" },
+          { id: "o3-q3-s2", text: "Option 3" },
+          { id: "o4-q3-s2", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q4-s2",
+        text: "This is question 4",
+        options: [
+          { id: "o1-q4-s2", text: "Option 1" },
+          { id: "o2-q4-s2", text: "Option 2" },
+          { id: "o3-q4-s2", text: "Option 3" },
+          { id: "o4-q4-s2", text: "Option 4" },
+        ],
+      },
+    ],
+  },
+  {
+    sectionId: 3,
+    sectionTitle: "Work Environment Preferences",
+    questions: [
+      {
+        id: "q1-s3",
+        text: "This is question 1",
+        options: [
+          { id: "o1-q1-s3", text: "Option 1" },
+          { id: "o2-q1-s3", text: "Option 2" },
+          { id: "o3-q1-s3", text: "Option 3" },
+          { id: "o4-q1-s3", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q2-s3",
+        text: "This is question 2",
+        options: [
+          { id: "o1-q2-s3", text: "Option 1" },
+          { id: "o2-q2-s3", text: "Option 2" },
+          { id: "o3-q2-s3", text: "Option 3" },
+          { id: "o4-q2-s3", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q3-s3",
+        text: "This is question 3",
+        options: [
+          { id: "o1-q3-s3", text: "Option 1" },
+          { id: "o2-q3-s3", text: "Option 2" },
+          { id: "o3-q3-s3", text: "Option 3" },
+          { id: "o4-q3-s3", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q4-s3",
+        text: "This is question 4",
+        options: [
+          { id: "o1-q4-s3", text: "Option 1" },
+          { id: "o2-q4-s3", text: "Option 2" },
+          { id: "o3-q4-s3", text: "Option 3" },
+          { id: "o4-q4-s3", text: "Option 4" },
+        ],
+      },
+    ],
+  },
+  {
+    sectionId: 4,
+    sectionTitle: "Growth Mindset & Learning",
+    questions: [
+      {
+        id: "q1-s4",
+        text: "This is question 1",
+        options: [
+          { id: "o1-q1-s4", text: "Option 1" },
+          { id: "o2-q1-s4", text: "Option 2" },
+          { id: "o3-q1-s4", text: "Option 3" },
+          { id: "o4-q1-s4", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q2-s4",
+        text: "This is question 2",
+        options: [
+          { id: "o1-q2-s4", text: "Option 1" },
+          { id: "o2-q2-s4", text: "Option 2" },
+          { id: "o3-q2-s4", text: "Option 3" },
+          { id: "o4-q2-s4", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q3-s4",
+        text: "This is question 3",
+        options: [
+          { id: "o1-q3-s4", text: "Option 1" },
+          { id: "o2-q3-s4", text: "Option 2" },
+          { id: "o3-q3-s4", text: "Option 3" },
+          { id: "o4-q3-s4", text: "Option 4" },
+        ],
+      },
+      {
+        id: "q4-s4",
+        text: "This is question 4",
+        options: [
+          { id: "o1-q4-s4", text: "Option 1" },
+          { id: "o2-q4-s4", text: "Option 2" },
+          { id: "o3-q4-s4", text: "Option 3" },
+          { id: "o4-q4-s4", text: "Option 4" },
+        ],
+      },
+    ],
+  },
+];
+
+export const blogData = [
+  {
+    id: 1,
+    category: "Back-end Development",
+    title: "Understanding APIs: A Beginner's Guide to Backend Communication",
+    image:
+      "https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=800&q=60",
+    span: "col-span-2 row-span-1 lg:col-span-4 lg:row-span-2",
+  },
+  {
+    id: 2,
+    category: "Student Lifestyle",
+    title: "Balancing Code and Campus Life: Tips for CS Students",
+    image:
+      "https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=800",
+    span: "col-span-3 row-span-1 lg:col-span-4 lg:row-span-2",
+  },
+  {
+    id: 3,
+    category: "AI & Machine Learning",
+    title: "Getting Started with Machine Learning Using Python",
+    image:
+      "https://news.mit.edu/sites/default/files/styles/news_article__image_gallery/public/images/202104/coding%20AI.png?itok=2gbVOckg",
+    span: "col-span-3 row-span-2 lg:col-span-3 lg:row-span-3",
+  },
+  {
+    id: 4,
+    category: "Tech Trends",
+    title: "Top Technologies CS Students Should Learn in 2025",
+    image:
+      "https://www.embl.org/news/wp-content/uploads/2020/10/BRAZMA_Machine_Learning_1000x600.jpg",
+    span: "col-span-2 row-span-1 lg:col-span-5 lg:row-span-3",
+  },
+  {
+    id: 5,
+    category: "Web Development",
+    title: "Why You Should Learn React in 2025",
+    image:
+      "https://codesrevolvewordpress.s3.us-west-2.amazonaws.com/revolveai/2023/01/18072951/machine-learning-in-code-generation.png",
+    span: "col-span-2 row-span-1 lg:col-span-3 lg:row-span-1",
+  },
+  {
+    id: 6,
+    category: "Career & Internships",
+    title: "How to Land Your First Internship as a CS Student",
+    image:
+      "https://images.pexels.com/photos/1181676/pexels-photo-1181676.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=800",
+    span: "col-span-5 row-span-1 lg:col-span-2 lg:row-span-2",
+  },
+  {
+    id: 7,
+    category: "Open Source & Community",
+    title: "Why Contributing to Open Source Makes You a Better Developer",
+    image:
+      "https://images.unsplash.com/photo-1587620962725-abab7fe55159?auto=format&fit=crop&w=800&q=60",
+    span: "col-span-5 row-span-1 lg:col-span-4 lg:row-span-2",
   },
 ];
