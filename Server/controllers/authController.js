@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
+import { Op } from "sequelize";
 import generateTokenSetCookie from "../utils/generateTokenSetCookie.js";
 import {
   sendPasswordResetEmail,
@@ -14,54 +15,54 @@ export const signUpController = async (req, res) => {
 
   try {
     if (!firstName || !lastName || !dateOfBirth || !email || !password) {
-      return res.status(400).json({ message: "Please fill all the fields" });
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all the fields",
+      });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ where: { email } });
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "User already exists" });
+      return res.status(400).json({
+        success: false,
+        message: "User already exists",
+      });
     }
 
-    //hash password
     const hashedPassword = await bcryptjs.hash(password, 10);
 
-    //VerificationCode
     const verificationToken = Math.floor(
       100000 + Math.random() * 900000
     ).toString();
 
-    // Create new user
-    const newUser = new User({
+    const newUser = await User.create({
       firstName,
       lastName,
       dateOfBirth,
       email,
       password: hashedPassword,
       verificationToken,
-      verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hour expiration
+      verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
-    await newUser.save();
-
-    //jwt
-    generateTokenSetCookie(res, newUser._id);
+    generateTokenSetCookie(res, newUser.id);
 
     await sendVerificationEmail(newUser.email, verificationToken);
+
+    const userData = { ...newUser.get() };
+    delete userData.password;
 
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      user: {
-        ...newUser._doc,
-        password: undefined,
-      },
+      user: userData,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 
@@ -69,45 +70,57 @@ export const verifyEmailController = async (req, res) => {
   const { code } = req.body;
   try {
     const user = await User.findOne({
-      verificationToken: code,
-      verificationTokenExpiresAt: { $gt: Date.now() },
+      where: {
+        verificationToken: code,
+        verificationTokenExpiresAt: { [Op.gt]: new Date() },
+      },
     });
+
     if (!user) {
       return res.status(400).json({
         success: false,
         message: "Invalid or expired verification code",
       });
     }
+
     user.isVerified = true;
-    user.verificationToken = undefined;
-    user.verificationTokenExpiresAt = undefined;
+    user.verificationToken = null;
+    user.verificationTokenExpiresAt = null;
 
     await sendWelcomeEmail(user.email, user.firstName);
-
     await user.save();
+
     res.status(200).json({
       success: true,
       message: "Email verified successfully",
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
 };
 
 export const loginController = async (req, res) => {
   const { email, password } = req.body;
   try {
     if (!email || !password) {
-      return res.status(400).json({ message: "Please fill all the fields" });
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all the fields",
+      });
     }
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ where: { email } });
     if (!existingUser) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid credentials",
+      });
     }
 
-    // Check password
     const isPasswordMatched = await bcryptjs.compare(
       password,
       existingUser.password
@@ -119,22 +132,25 @@ export const loginController = async (req, res) => {
       });
     }
 
-    //jwt
-    generateTokenSetCookie(res, existingUser._id);
+    generateTokenSetCookie(res, existingUser.id);
 
-    existingUser.lastLogin = Date.now();
+    existingUser.lastLogin = new Date();
+    await existingUser.save();
+
+    const userData = { ...existingUser.get() };
+    delete userData.password;
 
     res.status(200).json({
       success: true,
       message: "Login successfully",
-      user: {
-        ...existingUser._doc,
-        password: undefined,
-      },
+      user: userData,
     });
   } catch (error) {
     console.log("Error in login", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 
@@ -149,27 +165,22 @@ export const logoutController = async (req, res) => {
 export const forgotPasswordController = async (req, res) => {
   const { email } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ where: { email } });
     if (!user) {
       return res.status(400).json({
         success: false,
         message: "User not found",
       });
     }
-    // Generate a random password reset token
+
     const resetToken = crypto.randomBytes(20).toString("hex");
-    const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour expiration
-    //const resetTokenExpiresAt = Date.now() + 30 * 1000; // 30 seconds expiration
-    //const resetTokenExpiresAt = Date.now() + 1 * 60 * 1000; // 1 minute expiration
-
-
+    const resetTokenExpiresAt = new Date(Date.now() + 1 * 60 * 60 * 1000); // 1 hour
 
     user.resetPasswordToken = resetToken;
     user.resetPasswordExpiresAt = resetTokenExpiresAt;
 
     await user.save();
 
-    // Send the password reset email
     await sendPasswordResetEmail(
       user.email,
       `${process.env.CLIENT_URL}/reset-password/${resetToken}`
@@ -181,7 +192,10 @@ export const forgotPasswordController = async (req, res) => {
     });
   } catch (error) {
     console.log("Something went wrong on forgotPassword", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
 
@@ -190,12 +204,19 @@ export const resetPasswordController = async (req, res) => {
   const { password } = req.body;
   try {
     if (!password) {
-      return res.status(400).json({ message: "Please fill all the fields" });
+      return res.status(400).json({
+        success: false,
+        message: "Please fill all the fields",
+      });
     }
+
     const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpiresAt: { $gt: Date.now() },
+      where: {
+        resetPasswordToken: token,
+        resetPasswordExpiresAt: { [Op.gt]: new Date() },
+      },
     });
+
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -203,11 +224,10 @@ export const resetPasswordController = async (req, res) => {
       });
     }
 
-    // Hash the new password
     const hashedPassword = await bcryptjs.hash(password, 10);
     user.password = hashedPassword;
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpiresAt = undefined;
+    user.resetPasswordToken = null;
+    user.resetPasswordExpiresAt = null;
 
     await user.save();
 
@@ -219,6 +239,37 @@ export const resetPasswordController = async (req, res) => {
     });
   } catch (error) {
     console.log("Something went wrong on resetPassword", error);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const checkAuth = async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { id: req.userId } });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Remove sensitive data
+    const userData = { ...user.get() };
+    delete userData.password;
+
+    res.status(200).json({
+      success: true,
+      message: "User found",
+      user: userData,
+    });
+  } catch (error) {
+    console.log("Something went wrong on checkAuth", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
 };
