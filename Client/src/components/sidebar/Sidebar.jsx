@@ -1,0 +1,74 @@
+import { useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { sidebarItems } from "@/constants";
+import Logo from "@/assets/icons/logo.svg";
+import Logout from "@/assets/icons/sidebar/logout.svg";
+import { Settings } from "lucide-react";
+import { SidebarItem } from "./SidebarItem";
+import { useGlobalContext } from "@/context/GlobalContext";
+
+export default function Sidebar() {
+  const location = useLocation();
+  const { open, setOpen } = useGlobalContext();
+
+  return (
+    <>
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          "fixed z-50 top-0 left-0 h-full bg-white border-r w-64 p-6 space-y-10 md:relative md:translate-x-0 md:block transition-transform",
+          open ? "translate-x-0" : "-translate-x-full"
+        )}
+      >
+        {/* Logo */}
+        <div className="text-base font-normal flex items-center gap-2">
+          <img src={Logo} alt="logo" className="w-6 h-6" />
+          Career Mentor
+        </div>
+
+        {/* Nav Links */}
+        <nav className="space-y-1">
+          {sidebarItems.map((item) => {
+            const isActive =
+              item.href === "/dashboard"
+                ? location.pathname === item.href
+                : location.pathname.startsWith(item.href);
+
+            return (
+              <SidebarItem key={item.label} item={{ ...item, isActive }} />
+            );
+          })}
+        </nav>
+
+        {/* Bottom buttons */}
+        <div className="absolute bottom-6 left-6 right-6">
+          <SidebarItem
+            item={{
+              label: "Settings",
+              href: "/dashboard/settings",
+              icon: Settings,
+              isActive: location.pathname === "/dashboard/settings",
+            }}
+          />
+
+          <Button
+            variant="ghost"
+            className="w-full flex justify-start gap-3 text-muted-foreground text-sm font-medium"
+          >
+            <img src={Logout} className="w-5 h-5" alt="logout" />
+            Logout
+          </Button>
+        </div>
+      </aside>
+
+      {/* Dimmed overlay for mobile menu */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/30 z-40 md:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
+    </>
+  );
+}

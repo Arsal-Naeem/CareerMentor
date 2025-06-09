@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 
 export const Login = () => {
-  usePageTitle("CareerMentor - Login");
+  usePageTitle("Login");
   return (
     <AuthLayout
       mainHeading="Welcome Back! To Career Mentor"
