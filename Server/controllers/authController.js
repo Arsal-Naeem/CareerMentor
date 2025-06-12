@@ -45,7 +45,7 @@ export const signUpController = async (req, res) => {
       verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
-    generateTokenSetCookie(res, newUser.id);
+    generateTokenSetCookie(res, newUser.id, newUser.role);
 
     await sendVerificationEmail(newUser.email, verificationToken);
 
@@ -121,6 +121,13 @@ export const loginController = async (req, res) => {
       });
     }
 
+    if (!existingUser.isVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Account not verified. Please check your email.",
+      });
+    }
+
     const isPasswordMatched = await bcryptjs.compare(
       password,
       existingUser.password
@@ -132,7 +139,7 @@ export const loginController = async (req, res) => {
       });
     }
 
-    generateTokenSetCookie(res, existingUser.id);
+    generateTokenSetCookie(res, existingUser.id, existingUser.role);
 
     existingUser.lastLogin = new Date();
     await existingUser.save();
@@ -239,6 +246,55 @@ export const resetPasswordController = async (req, res) => {
     });
   } catch (error) {
     console.log("Something went wrong on resetPassword", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
+export const resendVerificationEmailController = async (req, res) => {
+  const { email } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({
+      success: false,
+      message: "Please provide an email",
+    });
+  }
+
+  try {
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        success: false,
+        message: "User is already verified",
+      });
+    }
+
+    const newToken = Math.floor(100000 + Math.random() * 900000).toString();
+    const newTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+    user.verificationToken = newToken;
+    user.verificationTokenExpiresAt = newTokenExpiry;
+    await user.save();
+
+    await sendVerificationEmail(user.email, newToken);
+
+    res.status(200).json({
+      success: true,
+      message: "A new verification email has been sent",
+    });
+  } catch (error) {
+    console.log("Error resending verification email", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",

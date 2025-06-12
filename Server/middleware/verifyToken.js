@@ -13,10 +13,21 @@ export const verifyToken = (req, res, next) => {
         .json({ success: false, message: "Unauthorized- Invalid token" });
 
     req.userId = decode.userId;
+    req.role = decode.role;
 
     next();
   } catch (error) {
     console.log("Error in verifyToken", error);
     return res.status(500).json({ success: false, message: "Server Error" });
   }
+};
+
+export const isAdmin = (req, res, next) => {
+  console.log("User Role:", req.role);
+  if (req.role !== "admin") {
+    return res
+      .status(403)
+      .json({ success: false, message: "Forbidden - Admins only" });
+  }
+  next();
 };

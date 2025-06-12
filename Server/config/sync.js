@@ -1,4 +1,5 @@
 import { sequelize } from "./connectDB.js";
+import "../models/index.js"
 
 
 const startApp = async () => {
