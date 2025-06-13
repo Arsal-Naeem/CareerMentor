@@ -78,7 +78,7 @@ export const createBlogController = async (req, res) => {
   let { title, shortDesc, longDesc, tags } = req.body;
   const userId = req.userId;
 
-    console.log("Creating blog with data:", {
+  console.log("Creating blog with data:", {
     title,
     shortDesc,
     longDesc,
@@ -90,11 +90,11 @@ export const createBlogController = async (req, res) => {
     try {
       tags = JSON.parse(tags);
     } catch (err) {
-      return res.status(400).json({ success: false, message: "Invalid tags format" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid tags format" });
     }
   }
-
-
 
   if (!title || !shortDesc || !longDesc || !Array.isArray(tags)) {
     return res
@@ -199,7 +199,6 @@ export const getAllBlogsController = async (req, res) => {
   }
 };
 
-
 export const updateBlogController = async (req, res) => {
   const userId = req.userId;
   const { blogId } = req.params;
@@ -225,11 +224,15 @@ export const updateBlogController = async (req, res) => {
     });
 
     if (!blog) {
-      return res.status(404).json({ success: false, message: "Blog not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
     }
 
     if (blog.userId !== userId) {
-      return res.status(403).json({ message: "Unauthorized to update this blog" });
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to update this blog" });
     }
 
     const t = await sequelize.transaction();
@@ -291,7 +294,7 @@ export const updateBlogController = async (req, res) => {
 };
 
 export const deleteBlogController = async (req, res) => {
-   const userId = req.userId;
+  const userId = req.userId;
   const { blogId } = req.params;
 
   try {
@@ -301,11 +304,15 @@ export const deleteBlogController = async (req, res) => {
     });
 
     if (!blog) {
-      return res.status(404).json({ success: false, message: "Blog not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
     }
 
     if (blog.userId !== userId) {
-      return res.status(403).json({ message: "Unauthorized to delete this blog" });
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this blog" });
     }
 
     const t = await sequelize.transaction();
@@ -326,9 +333,26 @@ export const deleteBlogController = async (req, res) => {
     await blog.destroy({ transaction: t });
     await t.commit();
 
-    res.status(200).json({ success: true, message: "Blog deleted successfully." });
+    res
+      .status(200)
+      .json({ success: true, message: "Blog deleted successfully." });
   } catch (error) {
     console.error("Delete blog error:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
-}
+};
+
+export const getUserBlogsController = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    const blogs = await Blogs.findAll({
+      where: { userId },
+    });
+
+    res.status(200).json({ success: true, blogs });
+  } catch (error) {
+    console.error("Error fetching user blogs:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};

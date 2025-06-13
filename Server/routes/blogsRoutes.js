@@ -4,6 +4,7 @@ import {
   createBlogController,
   deleteBlogController,
   getAllBlogsController,
+  getUserBlogsController,
   updateBlogController,
 } from "../controllers/blogController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
@@ -29,5 +30,7 @@ router.patch(
 router.delete("/delete-blog/:blogId", verifyToken, deleteBlogController);
 
 router.get("/get-all-blogs", getAllBlogsController);
+
+router.get("/get-user-blogs", verifyToken, getUserBlogsController);
 
 export default router;
