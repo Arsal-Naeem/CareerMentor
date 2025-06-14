@@ -1,0 +1,562 @@
+[
+  {
+    "category": "critical-thinking",
+    "subcategory": "management-and-planning",
+    "questionText": "When faced with multiple tasks, how do you decide which one to do first?",
+    "options": [
+      {
+        "label": "a",
+        "text": "I start with the most urgent task.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "I do the easiest task first.",
+        "score": 2
+      },
+      {
+        "label": "c",
+        "text": "I randomly pick one and start.",
+        "score": 1
+      },
+      {
+        "label": "d",
+        "text": "I wait until I feel motivated.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "analyze"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "management-and-planning",
+    "questionText": "What's the first step you take when starting a new project?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Understand the goal and make a plan.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Start working immediately.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "Wait for others to begin.",
+        "score": 0
+      },
+      {
+        "label": "d",
+        "text": "Collect all resources without planning.",
+        "score": 2
+      }
+    ],
+    "bloomLevel": "analyze"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "management-and-planning",
+    "questionText": "How do you handle sudden changes in your schedule?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Adjust plans and keep moving.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Get stressed and take a break.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "Ignore the change.",
+        "score": 0
+      },
+      {
+        "label": "d",
+        "text": "Ask someone else to manage it.",
+        "score": 2
+      }
+    ],
+    "bloomLevel": "analyze"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "management-and-planning",
+    "questionText": "Do you prefer creating to-do lists or handling tasks as they come?",
+    "options": [
+      {
+        "label": "a",
+        "text": "I always create and follow to-do lists.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "I prefer to handle tasks as they come.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "I do both depending on the situation.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "I rarely plan and work spontaneously.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "analyze"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "management-and-planning",
+    "questionText": "How do you ensure you don't forget important deadlines?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Use a planner or digital calendar.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Try to remember them.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "Ask others to remind me.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "I often forget and rush later.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "analyze"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "leadership-and-organization",
+    "questionText": "You're leading a small team. One member isn't performing well. What do you do?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Talk to them privately to understand the issue.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Ignore it and hope they improve.",
+        "score": 0
+      },
+      {
+        "label": "c",
+        "text": "Do their work yourself.",
+        "score": 1
+      },
+      {
+        "label": "d",
+        "text": "Complain to someone else.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "evaluate"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "leadership-and-organization",
+    "questionText": "What qualities make someone a good leader?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Clear communication and empathy.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Being strict and demanding.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "Doing everything alone.",
+        "score": 0
+      },
+      {
+        "label": "d",
+        "text": "Letting others do what they want.",
+        "score": 2
+      }
+    ],
+    "bloomLevel": "evaluate"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "leadership-and-organization",
+    "questionText": "How do you ensure everyone in your team is on the same page?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Regular updates and clear communication.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Assume everyone understands.",
+        "score": 0
+      },
+      {
+        "label": "c",
+        "text": "Let others handle communication.",
+        "score": 1
+      },
+      {
+        "label": "d",
+        "text": "Only talk when there's a problem.",
+        "score": 2
+      }
+    ],
+    "bloomLevel": "evaluate"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "leadership-and-organization",
+    "questionText": "You have to divide tasks among your classmates. How do you assign them?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Based on strengths and interest.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Randomly, so it's fair.",
+        "score": 2
+      },
+      {
+        "label": "c",
+        "text": "Take all the tasks yourself.",
+        "score": 1
+      },
+      {
+        "label": "d",
+        "text": "Let others pick whatever they want.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "evaluate"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "leadership-and-organization",
+    "questionText": "How do you handle disagreement in a group setting?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Listen to all sides and find a middle ground.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Ignore the disagreement.",
+        "score": 0
+      },
+      {
+        "label": "c",
+        "text": "Take the side of your close friends.",
+        "score": 1
+      },
+      {
+        "label": "d",
+        "text": "Avoid taking responsibility.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "evaluate"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "interest-in-people-vs-systems",
+    "questionText": "Do you prefer working alone on a task or collaborating with others?",
+    "options": [
+      {
+        "label": "a",
+        "text": "I prefer working alone where I can focus deeply.",
+        "score": 0
+      },
+      {
+        "label": "b",
+        "text": "I enjoy collaborating and sharing ideas.",
+        "score": 3
+      },
+      {
+        "label": "c",
+        "text": "Depends on the task.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "I like both equally, but lean slightly toward working alone.",
+        "score": 1
+      }
+    ],
+    "bloomLevel": "apply"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "interest-in-people-vs-systems",
+    "questionText": "When solving a problem, do you focus more on people's needs or the system's efficiency?",
+    "options": [
+      {
+        "label": "a",
+        "text": "People's needs are more important to me.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "I focus entirely on the system's performance.",
+        "score": 0
+      },
+      {
+        "label": "c",
+        "text": "I try to balance both.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "It depends on the context.",
+        "score": 1
+      }
+    ],
+    "bloomLevel": "apply"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "interest-in-people-vs-systems",
+    "questionText": "Are you more interested in understanding how a machine works or how a person thinks?",
+    "options": [
+      {
+        "label": "a",
+        "text": "How a machine works.",
+        "score": 0
+      },
+      {
+        "label": "b",
+        "text": "How a person thinks.",
+        "score": 3
+      },
+      {
+        "label": "c",
+        "text": "Both are equally interesting.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "Neither really interests me much.",
+        "score": 1
+      }
+    ],
+    "bloomLevel": "apply"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "interest-in-people-vs-systems",
+    "questionText": "Would you rather help resolve a team conflict or improve a workflow process?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Resolve a team conflict.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Improve a workflow process.",
+        "score": 0
+      },
+      {
+        "label": "c",
+        "text": "It depends on which is more urgent.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "I'd avoid both if possible.",
+        "score": 1
+      }
+    ],
+    "bloomLevel": "apply"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "interest-in-people-vs-systems",
+    "questionText": "What interests you more: organizing people or organizing data?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Organizing people and tasks.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Organizing and structuring data.",
+        "score": 0
+      },
+      {
+        "label": "c",
+        "text": "I like both.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "I'm not interested in either.",
+        "score": 1
+      }
+    ],
+    "bloomLevel": "apply"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "communication-and-teamwork",
+    "questionText": "How do you ensure your team understands your ideas?",
+    "options": [
+      {
+        "label": "a",
+        "text": "I explain clearly and ask if they have questions.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "I assume they'll ask if they're confused.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "I send a written summary after explaining.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "I repeat my points several times.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "understand"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "communication-and-teamwork",
+    "questionText": "You disagree with a teammate. What's your approach?",
+    "options": [
+      {
+        "label": "a",
+        "text": "I listen to their point first, then explain mine.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "I try to avoid conflict and stay quiet.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "I strongly defend my view until they agree.",
+        "score": 0
+      },
+      {
+        "label": "d",
+        "text": "I find a middle ground to keep peace.",
+        "score": 2
+      }
+    ],
+    "bloomLevel": "understand"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "communication-and-teamwork",
+    "questionText": "How do you handle team members who dominate the conversation?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Politely ask others to share their thoughts too.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "Let them lead, I don't mind.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "Interrupt and speak over them.",
+        "score": 0
+      },
+      {
+        "label": "d",
+        "text": "Talk to them privately about it.",
+        "score": 2
+      }
+    ],
+    "bloomLevel": "understand"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "communication-and-teamwork",
+    "questionText": "What do you do when a teammate misinterprets your instructions?",
+    "options": [
+      {
+        "label": "a",
+        "text": "I calmly explain it again with more clarity.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "I ignore it—they'll figure it out eventually.",
+        "score": 0
+      },
+      {
+        "label": "c",
+        "text": "I get frustrated and raise my voice.",
+        "score": 0
+      },
+      {
+        "label": "d",
+        "text": "I ask another teammate to explain it.",
+        "score": 2
+      }
+    ],
+    "bloomLevel": "understand"
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "communication-and-teamwork",
+    "questionText": "Do you give feedback even when it might upset someone?",
+    "options": [
+      {
+        "label": "a",
+        "text": "Yes, but I try to be respectful.",
+        "score": 3
+      },
+      {
+        "label": "b",
+        "text": "No, I avoid hurting feelings.",
+        "score": 1
+      },
+      {
+        "label": "c",
+        "text": "Only if it's very necessary.",
+        "score": 2
+      },
+      {
+        "label": "d",
+        "text": "I let someone else handle it.",
+        "score": 0
+      }
+    ],
+    "bloomLevel": "understand"
+  }
+]
