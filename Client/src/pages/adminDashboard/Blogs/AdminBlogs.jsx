@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminDashboardLayout from "@/layouts/AdmindashboardLayout";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -18,18 +13,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
-import { 
-  Search, 
-  Filter, 
-  Eye, 
-  Calendar, 
+import {
+  Search,
+  Filter,
+  Eye,
+  Calendar,
   User,
   FileText,
   TrendingUp,
   Clock,
   CheckCircle,
   XCircle,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
 const mockBlogs = [
@@ -43,7 +38,8 @@ const mockBlogs = [
     status: "pending",
     publishedAt: "2025-06-12",
     views: 1250,
-    excerpt: "Explore the latest trends and best practices in web development..."
+    excerpt:
+      "Explore the latest trends and best practices in web development...",
   },
   {
     id: 2,
@@ -55,18 +51,19 @@ const mockBlogs = [
     status: "approved",
     publishedAt: "2025-06-10",
     views: 2840,
-    excerpt: "Learn how to implement robust DevOps practices for your team..."
+    excerpt: "Learn how to implement robust DevOps practices for your team...",
   },
   {
     id: 3,
     title: "Career in Game Development: A Complete Guide",
     coverImage: "https://source.unsplash.com/400x200/?gaming,career",
     author: "Umar Yousuf",
-    tags: ["GameDev", "Unity", "Career","Cloud"],
+    tags: ["GameDev", "Unity", "Career", "Cloud"],
     status: "rejected",
     publishedAt: "2025-06-08",
     views: 890,
-    excerpt: "Everything you need to know about starting a career in game development..."
+    excerpt:
+      "Everything you need to know about starting a career in game development...",
   },
   {
     id: 4,
@@ -77,25 +74,26 @@ const mockBlogs = [
     status: "pending",
     publishedAt: "2025-06-11",
     views: 1560,
-    excerpt: "Discover the latest trends shaping the future of cloud computing..."
+    excerpt:
+      "Discover the latest trends shaping the future of cloud computing...",
   },
 ];
 
 const statusConfig = {
-  pending: { 
-    color: "bg-amber-50 text-amber-700 border-amber-200", 
+  pending: {
+    color: "bg-amber-50 text-amber-700 border-amber-200",
     icon: Clock,
-    label: "Pending Review"
+    label: "Pending Review",
   },
-  approved: { 
-    color: "bg-emerald-50 text-emerald-700 border-emerald-200", 
+  approved: {
+    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
     icon: CheckCircle,
-    label: "Approved"
+    label: "Approved",
   },
-  rejected: { 
-    color: "bg-red-50 text-red-700 border-red-200", 
+  rejected: {
+    color: "bg-red-50 text-red-700 border-red-200",
     icon: XCircle,
-    label: "Rejected"
+    label: "Rejected",
   },
 };
 
@@ -130,18 +128,21 @@ const AdminBlogs = () => {
 
   const filteredBlogs = blogs.filter((blog) => {
     const matchesFilter = filter === "all" || blog.status === filter;
-    const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         blog.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         blog.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
+    const matchesSearch =
+      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      blog.tags.some((tag) =>
+        tag.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     return matchesFilter && matchesSearch;
   });
 
   const getStatusCounts = () => {
     return {
       all: blogs.length,
-      pending: blogs.filter(b => b.status === 'pending').length,
-      approved: blogs.filter(b => b.status === 'approved').length,
-      rejected: blogs.filter(b => b.status === 'rejected').length,
+      pending: blogs.filter((b) => b.status === "pending").length,
+      approved: blogs.filter((b) => b.status === "approved").length,
+      rejected: blogs.filter((b) => b.status === "rejected").length,
     };
   };
 
@@ -150,7 +151,10 @@ const AdminBlogs = () => {
   const LoadingSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       {Array.from({ length: 6 }).map((_, i) => (
-        <Card key={`loading-${i}`} className="overflow-hidden border-0 shadow-sm bg-white">
+        <Card
+          key={`loading-${i}`}
+          className="overflow-hidden border-0 shadow-sm bg-white"
+        >
           <div className="relative">
             <Skeleton className="w-full h-48" />
             <div className="absolute top-3 right-3">
@@ -192,7 +196,9 @@ const AdminBlogs = () => {
                   </div>
                   Blog Management
                 </h1>
-                <p className="text-gray-600 mt-2">Review and manage blog submissions</p>
+                <p className="text-gray-600 mt-2">
+                  Review and manage blog submissions
+                </p>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-500">
                 <TrendingUp className="w-4 h-4" />
@@ -211,7 +217,7 @@ const AdminBlogs = () => {
                   className="pl-10 border-gray-200 focus:border-blue-300 focus:ring-blue-100"
                 />
               </div>
-              
+
               <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0">
                 {filterOptions.map((option) => {
                   const IconComponent = option.icon;
@@ -221,8 +227,8 @@ const AdminBlogs = () => {
                       variant={filter === option.value ? "default" : "outline"}
                       onClick={() => setFilter(option.value)}
                       className={`whitespace-nowrap flex items-center gap-2 ${
-                        filter === option.value 
-                          ? "bg-blue-600 hover:bg-blue-700 text-white" 
+                        filter === option.value
+                          ? "bg-blue-600 hover:bg-blue-700 text-white"
                           : "hover:bg-blue-50 border-gray-200"
                       }`}
                       size="sm"
@@ -261,7 +267,7 @@ const AdminBlogs = () => {
               {filteredBlogs.map((blog) => {
                 const statusInfo = statusConfig[blog.status];
                 const StatusIcon = statusInfo.icon;
-                
+
                 return (
                   <Card
                     key={blog.id}
@@ -292,7 +298,9 @@ const AdminBlogs = () => {
                           <span>{blog.author}</span>
                           <span>•</span>
                           <Calendar className="w-4 h-4" />
-                          <span>{new Date(blog.publishedAt).toLocaleDateString()}</span>
+                          <span>
+                            {new Date(blog.publishedAt).toLocaleDateString()}
+                          </span>
                         </div>
                       </div>
 
@@ -304,12 +312,19 @@ const AdminBlogs = () => {
 
                       <div className="flex flex-wrap gap-1">
                         {blog.tags.slice(0, 3).map((tag, i) => (
-                          <Badge key={i} variant="secondary" className="text-xs bg-gray-100 hover:bg-gray-200">
+                          <Badge
+                            key={i}
+                            variant="secondary"
+                            className="text-xs bg-gray-100 hover:bg-gray-200"
+                          >
                             {tag}
                           </Badge>
                         ))}
                         {blog.tags.length > 3 && (
-                          <Badge variant="secondary" className="text-xs bg-gray-100">
+                          <Badge
+                            variant="secondary"
+                            className="text-xs bg-gray-100"
+                          >
                             +{blog.tags.length - 3}
                           </Badge>
                         )}
@@ -318,12 +333,16 @@ const AdminBlogs = () => {
                       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                         <div className="flex items-center gap-2 text-sm text-gray-500">
                           <Eye className="w-4 h-4" />
-                          <span>{blog.views?.toLocaleString() || '0'} views</span>
+                          <span>
+                            {blog.views?.toLocaleString() || "0"} views
+                          </span>
                         </div>
 
                         <Select
                           value={blog.status}
-                          onValueChange={(value) => handleStatusChange(blog.id, value)}
+                          onValueChange={(value) =>
+                            handleStatusChange(blog.id, value)
+                          }
                         >
                           <SelectTrigger className="w-[130px] h-8 text-sm border-gray-200">
                             <SelectValue />
@@ -354,7 +373,9 @@ const AdminBlogs = () => {
                       <Button
                         variant="outline"
                         className="w-full mt-4 text-sm hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
-                        onClick={() => navigate(`/admin-dashboard/blogs/${blog.id}`)}
+                        onClick={() =>
+                          navigate(`/admin-dashboard/blogs/${blog.id}`)
+                        }
                       >
                         <Eye className="w-4 h-4 mr-2" />
                         View Details
@@ -372,10 +393,12 @@ const AdminBlogs = () => {
               <div className="p-4 bg-gray-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
                 <FileText className="w-8 h-8 text-gray-400" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No blogs found</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                No blogs found
+              </h3>
               <p className="text-gray-500 mb-4">
-                {searchTerm 
-                  ? `No blogs match your search "${searchTerm}"` 
+                {searchTerm
+                  ? `No blogs match your search "${searchTerm}"`
                   : `No blogs with status "${filter}"`}
               </p>
               {searchTerm && (

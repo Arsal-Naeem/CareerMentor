@@ -14,7 +14,9 @@ export const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { mutate: login, isPending } = useLogin();
+  const { mutate: login, isPending, data } = useLogin();
+
+  console.log(data);
 
   const handleSubmit = (e) => {
     e.preventDefault();

@@ -4,8 +4,11 @@ import AuthLayout from "../../layouts/AuthLayout";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import BackButton from "@/components/buttons/BackButton";
+import { useParams } from "react-router-dom";
 
 export const ResetPassword = () => {
+  const { token } = useParams();
+  console.log(token);
   usePageTitle("Reset Password");
   return (
     <AuthLayout

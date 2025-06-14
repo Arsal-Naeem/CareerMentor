@@ -7,6 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { useSignup } from "@/hooks/auth/useSignup";
 
+// TODO: add validations
+// ui fixes
+// api folder structure fixes
+// eye button on password inputs
 export const Signup = () => {
   usePageTitle("Signup");
 

@@ -1,8 +1,7 @@
 import { User, Blogs, Tag } from "../../models/index.js";
 
-
 export const getAllBlogsController = async (req, res) => {
-  //getallblogs 
+  //getallblogs
   try {
     const blogs = await Blogs.findAll({
       include: [
@@ -26,12 +25,12 @@ export const getAllBlogsController = async (req, res) => {
     console.error("Error fetching blogs:", error);
     res.status(500).json({ success: false, message: "Failed to fetch blogs" });
   }
-}
+};
 
 export const approveBlogController = async (req, res) => {
   try {
     const { blogId } = req.params;
-    const { status } = req.body; 
+    const { status } = req.body;
 
     // Assuming you have a Blog model to interact with your database
     const blog = await Blogs.findByPk(blogId);
@@ -45,7 +44,6 @@ export const approveBlogController = async (req, res) => {
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ message: "Invalid status" });
     }
-    
 
     blog.status = status;
     await blog.save();
@@ -55,4 +53,4 @@ export const approveBlogController = async (req, res) => {
     console.error("Error approving blog:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};

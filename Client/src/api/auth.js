@@ -23,7 +23,7 @@ export const resendVerification = async (email) => {
 export const VerifyIdentity = async (data) => {
   const res = await axiosInstance.post("/auth/verify-email", data);
   return res.data;
-}
+};
 
 export const verifyToken = async () => {
   const res = await axiosInstance.get("/auth/me");
@@ -33,4 +33,4 @@ export const verifyToken = async () => {
 export const logout = async () => {
   const res = await axiosInstance.post("/auth/logout");
   return res.data;
-}
+};

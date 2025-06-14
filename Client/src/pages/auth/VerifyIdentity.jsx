@@ -12,10 +12,12 @@ import { Link } from "react-router-dom";
 import { useVerifyOtp } from "@/hooks/auth/useVerifyIdentity";
 import { useNavigate } from "react-router-dom";
 
+// TODO: create resend code page
 export const VerifyIdentity = () => {
   usePageTitle("Verify Your Identity");
   const navigate = useNavigate();
 
+  // TODO : navigate to the dashboard on signup
   const [otp, setOtp] = useState(""); // Store 6-digit OTP
   const {
     mutate: verifyOtp,
