@@ -30,6 +30,10 @@ title: {
     type: DataTypes.ENUM("pending", "approved", "rejected"),
     defaultValue: "pending",
   },
+   timeToRead: {
+    type: DataTypes.INTEGER, // in minutes
+    allowNull: true,
+  },
 })
 
 export default Blogs;

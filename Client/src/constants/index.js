@@ -173,6 +173,10 @@ export const sidebarItems = [
     label: "Blogs",
     icon: Newspaper,
     href: "/blogs",
+    children: [
+      { label: "My Blogs", href: "/dashboard/my-blogs" },
+      { label: "View All Blogs", href: "/blogs" },
+    ],
   },
   { label: "Achievements", icon: Trophy, href: "/dashboard/achievements" },
 ];

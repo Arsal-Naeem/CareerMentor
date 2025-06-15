@@ -30,6 +30,8 @@ import AdminBlogs from "./pages/adminDashboard/Blogs/AdminBlogs";
 import AdminEvents from "./pages/adminDashboard/Events/AdminEvents";
 import CareerExplorer from "./pages/adminDashboard/CareerExplorer/CareerExplorer";
 import AdminBlogDetails from "./pages/adminDashboard/Blogs/AdminBlogDetails";
+import UserBlogs from "./pages/dashboard/blogs/UserBlogs";
+import AddNewBlog from "./pages/dashboard/blogs/AddNewBlog";
 
 function App() {
   return (
@@ -62,6 +64,8 @@ function App() {
             <Route path="mentorship" element={<Mentors />} />
             <Route path="achievements" element={<Achievements />} />
             <Route path="settings" element={<Settings />} />
+            <Route path="my-blogs" element={<UserBlogs />} />
+            <Route path="add-new-blogs" element={<AddNewBlog />} />
           </Route>
           {/* Admin Dashboard */}
           <Route path="/admin-dashboard">

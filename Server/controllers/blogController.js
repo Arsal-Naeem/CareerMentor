@@ -1,90 +1,16 @@
-import axios from "axios";
 import { sequelize } from "../config/connectDB.js";
 import { User, Blogs, Tag } from "../models/index.js";
 import { deleteFileFromS3, uploadFileToS3 } from "../utils/S3.js";
 
-// export const getAllBlogsController = async (req, res) => {
-//   try {
-//     const {
-//       tag = "softwareengineering",
-//       page = 1,
-//       per_page = 5,
-//       clean = false,
-//     } = req.query;
-
-//     const { data: articles } = await axios.get("https://dev.to/api/articles", {
-//       params: { tag, page, per_page },
-//     });
-
-//     const fullBlogs = await Promise.all(
-//       articles.map(async (article) => {
-//         const { username, profile_image } = article.user;
-//         const { slug } = article;
-
-//         try {
-//           const { data: fullArticle } = await axios.get(
-//             `https://dev.to/api/articles/${username}/${slug}`
-//           );
-
-//           return {
-//             title: article.title,
-//             shortDescription: article.description,
-//             fullDescription: clean
-//               ? sanitizeHtml(fullArticle.body_html, {
-//                   allowedTags: [
-//                     "p",
-//                     "h1",
-//                     "h2",
-//                     "h3",
-//                     "ul",
-//                     "li",
-//                     "pre",
-//                     "code",
-//                     "strong",
-//                     "em",
-//                     "a",
-//                   ],
-//                   allowedAttributes: {
-//                     a: ["href"],
-//                   },
-//                   disallowedTagsMode: "discard",
-//                 })
-//               : fullArticle.body_html,
-//             coverImage: article.cover_image,
-//             url: article.url,
-//             tags: article.tag_list,
-//             publishedAt: article.published_at,
-//             author: {
-//               username,
-//               profileImage: profile_image,
-//             },
-//           };
-//         } catch {
-//           return null;
-//         }
-//       })
-//     );
-
-//     const filteredBlogs = fullBlogs.filter(Boolean);
-
-//     res.json({ success: true, blogs: filteredBlogs });
-//   } catch (error) {
-//     console.error("Error fetching blogs:", error.message);
-//     res.status(500).json({ success: false, message: "Failed to fetch blogs" });
-//   }
-// };
+const calculateReadTime = (text) => {
+  const wordsPerMinute = 200;
+  const wordCount = text.trim().split(/\s+/).length;
+  return Math.ceil(wordCount / wordsPerMinute);
+};
 
 export const createBlogController = async (req, res) => {
   let { title, shortDesc, longDesc, tags } = req.body;
   const userId = req.userId;
-
-  console.log("Creating blog with data:", {
-    title,
-    shortDesc,
-    longDesc,
-    tags,
-    userId,
-  });
 
   if (typeof tags === "string") {
     try {
@@ -124,6 +50,7 @@ export const createBlogController = async (req, res) => {
         longDesc,
         author,
         coverImage: imageUrl || null,
+        timeToRead: calculateReadTime(longDesc),
       },
       { transaction: t }
     );
@@ -160,7 +87,14 @@ export const createBlogController = async (req, res) => {
 
 export const getAllBlogsController = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    let { page = 1, limit = 10 } = req.query;
+
+    // Convert to integers and validate
+    page = parseInt(page);
+    limit = parseInt(limit);
+
+    if (isNaN(page) || page < 1) page = 1;
+    if (isNaN(limit) || limit < 1) limit = 10;
 
     const blogs = await Blogs.findAll({
       include: [
@@ -176,7 +110,7 @@ export const getAllBlogsController = async (req, res) => {
         },
       ],
       offset: (page - 1) * limit,
-      limit: parseInt(limit),
+      limit,
       where: { status: "approved" },
       order: [["publishedAt", "DESC"]],
     });
@@ -188,11 +122,16 @@ export const getAllBlogsController = async (req, res) => {
       longDesc: blog.longDesc,
       author: `${blog.authorInfo.firstName} ${blog.authorInfo.lastName}`,
       publishedAt: blog.publishedAt,
-      coverImage: blog.coverImage || null, // ✅ include image URL
+      coverImage: blog.coverImage || null,
       tags: blog.Tags.map((tag) => tag.name),
     }));
 
-    res.status(200).json({ success: true, blogs: formattedBlogs });
+    res.status(200).json({
+      success: true,
+      page,
+      limit,
+      blogs: formattedBlogs,
+    });
   } catch (error) {
     console.error("Error fetching blogs:", error);
     res.status(500).json({ success: false, message: "Server error" });
@@ -353,6 +292,19 @@ export const getUserBlogsController = async (req, res) => {
     res.status(200).json({ success: true, blogs });
   } catch (error) {
     console.error("Error fetching user blogs:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+export const getAlltagsController = async (req, res) => {
+  try {
+    const tags = await Tag.findAll({ attributes: ["name", "usageCount"] });
+    if (!tags) {
+      return res.status(404).json({ success: false, message: "No tags found" });
+    }
+    res.status(200).json({ success: true, tags });
+  } catch (error) {
+    console.error("Error fetching tags:", error);
     res.status(500).json({ success: false, message: "Server error" });
   }
 };
