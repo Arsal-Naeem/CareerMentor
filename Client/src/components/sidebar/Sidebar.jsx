@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Logo from "@/assets/icons/logo.svg";
@@ -6,13 +6,15 @@ import Logout from "@/assets/icons/sidebar/logout.svg";
 import { Settings } from "lucide-react";
 import { SidebarItem } from "./SidebarItem";
 import { useGlobalContext } from "@/context/GlobalContext";
-import { useLogout } from "@/services/auth/auth.service";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Sidebar({ items, variant = "sidebar" }) {
   const location = useLocation();
   const { open, setOpen } = useGlobalContext();
   const { logout } = useAuth;
+
+  // TODO : fix the active item styling on admin screens
+  // Fix the width of sidebar on admin pages
 
   return (
     <>

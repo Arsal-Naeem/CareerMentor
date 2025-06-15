@@ -16,6 +16,9 @@ import { Calendar } from "@/components/ui/calendar";
 import { Eye, EyeOff } from "lucide-react";
 
 export const Signup = () => {
+  // TODO : fix auth flow, add protect routes, and resend code pages
+  // add form validations on all auth pages
+  // fix the error message styling on auth pages
   usePageTitle("Signup");
   const navigate = useNavigate();
 

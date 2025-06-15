@@ -106,6 +106,7 @@ const filterOptions = [
 ];
 
 const AdminBlogs = () => {
+  // TODO : fix the pending review hover styles
   usePageTitle("Admin Blogs");
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
