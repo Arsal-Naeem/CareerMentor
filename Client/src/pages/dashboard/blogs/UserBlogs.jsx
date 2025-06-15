@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import UserBlogCard from "@/components/blogs/UserBlogCard";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { useNavigate } from "react-router-dom";
+import { SecondaryButton } from "@/components/buttons/SecondaryButton";
 
 // Sample data (replace with API call later)
 const mockBlogs = [
@@ -79,7 +80,7 @@ const mockBlogs = [
 
 const UserBlogs = () => {
   const [loading, setLoading] = useState(false); // change to true if simulating loading
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleEdit = (post) => {
     console.log("Edit Blog ID:", post.id);
@@ -111,15 +112,12 @@ const UserBlogs = () => {
             <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-6 md:p-8 border border-slate-200 shadow-lg">
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-3">
-                  
                   <div>
-                    <h1 className="text-3xl md:text-4xl font-bold">
-                      My Blogs
-                    </h1>
-                    <div className="w-16 h-1 bg-gradient-to-r from-[#F3B34E] via-[#FFD272] to-[#59A4C0]rounded-full mt-1"></div>
+                    <h1 className="text-3xl md:text-4xl font-bold">My Blogs</h1>
+                    <div className="w-16 h-1 bg-gradient-to-r from-[#F3B34E] via-[#FFD272] rounded-full mt-1"></div>
                   </div>
                 </div>
-                <p className="text-gray-600 text-base md:text-lg max-w-2xl mt-2">
+                <p className="text-base lg:text-lg font-normal text-custom-black-light">
                   View and manage all the blogs you've written. Click on any
                   blog to view, edit, or delete it.
                 </p>
@@ -172,13 +170,13 @@ const UserBlogs = () => {
               {/* Empty State */}
               {mockBlogs.length === 0 && (
                 <div className="text-center py-20">
-                  <div className="w-24 h-24 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                  <div className="w-24 h-24 bg-gradient-to-r from-[#F3B34E] to-[#5BA7C7] via-[#FFD272] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
                     <Edit className="text-white" size={32} />
                   </div>
                   <h3 className="text-2xl font-bold text-gray-800 mb-3">
                     No blogs yet
                   </h3>
-                  <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                  <p className="text-custom-black-dark mb-6 max-w-md mx-auto">
                     Start sharing your thoughts and expertise with the world.
                     Create your first blog post today!
                   </p>
@@ -196,13 +194,15 @@ const UserBlogs = () => {
           {/* Add New Blog Floating Button */}
           <button
             onClick={handleAddNew}
-            className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-6 py-4 rounded-full shadow-2xl transition-all duration-300 hover:shadow-3xl hover:scale-110 flex items-center gap-3 group"
+            className="fixed bottom-6 right-6 z-50 bg-gradient-to-r from-[#F4C430] to-[#E17B47] hover:brightness-110 text-white font-semibold px-6 py-4 
+             rounded-full shadow-xl hover:shadow-2xl transition-transform duration-300 
+             hover:scale-110 flex items-center gap-2 group"
           >
             <Plus
               size={20}
               className="transition-transform duration-300 group-hover:rotate-90"
             />
-            <span className="hidden sm:inline">Add New Blog</span>
+            <span className="hidden sm:inline ">Add New Blog</span>
           </button>
 
           {/* Background Decorations */}

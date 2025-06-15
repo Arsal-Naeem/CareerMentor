@@ -190,7 +190,7 @@ const AdminBlogs = () => {
           <div className="mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
               <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 flex items-center gap-3">
+                <h1 className="text-3xl sm:text-4xl font-bold text-custom-black-light flex items-center gap-3">
                   <div className="p-2 bg-blue-100 rounded-xl">
                     <FileText className="w-8 h-8 text-blue-600" />
                   </div>
@@ -200,7 +200,7 @@ const AdminBlogs = () => {
                   Review and manage blog submissions
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
+              <div className="flex items-center gap-2 text-sm text-custom-black-dark">
                 <TrendingUp className="w-4 h-4" />
                 <span>{blogs.length} total blogs</span>
               </div>
@@ -293,7 +293,7 @@ const AdminBlogs = () => {
                         <CardTitle className="text-lg font-semibold line-clamp-2 group-hover:text-blue-600 transition-colors">
                           {blog.title}
                         </CardTitle>
-                        <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
+                        <div className="flex items-center gap-2 mt-2 text-sm text-custom-black-dark">
                           <User className="w-4 h-4" />
                           <span>{blog.author}</span>
                           <span>•</span>
@@ -305,7 +305,7 @@ const AdminBlogs = () => {
                       </div>
 
                       {blog.excerpt && (
-                        <p className="text-sm text-gray-600 line-clamp-2">
+                        <p className="text-sm text-custom-black-dark line-clamp-2">
                           {blog.excerpt}
                         </p>
                       )}
@@ -331,7 +331,7 @@ const AdminBlogs = () => {
                       </div>
 
                       <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="flex items-center gap-2 text-sm text-custom-black-dark">
                           <Eye className="w-4 h-4" />
                           <span>
                             {blog.views?.toLocaleString() || "0"} views
@@ -396,7 +396,7 @@ const AdminBlogs = () => {
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 No blogs found
               </h3>
-              <p className="text-gray-500 mb-4">
+              <p className="text-custom-black-dark mb-4">
                 {searchTerm
                   ? `No blogs match your search "${searchTerm}"`
                   : `No blogs with status "${filter}"`}

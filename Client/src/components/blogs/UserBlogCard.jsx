@@ -1,4 +1,5 @@
 import { Edit, Trash2, Calendar, Tag, Eye } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 const UserBlogCard = ({ post, onEdit, onDelete, onView }) => {
   return (
@@ -49,9 +50,9 @@ const UserBlogCard = ({ post, onEdit, onDelete, onView }) => {
           {post.tags.slice(0, 3).map((tag, index) => {
             // Alternate between different tag styles using design system colors
             const tagStyles = [
-              { border: "1px solid" }, // Light Yellow
-              { border: "1px solid" }, // Orange
-              { border: "1px solid" }, // Neutral
+              { border: "1px solid" },
+              { border: "1px solid" },
+              { border: "1px solid" },
             ];
             const style = tagStyles[index % tagStyles.length];
 
@@ -67,21 +68,21 @@ const UserBlogCard = ({ post, onEdit, onDelete, onView }) => {
             );
           })}
           {post.tags.length > 3 && (
-            <div
-              className="w-6 h-6 rounded-full text-xs font-medium flex items-center justify-center transition-all duration-200 hover:scale-105"
+            <Badge
+              className="rounded-full text-xs font-medium flex items-center justify-center transition-all duration-200 hover:scale-105"
               style={{
                 backgroundColor: "#E9ECEF",
                 color: "#7F8C8D",
               }}
             >
               +{post.tags.length - 3}
-            </div>
+            </Badge>
           )}
         </div>
 
         {/* Title - Using Heading 3 from typography system - Updated to change color on card hover */}
         <h3
-          className="font-bold text-lg mb-2 line-clamp-2 transition-colors duration-200 group-hover:text-blue-500"
+          className=" mb-2 line-clamp-2 transition-colors duration-200 group-hover:text-blue-500 font-bold anonymous-font md:text-2xl text-xl"
           style={{ color: "#2C3E50" }}
         >
           {post.title}
@@ -89,7 +90,7 @@ const UserBlogCard = ({ post, onEdit, onDelete, onView }) => {
 
         {/* Excerpt - Using Body Base from typography system */}
         <p
-          className="text-sm mb-4 line-clamp-3 leading-relaxed"
+          className="text-sm mb-4 line-clamp-3 leading-relaxed font-light md:text-base"
           style={{ color: "#7F8C8D" }}
         >
           {post.excerpt}
