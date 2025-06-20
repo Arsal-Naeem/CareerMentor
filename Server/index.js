@@ -15,7 +15,7 @@ import assessmentsRoutes from "./routes/assessmentsRoute.js";
 
 import startApp from "./config/sync.js";
 import { errorHandler } from "./middleware/errorHandler.js";
-import { seedQuestions } from "./utils/seedQuestions.js";
+import { insertQuestions } from "./utils/seedQuestions.js";
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ app.use(errorHandler);
 app.listen(PORT, () => {
   connectDB();
   startApp();
-  //seedQuestions();
+  //insertQuestions();
   console.log(`Server is running on port ${PORT}`);
   console.log(
     `📚 Swagger docs available at: http://localhost:${PORT}/api-docs`

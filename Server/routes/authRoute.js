@@ -10,6 +10,7 @@ import {
   resendVerificationEmailController,
 } from "../controllers/authController.js";
 import { isAdmin, verifyToken } from "../middleware/verifyToken.js";
+import { resendOtpLimiter } from "../utils/rateLimiter.js";
 
 const router = express.Router();
 
@@ -173,7 +174,11 @@ router.post("/forgot-password", forgotPasswordController);
  *       404:
  *         description: User not found
  */
-router.post("/send-verification-token", resendVerificationEmailController);
+router.post(
+  "/send-verification-code",
+  resendOtpLimiter,
+  resendVerificationEmailController
+);
 
 /**
  * @swagger

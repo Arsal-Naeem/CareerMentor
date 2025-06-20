@@ -1,3 +1,5 @@
+import AssessmentOption from "./AssessmentOptionModel.js";
+import AssessmentQuestion from "./assestmentQuestionModel.js";
 import Blogs from "./blogModel.js";
 import Tag from "./tagModel.js";
 import User from "./userModel.js";
@@ -20,4 +22,15 @@ Tag.belongsToMany(Blogs, {
   otherKey: "blogId",
 });
 
-export { Blogs, Tag, User };
+// 🔁 AssessmentQuestion → AssessmentOption (One-to-Many)
+AssessmentQuestion.hasMany(AssessmentOption, {
+  foreignKey: "questionId",
+  as: "options",
+  onDelete: "CASCADE",
+});
+AssessmentOption.belongsTo(AssessmentQuestion, {
+  foreignKey: "questionId",
+  as: "question",
+});
+
+export { Blogs, Tag, User, AssessmentQuestion, AssessmentOption };

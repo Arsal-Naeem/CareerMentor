@@ -4,9 +4,8 @@ import { sequelize } from "../config/connectDB.js";
 const AssessmentSession = sequelize.define("AssessmentSession", {
   sessionId: {
     type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    allowNull: false,         // important!
-    unique: true,   
+    defaultValue: DataTypes.UUIDV4, // auto-generate
+    primaryKey: true,
   },
   userId: {
     type: DataTypes.INTEGER,
@@ -21,16 +20,18 @@ const AssessmentSession = sequelize.define("AssessmentSession", {
     allowNull: false,
   },
   questionIds: {
-    type: DataTypes.JSON, // e.g., [101, 102, 103, ...]
+    type: DataTypes.JSON,
     allowNull: false,
-  },
-  answers: {
-    type: DataTypes.JSON, // Array of objects: [{questionId, selectedOptionIndex}]
-    defaultValue: [],
   },
   currentIndex: {
     type: DataTypes.INTEGER,
+    allowNull: false,
     defaultValue: 0,
+  },
+  answers: {
+    type: DataTypes.JSON,
+    allowNull: false,
+    defaultValue: [],
   },
   isCompleted: {
     type: DataTypes.BOOLEAN,

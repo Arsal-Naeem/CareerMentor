@@ -8,6 +8,8 @@ import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { validations } from "@/validations/auth/validations";
 import { Message } from "@/components/Message";
+import { useVerifyToken } from "@/services/auth/auth.service";
+import { Link } from "react-router-dom";
 
 export const ResetPassword = () => {
   usePageTitle("Reset Password");
@@ -16,11 +18,32 @@ export const ResetPassword = () => {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
-    // navigate to login on success
+  const {
+    mutate: verifyToken,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+  } = useVerifyToken();
+
+  const password = watch("password");
+
+  const onSubmit = (data) => {
+    verifyToken(
+      { password: data.password, token },
+      {
+        onSuccess: () => {
+          console.log("Password reset successful");
+        },
+        onError: (error) => {
+          console.error("Error resetting password:", error);
+        },
+      }
+    );
   };
 
   return (

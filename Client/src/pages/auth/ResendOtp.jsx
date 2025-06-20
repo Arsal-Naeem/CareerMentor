@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import BackButton from "@/components/buttons/BackButton";
-import { useForgotPassword } from "@/services/auth/auth.service";
+import {
+  useForgotPassword,
+  useResendVerificationEmail,
+} from "@/services/auth/auth.service";
 import { useForm } from "react-hook-form";
 import { Message } from "@/components/Message";
 import { validations } from "@/validations/auth/validations";
+import { useNavigate } from "react-router-dom";
 
 export const ResendOtp = () => {
   // email will be sent to the user to get the otp
@@ -17,14 +21,16 @@ export const ResendOtp = () => {
   usePageTitle("Resend Otp");
 
   const [email, setEmail] = useState("");
+  const [cooldown, setCooldown] = useState(0);
+  const navigate = useNavigate();
 
   const {
-    mutate: forgotPassword,
+    mutate: resendVerification,
     isPending,
     isSuccess,
     isError,
     error,
-  } = useForgotPassword();
+  } = useResendVerificationEmail();
 
   const {
     register,
@@ -32,17 +38,29 @@ export const ResendOtp = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    const email = data.email;
 
     if (!email.trim()) return;
 
-    forgotPassword(email, {
+    resendVerification(email, {
       onSuccess: () => {
-        // navigate the user to the verify identity page
+        console.log("OTP sent successfully");
+        navigate("/auth/verify-identity");
+        setCooldown(30); // Set cooldown to 30 seconds
+      },
+      onError: (err) => {
+        console.error("Error sending OTP:", err);
       },
     });
   };
+
+  useEffect(() => {
+    if (cooldown > 0) {
+      const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [cooldown]);
 
   return (
     <AuthLayout
@@ -92,10 +110,14 @@ export const ResendOtp = () => {
             <BackButton />
             <Button
               type="submit"
-              disabled={isPending}
+              disabled={isPending || cooldown > 0}
               className="text-white anonymous-font font-medium text-base rounded-full w-40 py-3 md:py-6 self-end"
             >
-              {isPending ? "Sending..." : "Resend Otp"}
+              {isPending
+                ? "Sending..."
+                : cooldown > 0
+                ? `Wait ${cooldown}s`
+                : "Resend OTP"}
             </Button>
           </div>
         </form>

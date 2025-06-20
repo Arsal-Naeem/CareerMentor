@@ -3,560 +3,520 @@
     "category": "critical-thinking",
     "subcategory": "management-and-planning",
     "questionText": "When faced with multiple tasks, how do you decide which one to do first?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
     "options": [
-      {
-        "label": "a",
-        "text": "I start with the most urgent task.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "I do the easiest task first.",
-        "score": 2
-      },
-      {
-        "label": "c",
-        "text": "I randomly pick one and start.",
-        "score": 1
-      },
-      {
-        "label": "d",
-        "text": "I wait until I feel motivated.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "analyze"
+      { "optionText": "I start with the most urgent task.", "score": 4 },
+      { "optionText": "I do the easiest task first.", "score": 3 },
+      { "optionText": "I randomly pick one and start.", "score": 2 },
+      { "optionText": "I wait until I feel motivated.", "score": 1 }
+    ]
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "management-and-planning",
+    "questionText": "How would you plan a group trip with limited time and budget?",
+    "bloomLevel": "create",
+    "bloomWeight": 1.5,
+    "options": [
+      { "optionText": "Create a checklist and assign roles.", "score": 4 },
+      { "optionText": "Let everyone decide what they want to do.", "score": 3 },
+      { "optionText": "Wait and see what others suggest.", "score": 2 },
+      { "optionText": "Focus on the cheapest option only.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "management-and-planning",
     "questionText": "What's the first step you take when starting a new project?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
     "options": [
-      {
-        "label": "a",
-        "text": "Understand the goal and make a plan.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Start working immediately.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "Wait for others to begin.",
-        "score": 0
-      },
-      {
-        "label": "d",
-        "text": "Collect all resources without planning.",
-        "score": 2
-      }
-    ],
-    "bloomLevel": "analyze"
+      { "optionText": "Understand the goal and make a plan.", "score": 4 },
+      { "optionText": "Start working immediately.", "score": 3 },
+      { "optionText": "Wait for others to begin.", "score": 2 },
+      { "optionText": "Collect all resources without planning.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "management-and-planning",
-    "questionText": "How do you handle sudden changes in your schedule?",
+    "questionText": "You're given a week to complete a report. How would you plan your time?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
     "options": [
-      {
-        "label": "a",
-        "text": "Adjust plans and keep moving.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Get stressed and take a break.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "Ignore the change.",
-        "score": 0
-      },
-      {
-        "label": "d",
-        "text": "Ask someone else to manage it.",
-        "score": 2
-      }
-    ],
-    "bloomLevel": "analyze"
+      { "optionText": "Divide the work into daily tasks.", "score": 4 },
+      { "optionText": "Start the night before the deadline.", "score": 2 },
+      { "optionText": "Do everything in one sitting.", "score": 1 },
+      { "optionText": "Ask someone for help and follow their schedule.", "score": 3 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "management-and-planning",
-    "questionText": "Do you prefer creating to-do lists or handling tasks as they come?",
+    "questionText": "What do you do when your plan doesn't go as expected?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
     "options": [
-      {
-        "label": "a",
-        "text": "I always create and follow to-do lists.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "I prefer to handle tasks as they come.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "I do both depending on the situation.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "I rarely plan and work spontaneously.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "analyze"
-  },
-  {
-    "category": "critical-thinking",
-    "subcategory": "management-and-planning",
-    "questionText": "How do you ensure you don't forget important deadlines?",
-    "options": [
-      {
-        "label": "a",
-        "text": "Use a planner or digital calendar.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Try to remember them.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "Ask others to remind me.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "I often forget and rush later.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "analyze"
+      { "optionText": "Re-evaluate and adjust quickly.", "score": 4 },
+      { "optionText": "Get frustrated and stop.", "score": 1 },
+      { "optionText": "Blame others and move on.", "score": 2 },
+      { "optionText": "Wait until things settle.", "score": 3 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "leadership-and-organization",
     "questionText": "You're leading a small team. One member isn't performing well. What do you do?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
     "options": [
-      {
-        "label": "a",
-        "text": "Talk to them privately to understand the issue.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Ignore it and hope they improve.",
-        "score": 0
-      },
-      {
-        "label": "c",
-        "text": "Do their work yourself.",
-        "score": 1
-      },
-      {
-        "label": "d",
-        "text": "Complain to someone else.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "evaluate"
-  },
-  {
-    "category": "critical-thinking",
-    "subcategory": "leadership-and-organization",
-    "questionText": "What qualities make someone a good leader?",
-    "options": [
-      {
-        "label": "a",
-        "text": "Clear communication and empathy.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Being strict and demanding.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "Doing everything alone.",
-        "score": 0
-      },
-      {
-        "label": "d",
-        "text": "Letting others do what they want.",
-        "score": 2
-      }
-    ],
-    "bloomLevel": "evaluate"
+      { "optionText": "Talk to them privately to understand the issue.", "score": 4 },
+      { "optionText": "Do their work yourself.", "score": 2 },
+      { "optionText": "Complain to someone else.", "score": 1 },
+      { "optionText": "Ignore it and hope they improve.", "score": 3 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "leadership-and-organization",
     "questionText": "How do you ensure everyone in your team is on the same page?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
     "options": [
-      {
-        "label": "a",
-        "text": "Regular updates and clear communication.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Assume everyone understands.",
-        "score": 0
-      },
-      {
-        "label": "c",
-        "text": "Let others handle communication.",
-        "score": 1
-      },
-      {
-        "label": "d",
-        "text": "Only talk when there's a problem.",
-        "score": 2
-      }
-    ],
-    "bloomLevel": "evaluate"
+      { "optionText": "Regular updates and clear communication.", "score": 4 },
+      { "optionText": "Only talk when there's a problem.", "score": 2 },
+      { "optionText": "Assume everyone understands.", "score": 3 },
+      { "optionText": "Let others handle communication.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "leadership-and-organization",
-    "questionText": "You have to divide tasks among your classmates. How do you assign them?",
+    "questionText": "What do you do if your decision leads to a mistake?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
     "options": [
-      {
-        "label": "a",
-        "text": "Based on strengths and interest.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Randomly, so it's fair.",
-        "score": 2
-      },
-      {
-        "label": "c",
-        "text": "Take all the tasks yourself.",
-        "score": 1
-      },
-      {
-        "label": "d",
-        "text": "Let others pick whatever they want.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "evaluate"
+      { "optionText": "Take responsibility and try to fix it.", "score": 4 },
+      { "optionText": "Ignore the mistake.", "score": 1 },
+      { "optionText": "Pretend it wasn't your decision.", "score": 2 },
+      { "optionText": "Blame someone else.", "score": 3 }
+    ]
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "leadership-and-organization",
+    "questionText": "You're in charge of organizing a seminar. How would you delegate tasks?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
+    "options": [
+      { "optionText": "Divide tasks based on skill and availability.", "score": 4 },
+      { "optionText": "Do most of the work yourself.", "score": 2 },
+      { "optionText": "Ask everyone to do everything.", "score": 3 },
+      { "optionText": "Delay decisions and start late.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "leadership-and-organization",
     "questionText": "How do you handle disagreement in a group setting?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
     "options": [
-      {
-        "label": "a",
-        "text": "Listen to all sides and find a middle ground.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Ignore the disagreement.",
-        "score": 0
-      },
-      {
-        "label": "c",
-        "text": "Take the side of your close friends.",
-        "score": 1
-      },
-      {
-        "label": "d",
-        "text": "Avoid taking responsibility.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "evaluate"
-  },
-  {
-    "category": "critical-thinking",
-    "subcategory": "interest-in-people-vs-systems",
-    "questionText": "Do you prefer working alone on a task or collaborating with others?",
-    "options": [
-      {
-        "label": "a",
-        "text": "I prefer working alone where I can focus deeply.",
-        "score": 0
-      },
-      {
-        "label": "b",
-        "text": "I enjoy collaborating and sharing ideas.",
-        "score": 3
-      },
-      {
-        "label": "c",
-        "text": "Depends on the task.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "I like both equally, but lean slightly toward working alone.",
-        "score": 1
-      }
-    ],
-    "bloomLevel": "apply"
+      { "optionText": "Listen to all sides and find a middle ground.", "score": 4 },
+      { "optionText": "Avoid taking responsibility.", "score": 1 },
+      { "optionText": "Ignore the disagreement.", "score": 2 },
+      { "optionText": "Take the side of your close friends.", "score": 3 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "interest-in-people-vs-systems",
     "questionText": "When solving a problem, do you focus more on people's needs or the system's efficiency?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
     "options": [
-      {
-        "label": "a",
-        "text": "People's needs are more important to me.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "I focus entirely on the system's performance.",
-        "score": 0
-      },
-      {
-        "label": "c",
-        "text": "I try to balance both.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "It depends on the context.",
-        "score": 1
-      }
-    ],
-    "bloomLevel": "apply"
+      { "optionText": "People's needs are more important to me.", "score": 4 },
+      { "optionText": "I try to balance both.", "score": 3 },
+      { "optionText": "It depends on the context.", "score": 2 },
+      { "optionText": "I focus entirely on the system's performance.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "interest-in-people-vs-systems",
     "questionText": "Are you more interested in understanding how a machine works or how a person thinks?",
+    "bloomLevel": "understand",
+    "bloomWeight": 1.1,
     "options": [
-      {
-        "label": "a",
-        "text": "How a machine works.",
-        "score": 0
-      },
-      {
-        "label": "b",
-        "text": "How a person thinks.",
-        "score": 3
-      },
-      {
-        "label": "c",
-        "text": "Both are equally interesting.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "Neither really interests me much.",
-        "score": 1
-      }
-    ],
-    "bloomLevel": "apply"
+      { "optionText": "How a person thinks.", "score": 4 },
+      { "optionText": "Both are equally interesting.", "score": 3 },
+      { "optionText": "How a machine works.", "score": 2 },
+      { "optionText": "Neither really interests me much.", "score": 1 }
+    ]
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "interest-in-people-vs-systems",
+    "questionText": "You're given the choice between managing a team or analyzing a system—what do you choose?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Managing the team.", "score": 4 },
+      { "optionText": "I enjoy both roles.", "score": 3 },
+      { "optionText": "Analyzing the system.", "score": 2 },
+      { "optionText": "I don't feel ready for either.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "interest-in-people-vs-systems",
     "questionText": "Would you rather help resolve a team conflict or improve a workflow process?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
     "options": [
-      {
-        "label": "a",
-        "text": "Resolve a team conflict.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Improve a workflow process.",
-        "score": 0
-      },
-      {
-        "label": "c",
-        "text": "It depends on which is more urgent.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "I'd avoid both if possible.",
-        "score": 1
-      }
-    ],
-    "bloomLevel": "apply"
+      { "optionText": "Resolve a team conflict.", "score": 4 },
+      { "optionText": "Improve a workflow process.", "score": 2 },
+      { "optionText": "It depends on which is more urgent.", "score": 3 },
+      { "optionText": "I'd avoid both if possible.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "interest-in-people-vs-systems",
-    "questionText": "What interests you more: organizing people or organizing data?",
+    "questionText": "What makes you more satisfied: a well-functioning process or a well-motivated team?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
     "options": [
-      {
-        "label": "a",
-        "text": "Organizing people and tasks.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Organizing and structuring data.",
-        "score": 0
-      },
-      {
-        "label": "c",
-        "text": "I like both.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "I'm not interested in either.",
-        "score": 1
-      }
-    ],
-    "bloomLevel": "apply"
-  },
-  {
-    "category": "critical-thinking",
-    "subcategory": "communication-and-teamwork",
-    "questionText": "How do you ensure your team understands your ideas?",
-    "options": [
-      {
-        "label": "a",
-        "text": "I explain clearly and ask if they have questions.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "I assume they'll ask if they're confused.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "I send a written summary after explaining.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "I repeat my points several times.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "understand"
+      { "optionText": "A well-motivated team.", "score": 4 },
+      { "optionText": "Both are equally satisfying.", "score": 3 },
+      { "optionText": "A smooth, functioning process.", "score": 2 },
+      { "optionText": "I don't think about this much.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "communication-and-teamwork",
     "questionText": "You disagree with a teammate. What's your approach?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
     "options": [
-      {
-        "label": "a",
-        "text": "I listen to their point first, then explain mine.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "I try to avoid conflict and stay quiet.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "I strongly defend my view until they agree.",
-        "score": 0
-      },
-      {
-        "label": "d",
-        "text": "I find a middle ground to keep peace.",
-        "score": 2
-      }
-    ],
-    "bloomLevel": "understand"
+      { "optionText": "I listen to their point first, then explain mine.", "score": 4 },
+      { "optionText": "I find a middle ground to keep peace.", "score": 3 },
+      { "optionText": "I try to avoid conflict and stay quiet.", "score": 2 },
+      { "optionText": "I strongly defend my view until they agree.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "communication-and-teamwork",
-    "questionText": "How do you handle team members who dominate the conversation?",
+    "questionText": "How do you ensure your team understands your ideas?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
     "options": [
-      {
-        "label": "a",
-        "text": "Politely ask others to share their thoughts too.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "Let them lead, I don't mind.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "Interrupt and speak over them.",
-        "score": 0
-      },
-      {
-        "label": "d",
-        "text": "Talk to them privately about it.",
-        "score": 2
-      }
-    ],
-    "bloomLevel": "understand"
+      { "optionText": "I explain clearly and ask if they have questions.", "score": 4 },
+      { "optionText": "I send a written summary after explaining.", "score": 3 },
+      { "optionText": "I repeat my points several times.", "score": 2 },
+      { "optionText": "I assume they'll ask if they're confused.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "communication-and-teamwork",
-    "questionText": "What do you do when a teammate misinterprets your instructions?",
+    "questionText": "How do you encourage open dialogue in a group setting?",
+    "bloomLevel": "create",
+    "bloomWeight": 1.5,
     "options": [
-      {
-        "label": "a",
-        "text": "I calmly explain it again with more clarity.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "I ignore it—they'll figure it out eventually.",
-        "score": 0
-      },
-      {
-        "label": "c",
-        "text": "I get frustrated and raise my voice.",
-        "score": 0
-      },
-      {
-        "label": "d",
-        "text": "I ask another teammate to explain it.",
-        "score": 2
-      }
-    ],
-    "bloomLevel": "understand"
+      { "optionText": "I create a friendly environment where all feel safe to speak.", "score": 4 },
+      { "optionText": "I start the discussion and invite others to join.", "score": 3 },
+      { "optionText": "I let the most active members lead.", "score": 2 },
+      { "optionText": "I don't usually participate much.", "score": 1 }
+    ]
   },
   {
     "category": "critical-thinking",
     "subcategory": "communication-and-teamwork",
-    "questionText": "Do you give feedback even when it might upset someone?",
+    "questionText": "You're working with a quiet team member. How do you engage them?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
     "options": [
-      {
-        "label": "a",
-        "text": "Yes, but I try to be respectful.",
-        "score": 3
-      },
-      {
-        "label": "b",
-        "text": "No, I avoid hurting feelings.",
-        "score": 1
-      },
-      {
-        "label": "c",
-        "text": "Only if it's very necessary.",
-        "score": 2
-      },
-      {
-        "label": "d",
-        "text": "I let someone else handle it.",
-        "score": 0
-      }
-    ],
-    "bloomLevel": "understand"
+      { "optionText": "I ask for their input directly.", "score": 4 },
+      { "optionText": "I check with them privately later.", "score": 3 },
+      { "optionText": "I let them be, they might be shy.", "score": 2 },
+      { "optionText": "I speak for them if they seem unsure.", "score": 1 }
+    ]
+  },
+  {
+    "category": "critical-thinking",
+    "subcategory": "communication-and-teamwork",
+    "questionText": "What do you do when someone's idea conflicts with yours?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "I listen first, then present my view calmly.", "score": 4 },
+      { "optionText": "I try to merge both ideas.", "score": 3 },
+      { "optionText": "I avoid the topic.", "score": 2 },
+      { "optionText": "I argue to prove mine is better.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "technical-inclination-logic",
+    "questionText": "When faced with a technical problem, what is your first step?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
+    "options": [
+      { "optionText": "Break down the problem into smaller parts.", "score": 4 },
+      { "optionText": "Search for ready-made solutions online.", "score": 3 },
+      { "optionText": "Guess the solution based on past experience.", "score": 2 },
+      { "optionText": "Ask someone else to solve it.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "technical-inclination-logic",
+    "questionText": "You encounter a coding error. How do you proceed?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
+    "options": [
+      { "optionText": "Trace the error step-by-step through the code.", "score": 4 },
+      { "optionText": "Restart the program without debugging.", "score": 2 },
+      { "optionText": "Copy code from others without understanding.", "score": 1 },
+      { "optionText": "Ignore the error and hope it resolves.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "technical-inclination-logic",
+    "questionText": "How do you verify your technical solutions?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Test them thoroughly under different scenarios.", "score": 4 },
+      { "optionText": "Check only the obvious cases.", "score": 2 },
+      { "optionText": "Trust that it works if it runs once.", "score": 1 },
+      { "optionText": "Skip testing to save time.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "technical-inclination-logic",
+    "questionText": "When debugging, how do you isolate the cause?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
+    "options": [
+      { "optionText": "Divide the problem and test each part independently.", "score": 4 },
+      { "optionText": "Randomly change parts until it works.", "score": 2 },
+      { "optionText": "Replace the whole system without analysis.", "score": 1 },
+      { "optionText": "Ask someone else to fix it.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "technical-inclination-logic",
+    "questionText": "You have limited resources to solve a problem. What's your approach?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
+    "options": [
+      { "optionText": "Prioritize and find the most efficient solution.", "score": 4 },
+      { "optionText": "Try everything you can think of.", "score": 2 },
+      { "optionText": "Use the most complex solution available.", "score": 1 },
+      { "optionText": "Avoid the problem.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "analytical-reasoning",
+    "questionText": "Given a set of data, how do you identify patterns?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
+    "options": [
+      { "optionText": "Organize data systematically and look for trends.", "score": 4 },
+      { "optionText": "Look at data briefly and guess patterns.", "score": 2 },
+      { "optionText": "Ignore data irregularities.", "score": 1 },
+      { "optionText": "Wait for someone else to explain.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "analytical-reasoning",
+    "questionText": "What do you do when data contradicts your initial assumptions?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Reassess your assumptions and adjust your reasoning.", "score": 4 },
+      { "optionText": "Ignore contradictions and proceed.", "score": 2 },
+      { "optionText": "Change the data to fit assumptions.", "score": 1 },
+      { "optionText": "Avoid analyzing the data.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "analytical-reasoning",
+    "questionText": "How do you handle problems requiring multiple steps of reasoning?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
+    "options": [
+      { "optionText": "Map out each step clearly before proceeding.", "score": 4 },
+      { "optionText": "Jump straight to the end.", "score": 2 },
+      { "optionText": "Skip steps to save time.", "score": 1 },
+      { "optionText": "Avoid complex problems.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "analytical-reasoning",
+    "questionText": "When given contradictory clues, how do you decide which to trust?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Evaluate the source and evidence for each clue.", "score": 4 },
+      { "optionText": "Choose the easiest to believe.", "score": 2 },
+      { "optionText": "Ignore contradictions.", "score": 1 },
+      { "optionText": "Ask someone else to decide.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "analytical-reasoning",
+    "questionText": "What is your approach to hypothesis testing?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
+    "options": [
+      { "optionText": "Form hypotheses and test them systematically.", "score": 4 },
+      { "optionText": "Accept initial guesses without testing.", "score": 2 },
+      { "optionText": "Avoid testing hypotheses.", "score": 1 },
+      { "optionText": "Let others test.", "score": 0 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "strategic-thinking",
+    "questionText": "When planning to solve a problem, what is your first step?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
+    "options": [
+      { "optionText": "Set clear goals and outline a step-by-step plan.", "score": 5 },
+      { "optionText": "Start immediately without planning.", "score": 3 },
+      { "optionText": "Wait for instructions.", "score": 2 },
+      { "optionText": "Delegate the task to others.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "strategic-thinking",
+    "questionText": "How do you decide which solution to implement among several options?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Evaluate pros and cons and pick the most effective.", "score": 5 },
+      { "optionText": "Choose the easiest or fastest solution.", "score": 3 },
+      { "optionText": "Pick randomly.", "score": 2 },
+      { "optionText": "Avoid decision-making.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "strategic-thinking",
+    "questionText": "When a strategy fails, what is your response?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Analyze causes and revise the strategy.", "score": 5 },
+      { "optionText": "Blame external factors and give up.", "score": 2 },
+      { "optionText": "Repeat the same strategy.", "score": 3 },
+      { "optionText": "Avoid responsibility.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "strategic-thinking",
+    "questionText": "How do you involve others in strategic problem solving?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
+    "options": [
+      { "optionText": "Collaborate and gather diverse input before deciding.", "score": 5 },
+      { "optionText": "Work alone to save time.", "score": 3 },
+      { "optionText": "Follow others' instructions without input.", "score": 2 },
+      { "optionText": "Avoid teamwork.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "strategic-thinking",
+    "questionText": "You have limited time to solve a problem. What is your strategy?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
+    "options": [
+      { "optionText": "Focus on high-impact actions first.", "score": 5 },
+      { "optionText": "Work on any task that seems doable.", "score": 3 },
+      { "optionText": "Rush everything without planning.", "score": 2 },
+      { "optionText": "Avoid the problem due to time pressure.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "practical-decision-making",
+    "questionText": "When making a decision under pressure, how do you act?",
+    "bloomLevel": "apply",
+    "bloomWeight": 1.2,
+    "options": [
+      { "optionText": "Stay calm and rely on previous experience.", "score": 5 },
+      { "optionText": "Make quick guesses without thinking.", "score": 3 },
+      { "optionText": "Delay decision until pressure eases.", "score": 2 },
+      { "optionText": "Avoid decisions.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "practical-decision-making",
+    "questionText": "What do you do if you realize your decision was wrong?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Admit and correct it quickly.", "score": 5 },
+      { "optionText": "Ignore mistakes and continue.", "score": 2 },
+      { "optionText": "Blame others.", "score": 1 },
+      { "optionText": "Avoid admitting fault.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "practical-decision-making",
+    "questionText": "How do you prioritize decisions when multiple problems arise?",
+    "bloomLevel": "analyze",
+    "bloomWeight": 1.3,
+    "options": [
+      { "optionText": "Assess urgency and impact to decide order.", "score": 5 },
+      { "optionText": "Deal with problems as they appear randomly.", "score": 3 },
+      { "optionText": "Avoid handling multiple problems.", "score": 1 },
+      { "optionText": "Delegate everything.", "score": 2 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "practical-decision-making",
+    "questionText": "When faced with an ethical dilemma, how do you decide?",
+    "bloomLevel": "evaluate",
+    "bloomWeight": 1.4,
+    "options": [
+      { "optionText": "Consider values and choose the most ethical option.", "score": 5 },
+      { "optionText": "Choose the easiest way out.", "score": 2 },
+      { "optionText": "Ignore ethics.", "score": 1 },
+      { "optionText": "Avoid making the decision.", "score": 1 }
+    ]
+  },
+  {
+    "category": "problem-solving-skills",
+    "subcategory": "practical-decision-making",
+    "questionText": "How often do you review past decisions to improve?",
+    "bloomLevel": "remember",
+    "bloomWeight": 1.0,
+    "options": [
+      { "optionText": "Regularly reflect and learn.", "score": 5 },
+      { "optionText": "Rarely look back.", "score": 3 },
+      { "optionText": "Never review.", "score": 1 },
+      { "optionText": "Avoid thinking about past decisions.", "score": 1 }
+    ]
   }
 ]

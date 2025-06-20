@@ -37,3 +37,15 @@ export const useLogout = () => {
     mutationFn: AuthAPI.logout,
   });
 };
+
+export const useVerifyToken = () => {
+  return useMutation({
+    mutationFn: AuthAPI.verifyToken,
+  });
+}
+
+export const useResendVerificationEmail = () => {
+  return useMutation({
+    mutationFn: AuthAPI.resendVerification,
+  });
+}

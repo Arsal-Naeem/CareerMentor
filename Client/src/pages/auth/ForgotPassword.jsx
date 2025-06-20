@@ -14,8 +14,6 @@ import { useNavigate } from "react-router-dom";
 export const ForgotPassword = () => {
   usePageTitle("Forgot Password");
 
-  const [email, setEmail] = useState("");
-
   const {
     mutate: forgotPassword,
     isPending,
@@ -30,14 +28,17 @@ export const ForgotPassword = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    const email = data.email.trim();
 
-    if (!email.trim()) return;
+    if (!email) return;
+    console.log("Submitting forgot password request for email:", email);
 
     forgotPassword(email, {
       onSuccess: () => {
+        console.log("Reset email sent successfully");
         // navigate through the email to reset password page
+        alert("Please check your email for the reset link.");
       },
     });
   };
@@ -62,8 +63,7 @@ export const ForgotPassword = () => {
               type="email"
               placeholder="johndoe@gmail.com"
               className="rounded-md"
-              onChange={(e) => setEmail(e.target.value)}
-              {...register("email", validations.email)}
+              {...register("email", validations.email)} // ✅ Use only this
             />
             <div className="min-h-[1.25rem] md:min-h-[35px]">
               <Message message={errors.email?.message} />

@@ -33,8 +33,10 @@ export const VerifyIdentity = async (data) => {
   return res.data;
 };
 
-export const verifyToken = async () => {
-  const res = await axiosInstance.get(authApiRoutes.VERIFY_TOKEN);
+export const verifyToken = async ({ password, token }) => {
+  const res = await axiosInstance.post(`${authApiRoutes.VERIFY_TOKEN}/${token}`, {
+    password,
+  });
   return res.data;
 };
 
