@@ -44,3 +44,8 @@ export const logout = async () => {
   const res = await axiosInstance.post(authApiRoutes.LOGOUT);
   return res.data;
 };
+
+export const verifyBrowserToken = async () => {
+  const res = await axiosInstance.get(authApiRoutes.verifyBrowserToken); // or whatever your endpoint is
+  return res.data;
+};

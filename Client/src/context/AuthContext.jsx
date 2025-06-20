@@ -6,7 +6,10 @@ import { useLogout } from "@/services/auth/auth.service";
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  });
 
   const { data, isLoading } = useQuery({
     queryKey: ["me"],
@@ -18,11 +21,9 @@ export const AuthProvider = ({ children }) => {
 
   const logoutMutation = useLogout({
     onSuccess: () => {
+      localStorage.removeItem("user");
       setUser(null);
       window.location.replace("/auth/login");
-    },
-    onError: () => {
-      console.error("Logout failed");
     },
   });
 

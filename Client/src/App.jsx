@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import "./App.css";
+
+//Protected Routes
+import { PublicRoute, UserProtectedRoute, AdminProtectedRoute } from "./components/protectedRoute/protectedRoutes";
 
 //Authentication
 import {
@@ -24,16 +26,19 @@ import {
   Settings,
   SkillTracking,
 } from "./pages/dashboard";
+
 // blogs
 import { Blogs } from "./pages/blogs/Blogs";
 import { BlogDetail } from "./pages/blogs/BlogDetail";
 import AddNewBlog from "./pages/blogs/AddNewBlog";
+
 // admin
 import { AdminDashboard } from "./pages/adminDashboard/AdminDashboard";
 import AdminBlogs from "./pages/adminDashboard/Blogs/AdminBlogs";
 import AdminEvents from "./pages/adminDashboard/Events/AdminEvents";
 import CareerExplorer from "./pages/adminDashboard/CareerExplorer/CareerExplorer";
 import AdminBlogDetails from "./pages/adminDashboard/Blogs/AdminBlogDetails";
+
 // user blogs
 import UserBlogs from "./pages/dashboard/blogs/UserBlogs";
 
@@ -43,6 +48,7 @@ function App() {
       {/* TODO : avoid repetition here and store the routes in separate file */}
       <BrowserRouter>
         <Routes>
+          {/* Public Routes - Accessible to everyone */}
           <Route path="/" element={<Home />} />
           <Route path="/blogs">
             <Route index element={<Blogs />} />
@@ -50,36 +56,161 @@ function App() {
           </Route>
           <Route path="/events" element={<Events />} />
           <Route path="/careers" element={<Careers />} />
-          {/* auth */}
+
+          {/* Auth Routes - Only for guests (redirects logged-in users) */}
           <Route path="/auth">
-            <Route path="login" element={<Login />} />
-            <Route path="signup" element={<Signup />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="reset-password/:token" element={<ResetPassword />} />
-            <Route path="verify-identity" element={<VerifyIdentity />} />
-            <Route path="resend-otp" element={<ResendOtp />} />
+            <Route 
+              path="login" 
+              element={
+                <PublicRoute>
+                  <Login />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="signup" 
+              element={
+                <PublicRoute>
+                  <Signup />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="forgot-password" 
+              element={
+                <PublicRoute>
+                  <ForgotPassword />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="reset-password/:token" 
+              element={
+                <PublicRoute>
+                  <ResetPassword />
+                </PublicRoute>
+              } 
+            />
+            <Route 
+              path="verify-identity" 
+              element={<VerifyIdentity />} 
+            />
+            <Route 
+              path="resend-otp" 
+              element={<ResendOtp />} 
+            />
           </Route>
-          {/* dashboard */}
+
+          {/* User Dashboard Routes - Protected for authenticated users */}
           <Route path="/dashboard">
-            <Route index element={<Dashboard />} />
+            <Route 
+              index 
+              element={
+                <UserProtectedRoute>
+                  <Dashboard />
+                </UserProtectedRoute>
+              } 
+            />
             <Route
               path="career-assessment"
-              element={<AssessmentFlowManager />}
+              element={
+                <UserProtectedRoute>
+                  <AssessmentFlowManager />
+                </UserProtectedRoute>
+              }
             />
-            <Route path="skill-tracker" element={<SkillTracking />} />
-            <Route path="mentorship" element={<Mentors />} />
-            <Route path="achievements" element={<Achievements />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="my-blogs" element={<UserBlogs />} />
-            <Route path="add-new-blogs" element={<AddNewBlog />} />
+            <Route 
+              path="skill-tracker" 
+              element={
+                <UserProtectedRoute>
+                  <SkillTracking />
+                </UserProtectedRoute>
+              } 
+            />
+            <Route 
+              path="mentorship" 
+              element={
+                <UserProtectedRoute>
+                  <Mentors />
+                </UserProtectedRoute>
+              } 
+            />
+            <Route 
+              path="achievements" 
+              element={
+                <UserProtectedRoute>
+                  <Achievements />
+                </UserProtectedRoute>
+              } 
+            />
+            <Route 
+              path="settings" 
+              element={
+                <UserProtectedRoute>
+                  <Settings />
+                </UserProtectedRoute>
+              } 
+            />
+            <Route 
+              path="my-blogs" 
+              element={
+                <UserProtectedRoute>
+                  <UserBlogs />
+                </UserProtectedRoute>
+              } 
+            />
+            <Route 
+              path="add-new-blogs" 
+              element={
+                <UserProtectedRoute>
+                  <AddNewBlog />
+                </UserProtectedRoute>
+              } 
+            />
           </Route>
-          {/* Admin Dashboard */}
+
+          {/* Admin Dashboard Routes - Protected for admin users only */}
           <Route path="/admin-dashboard">
-            <Route index element={<AdminDashboard />} />
-            <Route path="blogs" element={<AdminBlogs />} />
-            <Route path="blogs/:id" element={<AdminBlogDetails />} />
-            <Route path="events" element={<AdminEvents />} />
-            <Route path="career-explorer" element={<CareerExplorer />} />
+            <Route 
+              index 
+              element={
+                <AdminProtectedRoute>
+                  <AdminDashboard />
+                </AdminProtectedRoute>
+              } 
+            />
+            <Route 
+              path="blogs" 
+              element={
+                <AdminProtectedRoute>
+                  <AdminBlogs />
+                </AdminProtectedRoute>
+              } 
+            />
+            <Route 
+              path="blogs/:id" 
+              element={
+                <AdminProtectedRoute>
+                  <AdminBlogDetails />
+                </AdminProtectedRoute>
+              } 
+            />
+            <Route 
+              path="events" 
+              element={
+                <AdminProtectedRoute>
+                  <AdminEvents />
+                </AdminProtectedRoute>
+              } 
+            />
+            <Route 
+              path="career-explorer" 
+              element={
+                <AdminProtectedRoute>
+                  <CareerExplorer />
+                </AdminProtectedRoute>
+              } 
+            />
           </Route>
         </Routes>
       </BrowserRouter>

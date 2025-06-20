@@ -5,6 +5,7 @@ import Logo from "../assets/icons/logo.svg";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { useGlobalContext } from "@/context/GlobalContext";
 import Sidebar from "./sidebar/Sidebar";
+import { useAuth } from "@/context/AuthContext";
 
 const Header = () => {
   const [isScrolledPast, setIsScrolledPast] = useState(false);
@@ -15,6 +16,8 @@ const Header = () => {
   const location = useLocation();
 
   const isAuthPage = location.pathname.startsWith("/auth/");
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const onScroll = () => {
@@ -97,12 +100,21 @@ const Header = () => {
                 })}
               </div>
 
-              <button
-                onClick={handleGetStarted}
-                className="border border-custom-black-dark text-sm md:text-base font-normal rounded-full text-custom-black-dark anonymous-font px-3 py-1 md:px-6 md:py-2"
-              >
-                Get Started
-              </button>
+              {user ? (
+                <Link
+                  to={user.role === "admin" ? "/admin-dashboard" : "/dashboard"}
+                  className="border border-custom-black-dark text-sm md:text-base font-normal rounded-full text-custom-black-dark anonymous-font px-3 py-1 md:px-6 md:py-2"
+                >
+                  Dashboard
+                </Link>
+              ) : (
+                <button
+                  onClick={handleGetStarted}
+                  className="border border-custom-black-dark text-sm md:text-base font-normal rounded-full text-custom-black-dark anonymous-font px-3 py-1 md:px-6 md:py-2"
+                >
+                  Get Started
+                </button>
+              )}
             </>
           )}
         </nav>

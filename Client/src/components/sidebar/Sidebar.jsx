@@ -11,7 +11,7 @@ import { useAuth } from "@/context/AuthContext";
 export default function Sidebar({ items, variant = "sidebar" }) {
   const location = useLocation();
   const { open, setOpen } = useGlobalContext();
-  const { logout } = useAuth;
+  const { logout } = useAuth();
 
   // TODO : fix the active item styling on admin screens
   // Fix the width of sidebar on admin pages

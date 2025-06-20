@@ -6,4 +6,5 @@ export const authApiRoutes = {
   VERIFY_EMAIL: "/auth/verify-email",
   VERIFY_TOKEN: "/auth/reset-password",
   LOGOUT: "/auth/logout",
+  verifyBrowserToken: "/auth/checkauth",
 };
