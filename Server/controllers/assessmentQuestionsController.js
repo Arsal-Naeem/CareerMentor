@@ -11,11 +11,12 @@ const formatQuestion = (question) => ({
   bloomLevel: question.bloomLevel,
   bloomWeight: question.bloomWeight,
   subcategory: question.subcategory,
-  options: question.options?.map((opt) => ({
-    id: opt.id,
-    optionText: opt.optionText,
-    score: opt.score,
-  })) || [],
+  options:
+    question.options?.map((opt) => ({
+      id: opt.id,
+      optionText: opt.optionText,
+      score: opt.score,
+    })) || [],
 });
 
 // Create Assessment Session
@@ -26,7 +27,12 @@ export const createAssessmentSession = async (req, res) => {
 
     const subcategories = await getSubcategoriesByCategory(category);
     if (!subcategories?.length) {
-      return res.status(400).json({ success: false, message: "No subcategories found for category." });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "No subcategories found for category.",
+        });
     }
 
     const selectedQuestions = [];
@@ -35,7 +41,7 @@ export const createAssessmentSession = async (req, res) => {
       selectedQuestions.push(...twoQs);
     }
 
-    const questionIds = selectedQuestions.map(q => q.id);
+    const questionIds = selectedQuestions.map((q) => q.id);
     const session = await AssessmentSession.create({
       userId,
       category,
@@ -49,13 +55,14 @@ export const createAssessmentSession = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      sessionId: session.id,
+      sessionId: session.sessionId,
       questions: formattedQuestions,
     });
-
   } catch (err) {
     console.error("Start Assessment Error:", err);
-    return res.status(500).json({ success: false, message: "Unable to start assessment" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Unable to start assessment" });
   }
 };
 
@@ -65,20 +72,33 @@ export const getAssessmentSession = async (req, res) => {
     const { sessionId } = req.params;
     const session = await AssessmentSession.findByPk(sessionId);
     if (!session) {
-      return res.status(404).json({ success: false, message: "Session not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Session not found" });
     }
 
     const { questionIds, currentIndex } = session;
     if (currentIndex >= questionIds.length) {
-      return res.status(200).json({ success: true, isFinished: true, message: "Assessment already completed." });
+      return res
+        .status(200)
+        .json({
+          success: true,
+          isFinished: true,
+          message: "Assessment already completed.",
+        });
     }
 
-    const question = await AssessmentQuestion.findByPk(questionIds[currentIndex], {
-      include: [{ model: AssessmentOption, as: "options" }],
-    });
+    const question = await AssessmentQuestion.findByPk(
+      questionIds[currentIndex],
+      {
+        include: [{ model: AssessmentOption, as: "options" }],
+      }
+    );
 
     if (!question) {
-      return res.status(404).json({ success: false, message: "Question not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Question not found" });
     }
 
     return res.status(200).json({
@@ -88,10 +108,14 @@ export const getAssessmentSession = async (req, res) => {
       isFinished: false,
       question: formatQuestion(question),
     });
-
   } catch (err) {
     console.error("Get Assessment Session Error:", err);
-    return res.status(500).json({ success: false, message: "Failed to retrieve assessment session" });
+    return res
+      .status(500)
+      .json({
+        success: false,
+        message: "Failed to retrieve assessment session",
+      });
   }
 };
 
@@ -103,13 +127,21 @@ export const submitAnswer = async (req, res) => {
 
     const session = await AssessmentSession.findByPk(sessionId);
     if (!session) {
-      return res.status(404).json({ success: false, message: "Session not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Session not found" });
     }
 
     const { questionIds, currentIndex, answers } = session;
 
     if (currentIndex >= questionIds.length) {
-      return res.status(200).json({ success: true, isFinished: true, message: "Assessment already completed." });
+      return res
+        .status(200)
+        .json({
+          success: true,
+          isFinished: true,
+          message: "Assessment already completed.",
+        });
     }
 
     const currentQuestionId = questionIds[currentIndex];
@@ -142,7 +174,8 @@ export const submitAnswer = async (req, res) => {
     });
   } catch (err) {
     console.error("Submit Answer Error:", err);
-    return res.status(500).json({ success: false, message: "Failed to submit answer" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Failed to submit answer" });
   }
 };
-
