@@ -2,6 +2,7 @@ import React from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const EventSkeleton = () => {
+  // TODO : fix the skeleton width
   return (
     <div className="flex flex-col md:flex-row gap-6 items-center md:items-start border-b border-custom-gray pb-8 w-full">
       {/* Image Skeleton - match exact width of Event component */}
