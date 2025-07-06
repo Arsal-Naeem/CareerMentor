@@ -8,8 +8,8 @@ import { OutlinedActionButton } from "@/components/buttons/OutlinedActionButton"
 import { BookOpenCheck, Ellipsis, Plus, Trash2 } from "lucide-react";
 import { SecondaryButton } from "@/components/buttons/SecondaryButton";
 import {
+  careerDomainDropdownItem,
   careerDomains,
-  domainSkillDropdownItems,
   individualSkills,
   skillDropDownItems,
 } from "@/constants";
@@ -83,7 +83,7 @@ const Domains = () => {
               className="w-full h-full object-cover rounded-md"
             />
             <DropdownMenu>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger asChild>
                 <Ellipsis
                   color="#FDFDFD"
                   size={20}
@@ -91,7 +91,7 @@ const Domains = () => {
                 />
               </DropdownMenuTrigger>
               <ActionDropdown
-                items={domainSkillDropdownItems}
+                items={careerDomainDropdownItem}
                 onAction={handleActions}
                 variant="light"
               />
