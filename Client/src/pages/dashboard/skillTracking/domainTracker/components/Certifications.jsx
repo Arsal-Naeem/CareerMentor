@@ -26,7 +26,7 @@ export const Certifications = () => {
       <Heading heading="Certifications" />
       <div className="flex flex-col gap-9">
         {Array.from({ length: 3 }).map((_, index) => (
-          <div key={index} className="flex items-center justify-between">
+          <div key={index} className="flex justify-between">
             <div className="flex items-center gap-3">
               <img src={Certification} alt="certification" />
               <div className="flex flex-col gap-1 text-black">
