@@ -2,8 +2,10 @@ import express from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
 import {
   createAssessmentSession,
+  currentPredictionResult,
   generateQuestionsByCategory,
   getAssessmentSession,
+  pastPredictionResult,
   predictionResult,
   submitAnswer,
 } from "../controllers/assessmentQuestionsController.js";
@@ -162,5 +164,9 @@ router.post("/session/:sessionId/answer", verifyToken, submitAnswer);
  *         description: Unauthorized
  */
 router.post("/session/result/:sessionId", verifyToken, predictionResult);
+
+router.get("/result/current-results/:sessionId", verifyToken, currentPredictionResult)
+
+router.get("/result/past-results", verifyToken, pastPredictionResult);
 
 export default router;

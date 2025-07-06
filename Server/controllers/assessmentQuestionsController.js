@@ -463,3 +463,126 @@ export const predictionResult = async (req, res) => {
     });
   }
 };
+
+export const currentPredictionResult = async (req, res) => {
+  const { sessionId } = req.params;
+
+  console.log("sessionId", sessionId);
+
+  try {
+    const session = await AssessmentSession.findOne({ where: { sessionId } });
+
+    console.log("session", session);
+
+    if (!session) {
+      return res.status(404).json({ message: "Session not found" });
+    }
+
+    if (session.isCompleted !== true) {
+      return res
+        .status(400)
+        .json({ message: "Prediction is not completed for this session." });
+    }
+
+    const prediction = await trainingSample.findOne({ where: { sessionId } });
+
+    if (!prediction) {
+      return res.status(404).json({ message: "Prediction result not found." });
+    }
+
+    const categoryBadges = await categoryScoreGame.findAll({
+      where: { sessionId },
+      attributes: ["categoryName", "totalScore", "badge"],
+    });
+
+    return res.status(200).json({
+      sessionId,
+      prediction: {
+        recommendedCareers: [
+          {
+            career: prediction.recommendedCareer1,
+            reason: prediction.reason1,
+          },
+          {
+            career: prediction.recommendedCareer2,
+            reason: prediction.reason2,
+          },
+          {
+            career: prediction.recommendedCareer3,
+            reason: prediction.reason3,
+          },
+        ],
+
+        badges: categoryBadges,
+      },
+    });
+  } catch (error) {
+    console.error("❌ Error retrieving current prediction result:", error);
+    return res
+      .status(500)
+      .json({ message: "Server error", error: error.message });
+  }
+};
+
+export const pastPredictionResult = async (req, res) => {
+  const userId = req.userId;
+
+  try {
+    // Step 1: Get all completed sessions
+    const sessions = await AssessmentSession.findAll({
+      where: { userId, isCompleted: true },
+      attributes: ["sessionId", "createdAt"],
+      order: [["createdAt", "DESC"]],
+    });
+
+    const sessionIds = sessions.map((s) => s.sessionId);
+
+    // Step 2: Fetch predictions
+    const predictions = await trainingSample.findAll({
+      where: { sessionId: sessionIds },
+      attributes: [
+        "sessionId",
+        "recommendedCareer1",
+        "recommendedCareer2",
+        "recommendedCareer3",
+      ],
+    });
+
+    // Step 3: Fetch category scores + badges for each session
+    const badges = await categoryScoreGame.findAll({
+      where: { sessionId: sessionIds },
+      attributes: ["sessionId", "categoryName", "totalScore", "badge"],
+    });
+
+    // Step 4: Group badges by session
+    const badgeMap = {};
+    badges.forEach((b) => {
+      if (!badgeMap[b.sessionId]) badgeMap[b.sessionId] = [];
+      badgeMap[b.sessionId].push({
+        categoryName: b.categoryName,
+        totalScore: b.totalScore,
+        badge: b.badge,
+      });
+    });
+
+    // Step 5: Merge predictions with their respective badges
+    const result = predictions.map((p) => ({
+      sessionId: p.sessionId,
+      recommendedCareers: [
+        p.recommendedCareer1,
+        p.recommendedCareer2,
+        p.recommendedCareer3,
+      ],
+      badges: badgeMap[p.sessionId] || [],
+      createdAt: sessions.find((s) => s.sessionId === p.sessionId)?.createdAt,
+    }));
+
+    return res.status(200).json({ history: result });
+  } catch (error) {
+    console.error("❌ Error retrieving past prediction result:", error);
+    return res.status(500).json({
+      message: "Server error",
+      error: error.message,
+    });
+  }
+};
