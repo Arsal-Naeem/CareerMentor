@@ -7,10 +7,12 @@ import { AssessmentResult } from "@/components/careerAssessment/AssessmentResult
 import { AssessmentInitialUi } from "@/components/careerAssessment/AssessmentInitialUi";
 import { useAssessmentContext } from "@/context/AssessmentContext";
 import { SectionCompleteScreen } from "@/components/careerAssessment/SectionCompleteUi";
+import { AssessmentHistory } from "@/components/careerAssessment/AssessmentHistory";
 
 export const AssessmentFlowManager = () => {
   usePageTitle("Assessment");
   const { step } = useAssessmentContext();
+  console.log("step", step)
 
   return (
     <DashboardLayout>
@@ -18,6 +20,7 @@ export const AssessmentFlowManager = () => {
       {step === "question" && <AssessmentQuestion />}
       {step === "complete" && <SectionCompleteScreen />}
       {step === "result" && <AssessmentResult />}
+      {step === "history" && <AssessmentHistory/>}
     </DashboardLayout>
   );
 };

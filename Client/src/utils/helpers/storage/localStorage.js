@@ -4,6 +4,7 @@ export function saveItemToStorage(key, value) {
 
 export function getItemFromStorage(key) {
   const storedValue = localStorage.getItem(key);
+  console.log("storedValue", storedValue);
   return storedValue ? JSON.parse(storedValue) : null;
 }
 

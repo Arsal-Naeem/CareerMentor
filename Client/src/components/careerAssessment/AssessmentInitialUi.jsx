@@ -7,22 +7,22 @@ import { useGlobalContext } from "@/context/GlobalContext";
 import { AssessmentSectionHeading } from "./AssessmentSectionHeading";
 import { SecondaryButton } from "../buttons/SecondaryButton";
 import { Info } from "lucide-react";
-import {
-  GenerateQuestionsByCategory,
-  StartSession,
-} from "@/apis/assessment/assessment.service";
+import { SessionStarted } from "@/apis/assessment/assessment.service";
 import { BreadCrumb } from "./BreadCrumb";
 import { useAssessmentContext } from "@/context/AssessmentContext";
 import { saveItemToStorage } from "@/utils/helpers/storage/localStorage";
 import { toast } from "sonner";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import { getQuestionsByCategory } from "@/apis/assessment/assessment.api";
 
 export const AssessmentInitialUi = () => {
   const { setBreadcrumbText } = useGlobalContext();
-  const { setSessionId, setStep, setCategoryNo } = useAssessmentContext();
-  const startSession = StartSession();
-  const generateQuestions = GenerateQuestionsByCategory();
+  const { setSessionId, setStep, setCategoryNo, setQuestions } =
+    useAssessmentContext();
+  const sessionStarted = SessionStarted();
   const { isVeryLargeScreen } = useScreenSize();
+
+  console.log("sessionStarted", sessionStarted);
 
   useEffect(() => {
     setBreadcrumbText("");
@@ -30,26 +30,53 @@ export const AssessmentInitialUi = () => {
 
   const handleStartAssessment = async () => {
     try {
-      const sessionRes = await startSession.mutateAsync();
-      const sessionId = sessionRes.sessionId;
+      const resSession = await sessionStarted.mutateAsync();
+      const sessionId = resSession.sessionId;
 
       setSessionId(sessionId);
       saveItemToStorage("sessionId", sessionId);
 
-      // Post questions for category 1 → 2 → 3 sequentially
-      await generateQuestions.mutateAsync({ sessionId, categoryId: 1 });
-      await generateQuestions.mutateAsync({ sessionId, categoryId: 2 });
-      await generateQuestions.mutateAsync({ sessionId, categoryId: 3 });
+      // Always start with Category 1
+      const initialCategory = 1;
+      const questions = await getQuestionsByCategory(
+        sessionId,
+        initialCategory
+      );
 
-      saveItemToStorage("categoryNo", 1);
-      setCategoryNo(1);
-
+      setQuestions(questions);
+      setCategoryNo(initialCategory);
       setStep("question");
-      saveItemToStorage("step", "start");
 
-      toast.success("Assessment started successfully!");
-    } catch (error) {
-      console.error("❌ Error in starting assessment flow:", error.message);
+      saveItemToStorage("questions", questions);
+      saveItemToStorage("categoryNo", initialCategory);
+      saveItemToStorage("step", "question");
+
+      toast.success("Assessment started");
+    } catch (err) {
+      const sessionId = err.response?.data?.sessionId;
+
+      if (err.response?.status === 400 && sessionId) {
+        setSessionId(sessionId);
+        saveItemToStorage("sessionId", sessionId);
+
+        const initialCategory = 1;
+        const questions = await getQuestionsByCategory(
+          sessionId,
+          initialCategory
+        );
+
+        setQuestions(questions);
+        setCategoryNo(initialCategory);
+        setStep("question");
+
+        saveItemToStorage("questions", questions);
+        saveItemToStorage("categoryNo", initialCategory);
+        saveItemToStorage("step", "question");
+
+        toast.info("Resumed existing session");
+      } else {
+        toast.error(err.message || "Error starting session");
+      }
     }
   };
 

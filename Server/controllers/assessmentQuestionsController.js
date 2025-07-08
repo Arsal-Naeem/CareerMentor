@@ -32,6 +32,7 @@ const getBadge = (score) => {
 //Create and Start new session with questions
 
 export const startSession = async (req, res) => {
+  console.log("startSession", req.userId);
   const userId = req.userId;
   const categoryIds = [1, 2, 3]; // Cognitive, Creative, Self-Awareness
   const bloomLevels = [

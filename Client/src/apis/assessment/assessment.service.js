@@ -4,19 +4,9 @@ import { saveItemToStorage } from "@/utils/helpers/storage/localStorage";
 import { useAssessmentContext } from "@/context/AssessmentContext";
 import { toast } from "sonner";
 
-export const StartSession = () => {
+export const SessionStarted = () => {
   return useMutation({
-    mutationFn: AssessmentAPI.startSession,
-  });
-};
-
-export const GenerateQuestionsByCategory = () => {
-  return useMutation({
-    mutationFn: ({ sessionId, categoryId }) =>
-      AssessmentAPI.postSessionByCategory(sessionId, categoryId),
-    onSuccess: (data) => {
-      console.log("✅ Questions posted successfully:", data.questions);
-    },
+    mutationFn: AssessmentAPI.StartSession,
   });
 };
 
@@ -62,7 +52,7 @@ export const PostResults = () => {
 export const GetFinalResults = (sessionId) => {
   return useQuery({
     queryKey: ["results", sessionId],
-    queryFn: () => AssessmentAPI.getResults(sessionId),
+    queryFn: () => AssessmentAPI.getCurrentResult(sessionId),
     enabled: !!sessionId,
     onSuccess: (data) => {
       console.log("✅ Final results:", data);

@@ -14,11 +14,24 @@ import {
 } from "@/utils/helpers/storage/localStorage";
 import { SubmitAnswer } from "@/apis/assessment/assessment.service";
 import { BreadCrumb } from "./BreadCrumb";
+import {
+  getQuestionsByCategory,
+  postResults,
+} from "@/apis/assessment/assessment.api";
 
 export const AssessmentQuestion = () => {
   const { setBreadcrumbText } = useGlobalContext();
-  const { questions, setQuestions, categoryNo, setStep, sessionId } =
-    useAssessmentContext();
+  const {
+    questions,
+    setQuestions,
+    categoryNo,
+    setStep,
+    sessionId,
+    setCategoryNo,
+    categoryName,
+    setCategoryName,
+  } = useAssessmentContext();
+  console.log("questions", questions, categoryNo, sessionId);
 
   const [loadedQuestions, setLoadedQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(
@@ -34,7 +47,13 @@ export const AssessmentQuestion = () => {
 
   useEffect(() => {
     setBreadcrumbText("Career Assessment/Assessment");
-    setLoadedQuestions(questions);
+    setLoadedQuestions(questions.questions || []);
+
+    // Set categoryName if available
+    if (questions.categoryName) {
+      setCategoryName(questions.categoryName);
+      saveItemToStorage("category", questions.categoryName);
+    }
   }, [questions]);
 
   useEffect(() => {
@@ -48,7 +67,7 @@ export const AssessmentQuestion = () => {
     saveItemToStorage("currentQuestionIndex", currentIndex);
   }, [currentIndex]);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!selectedOption) return;
 
     const questionId = currentQuestion.id;
@@ -65,12 +84,43 @@ export const AssessmentQuestion = () => {
     if (currentIndex < loadedQuestions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
     } else {
-      // All questions in the category answered
-      setStep("complete");
-      saveItemToStorage("step", "complete");
-      removeItemFromStorage("assessmentAnswers");
-      removeItemFromStorage("questions");
-      removeItemFromStorage("currentQuestionIndex");
+      // Category done
+      const nextCategory = categoryNo + 1;
+
+      if (nextCategory <= 3) {
+        const nextQuestions = await getQuestionsByCategory(
+          sessionId,
+          nextCategory
+        );
+        setQuestions(nextQuestions);
+        setCategoryNo(nextCategory);
+        setCurrentIndex(0);
+
+        saveItemToStorage("questions", nextQuestions);
+        saveItemToStorage("categoryNo", nextCategory);
+        saveItemToStorage("currentQuestionIndex", 0);
+        saveItemToStorage("step", "question");
+
+        setStep("question");
+      } else {
+        try {
+          // ✅ Post results before navigating to result screen
+          await postResults(sessionId);
+        } catch (err) {
+          console.error("❌ Failed to post results:", err);
+          return; // optionally prevent moving forward if prediction fails
+        }
+
+        // ✅ All categories done, update step
+        setStep("result");
+        saveItemToStorage("step", "result");
+
+        // ✅ Clean up assessment-related storage
+        removeItemFromStorage("assessmentAnswers");
+        removeItemFromStorage("questions");
+        removeItemFromStorage("currentQuestionIndex");
+        removeItemFromStorage("categoryNo");
+      }
     }
   };
 
@@ -78,8 +128,12 @@ export const AssessmentQuestion = () => {
     if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
   };
 
+  console.log("currentQuestion", currentQuestion);
+
   if (!currentQuestion) return <p>Loading questions...</p>;
   // TODO : Make a reusable component for both skill assessment and assessment for handling the questions
+
+  console.log("categoryName, categoryNo", categoryNo, categoryName);
   return (
     <div className="h-full flex flex-col grow 3xl:max-w-7xl 3xl:mx-auto justify-between 3xl:items-center 3xl:justify-center px-6 md:px-10 py-4 md:py-7">
       <div className="flex flex-col gap-5">
@@ -87,7 +141,7 @@ export const AssessmentQuestion = () => {
           <BreadCrumb />
           <AssessmentSectionHeading />
           <p className="text-xl md:text-3xl font-medium max-w-2xl">
-            {currentQuestion?.questionText}
+            {currentQuestion?.text}
           </p>
           <RadioGroup
             value={selectedOption}
