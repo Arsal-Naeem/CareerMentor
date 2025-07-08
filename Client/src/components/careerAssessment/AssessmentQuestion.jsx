@@ -45,6 +45,8 @@ export const AssessmentQuestion = () => {
 
   const currentQuestion = loadedQuestions[currentIndex];
 
+  const [isPredicting, setIsPredicting] = useState(false);
+
   useEffect(() => {
     setBreadcrumbText("Career Assessment/Assessment");
     setLoadedQuestions(questions.questions || []);
@@ -104,22 +106,24 @@ export const AssessmentQuestion = () => {
         setStep("question");
       } else {
         try {
-          // ✅ Post results before navigating to result screen
+          setIsPredicting(true);
           await postResults(sessionId);
+          setStep("result");
+          saveItemToStorage("step", "result");
+
+          // ✅ Clean up assessment-related storage
+          removeItemFromStorage("assessmentAnswers");
+          removeItemFromStorage("questions");
+          removeItemFromStorage("currentQuestionIndex");
+          removeItemFromStorage("categoryNo");
         } catch (err) {
           console.error("❌ Failed to post results:", err);
           return; // optionally prevent moving forward if prediction fails
+        } finally {
+          setIsPredicting(false);
         }
 
-        // ✅ All categories done, update step
-        setStep("result");
-        saveItemToStorage("step", "result");
 
-        // ✅ Clean up assessment-related storage
-        removeItemFromStorage("assessmentAnswers");
-        removeItemFromStorage("questions");
-        removeItemFromStorage("currentQuestionIndex");
-        removeItemFromStorage("categoryNo");
       }
     }
   };
@@ -134,6 +138,22 @@ export const AssessmentQuestion = () => {
   // TODO : Make a reusable component for both skill assessment and assessment for handling the questions
 
   console.log("categoryName, categoryNo", categoryNo, categoryName);
+
+  if (isPredicting) {
+    return (
+      <div className="h-full flex items-center justify-center px-6 md:px-10 py-4 md:py-7">
+        <div className="text-center space-y-4">
+          <p className="text-2xl font-semibold text-black">
+            Analyzing your responses...
+          </p>
+          <p className="text-gray-600">
+            Please wait while we predict your career path.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="h-full flex flex-col grow 3xl:max-w-7xl 3xl:mx-auto justify-between 3xl:items-center 3xl:justify-center px-6 md:px-10 py-4 md:py-7">
       <div className="flex flex-col gap-5">

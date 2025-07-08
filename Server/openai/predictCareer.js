@@ -17,17 +17,12 @@ Task:
    - Frontend Developer
    - Backend Developer
    - Full Stack Developer
-   - Data Scientist
    - Data Analyst
    - ML Engineer
    - Cloud Engineer
    - DevOps Engineer
-   - Cybersecurity Engineer
-   - QA Engineer
    - UI/UX Designer
    - Game Developer
-   - Product Manager
-   - Technical Writer
 
 ✅ Respond **only** in **valid JSON format**, no explanations, no markdown, no extra text.
 The structure should be:
@@ -39,7 +34,7 @@ The structure should be:
 }
 
 Data:
-${JSON.stringify(userData, null, 0)}
+${JSON.stringify(userData, null, 2)}
 `;
 
   const response = await openai.chat.completions.create({
@@ -50,22 +45,30 @@ ${JSON.stringify(userData, null, 0)}
     ],
   });
 
-  // Parse JSON string from GPT safely
-  try {
-    let content = response.choices[0].message.content;
+  let content = response.choices[0].message.content.trim();
 
-    // 🔧 Strip markdown if wrapped in ```json ``` or ```
-    content = content.trim().replace(/^```json\s*|^```\s*|```$/g, "");
-
-    // 🛡️ Safe parse
-    try {
-      return JSON.parse(content);
-    } catch (err) {
-      console.error("❌ Error parsing GPT response JSON:", err.message);
-      throw new Error("Invalid JSON format from GPT");
-    }
-  } catch (err) {
-    console.error("❌ Error parsing GPT response JSON:", err.message);
-    throw new Error("Invalid JSON format from GPT");
+  // 🔧 Clean up GPT response (remove ```json or ``` if present)
+  if (content.startsWith("```")) {
+    content = content.replace(/^```json\s*|^```\s*|```$/g, "").trim();
   }
+
+  // 🔁 Retry logic to safely parse JSON
+  let parsed = null;
+  let attempts = 0;
+
+  while (attempts < 3 && !parsed) {
+    try {
+      parsed = JSON.parse(content);
+    } catch (err) {
+      attempts++;
+      console.warn(`❌ Attempt ${attempts} - Failed to parse GPT response JSON.`);
+      if (attempts === 3) {
+        console.error("❌ Final GPT output:\n", content);
+        throw new Error("Invalid JSON format from GPT");
+      }
+    }
+  }
+
+  return parsed;
 };
+

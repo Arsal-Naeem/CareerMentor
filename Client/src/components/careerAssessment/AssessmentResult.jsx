@@ -47,6 +47,8 @@ export const AssessmentResult = () => {
     localStorage.removeItem("questions");
     localStorage.removeItem("currentQuestionIndex");
 
+    setStep("start");
+
     // Navigate to starting route of assessment (adjust if needed)
     navigate("/user/dashboard/career-assessment");
   };
