@@ -70,14 +70,8 @@ export const createAssessmentSession = async (req, res) => {
 };
 
 export const generateQuestionsByCategory = async (req, res) => {
-  const { sessionId, categoryId } = req.params;
-  // console.log(
-  //   "Generating questions for session:",
-  //   sessionId,
-  //   "and category:",
-  //   categoryId
-  // );
-
+  const { sessionId } = req.params;
+  const categoryIds = [1, 2, 3];
   const bloomLevels = [
     "Remember",
     "Understand",
@@ -89,7 +83,7 @@ export const generateQuestionsByCategory = async (req, res) => {
 
   const t = await sequelize.transaction();
   try {
-    // 🔒 Validate session
+    // Validate session
     const session = await AssessmentSession.findOne({
       where: { sessionId },
       transaction: t,
@@ -99,81 +93,93 @@ export const generateQuestionsByCategory = async (req, res) => {
       return res.status(404).json({ message: "Session not found" });
     }
 
-    // ✅ Check if category exists dynamically (no hardcoding)
-    const categoryObj = await category.findOne({
-      where: { id: categoryId },
-      transaction: t,
-    });
-    if (!categoryObj) {
-      await t.rollback();
-      return res
-        .status(400)
-        .json({ message: "Invalid categoryId — not found in DB" });
-    }
+    const results = [];
 
-    // ❌ Check if this session already has questions for this category
-    const alreadyExists = await AssessmentSessionQuestion.findOne({
-      where: { sessionId, categoryId },
-      transaction: t,
-    });
-
-    if (alreadyExists) {
-      await t.rollback();
-      return res.status(400).json({
-        message:
-          "Questions for this category have already been generated for this session.",
-      });
-    }
-
-    // 🎯 Get one random question per Bloom level (in parallel)
-    const questionPromises = bloomLevels.map((level) =>
-      AssessmentQuestion.findOne({
-        where: { categoryId, bloomLevel: level },
-        order: sequelize.random(),
-        attributes: ["id", "text", "bloomLevel", "categoryId"],
+    for (const categoryId of categoryIds) {
+      // Check if category exists
+      const categoryObj = await category.findOne({
+        where: { id: categoryId },
         transaction: t,
-      })
-    );
-    const questions = (await Promise.all(questionPromises)).filter(Boolean);
+      });
+      if (!categoryObj) {
+        results.push({
+          categoryId,
+          status: "error",
+          message: "Category not found in DB",
+        });
+        continue;
+      }
 
-    if (questions.length < bloomLevels.length) {
-      await t.rollback();
-      return res.status(400).json({
-        message: `Not enough questions for all Bloom levels in this category. Found ${questions.length}/${bloomLevels.length}.`,
-        missingLevels: bloomLevels.filter(
-          (level) => !questions.find((q) => q.bloomLevel === level)
-        ),
+      // Check if already assigned
+      const alreadyExists = await AssessmentSessionQuestion.findOne({
+        where: { sessionId, categoryId },
+        transaction: t,
+      });
+      if (alreadyExists) {
+        results.push({
+          categoryId,
+          status: "skipped",
+          message: "Questions already assigned for this category",
+        });
+        continue;
+      }
+
+      // Get one random question per Bloom level
+      const questionPromises = bloomLevels.map((level) =>
+        AssessmentQuestion.findOne({
+          where: { categoryId, bloomLevel: level },
+          order: sequelize.random(),
+          attributes: ["id", "text", "bloomLevel", "categoryId"],
+          transaction: t,
+        })
+      );
+      const questions = (await Promise.all(questionPromises)).filter(Boolean);
+
+      if (questions.length < bloomLevels.length) {
+        results.push({
+          categoryId,
+          status: "error",
+          message: `Not enough questions for all Bloom levels. Found ${questions.length}/${bloomLevels.length}.`,
+          missingLevels: bloomLevels.filter(
+            (level) => !questions.find((q) => q.bloomLevel === level)
+          ),
+        });
+        continue;
+      }
+
+      // Store selected questions
+      const questionLinks = questions.map((q) => ({
+        sessionId,
+        questionId: q.id,
+        categoryId: q.categoryId,
+      }));
+
+      await AssessmentSessionQuestion.bulkCreate(questionLinks, { transaction: t });
+
+      results.push({
+        categoryId,
+        status: "assigned",
+        questions: questions.map((q) => ({
+          id: q.id,
+          text: q.text,
+          bloomLevel: q.bloomLevel,
+        })),
       });
     }
-
-    // 💾 Store selected questions in AssessmentSessionQuestion
-    const questionLinks = questions.map((q) => ({
-      sessionId,
-      questionId: q.id,
-      categoryId: q.categoryId,
-    }));
-
-    await AssessmentSessionQuestion.bulkCreate(questionLinks, {
-      transaction: t,
-    });
 
     await t.commit();
 
     return res.status(201).json({
-      message: "Questions assigned to session based on Bloom levels",
-      questions: questions.map((q) => ({
-        id: q.id,
-        text: q.text,
-        bloomLevel: q.bloomLevel,
-        categoryId: q.categoryId,
-      })),
+      message: "Questions assignment for all categories complete.",
+      results,
     });
   } catch (error) {
     await t.rollback();
-    console.error("Error in generating questions by category:", error);
-    return res
-      .status(500)
-      .json({ message: "Internal server error", error: error.message });
+    console.error("Error in generateAllCategoryQuestions:", error);
+    return res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
   }
 };
 

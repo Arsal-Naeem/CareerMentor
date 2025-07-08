@@ -54,7 +54,7 @@ router.post("/session", verifyToken, createAssessmentSession);
  *         description: Bad Request or Questions already exist
  */
 router.post(
-  "/generatequestions/:sessionId/:categoryId",
+  "/generatequestions/:sessionId",
   verifyToken,
   generateQuestionsByCategory
 );
