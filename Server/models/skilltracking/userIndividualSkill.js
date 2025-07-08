@@ -2,30 +2,25 @@ import { sequelize } from "../../config/connectDB.js";
 import { DataTypes } from "sequelize";
 
 const UserIndividualSkill = sequelize.define("userIndividualSkill", {
-   id: {
+  id: {
     type: DataTypes.INTEGER,
-    primaryKey: true,
     autoIncrement: true,
+    primaryKey: true,
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  domainSkillId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: "domainskills",
-      key: "id",
-    }
+  customName: {
+    type: DataTypes.STRING,
+    allowNull: false, 
   },
   progress: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    defaultValue: 0,
   },
   completed: {
     type: DataTypes.BOOLEAN,
-    allowNull: false,
     defaultValue: false,
   },
   isArchived: {
