@@ -19,6 +19,7 @@ import {
   postResults,
 } from "@/apis/assessment/assessment.api";
 
+// TODO : add results view option even when the user is giving quiz
 export const AssessmentQuestion = () => {
   const { setBreadcrumbText } = useGlobalContext();
   const {
@@ -122,8 +123,6 @@ export const AssessmentQuestion = () => {
         } finally {
           setIsPredicting(false);
         }
-
-
       }
     }
   };
@@ -139,6 +138,7 @@ export const AssessmentQuestion = () => {
 
   console.log("categoryName, categoryNo", categoryNo, categoryName);
 
+  // show skeleton
   if (isPredicting) {
     return (
       <div className="h-full flex items-center justify-center px-6 md:px-10 py-4 md:py-7">
@@ -203,7 +203,7 @@ export const AssessmentQuestion = () => {
       </div>
 
       <CustomProgressBar
-        questionNo={currentIndex + 1}
+        questionNo={currentIndex}
         totalQuestions={loadedQuestions.length}
       />
     </div>

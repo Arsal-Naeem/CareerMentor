@@ -15,3 +15,16 @@ export const getCategory = (category = "") => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 };
+
+export const getBadgeColorClasses = (badge) => {
+  switch (badge.toLowerCase()) {
+    case "gold":
+      return "bg-[#D4AF37] text-gray-900";
+    case "silver":
+      return "bg-gray-300 text-gray-800";
+    case "bronze":
+      return "bg-amber-500 text-white";
+    default:
+      return "bg-gray-100 text-gray-700";
+  }
+};

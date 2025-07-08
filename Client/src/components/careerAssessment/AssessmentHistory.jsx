@@ -6,6 +6,7 @@ import { SecondaryButton } from "../buttons/SecondaryButton";
 import { Badge } from "../ui/badge";
 import { CalendarDays, Star } from "lucide-react";
 import { useAssessmentContext } from "@/context/AssessmentContext";
+import { getBadgeColorClasses } from "@/utils/helpers";
 
 // Optional utility for formatting ISO date strings
 const formatDate = (iso) =>
@@ -45,11 +46,14 @@ export const AssessmentHistory = () => {
     navigate("/user/dashboard/career-assessment");
   };
 
+  // TODO : show skeleton
   if (loading) return <p className="px-6 pt-6">Loading history...</p>;
 
   return (
     <div className="h-full px-6 md:px-10 py-4 md:py-7">
-      <div className="flex justify-between items-center mb-6">
+      <BreadCrumb />
+
+      <div className="flex justify-between items-center my-3">
         <h1 className="text-black text-3xl font-bold">
           Previous Assessment Results
         </h1>
@@ -59,8 +63,6 @@ export const AssessmentHistory = () => {
           className="text-sm text-black bg-custom-orange-dark"
         />
       </div>
-
-      <BreadCrumb />
 
       <div className="flex flex-col gap-6 mt-4">
         {history.length === 0 ? (
@@ -115,9 +117,14 @@ export const AssessmentHistory = () => {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {item.badges?.map((badge, idx) => (
-                    <Badge key={idx} variant="outline">
+                    <div
+                      key={idx}
+                      className={`text-xs px-3 py-1 font-medium rounded-full ${getBadgeColorClasses(
+                        badge.badge
+                      )} hover:bg-none hover:shadow-none hover:text-inherit`}
+                    >
                       {badge.categoryName} - {badge.badge}
-                    </Badge>
+                    </div>
                   ))}
                 </div>
               </div>

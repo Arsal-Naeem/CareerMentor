@@ -1,11 +1,8 @@
 import { useGlobalContext } from "@/context/GlobalContext";
 import React, { useEffect, useState } from "react";
-import { AssessmentSectionHeading } from "./AssessmentSectionHeading";
 import { Star } from "lucide-react";
 import { SecondaryButton } from "../buttons/SecondaryButton";
-import { Progress } from "../ui/progress";
 import { useNavigate } from "react-router-dom";
-import { careers, traits } from "@/constants";
 import { BreadCrumb } from "./BreadCrumb";
 import { OrangeProgressBar } from "../OrangeProgressBar";
 import { getCurrentResult } from "@/apis/assessment/assessment.api";
@@ -57,6 +54,7 @@ export const AssessmentResult = () => {
     setStep("history");
   };
 
+  // TODO : show skeleton and handle no result found UI too
   if (loading) return <p>Loading your results...</p>;
   if (!result) return <p>No result found.</p>;
 
@@ -90,7 +88,7 @@ export const AssessmentResult = () => {
             ))}
           </div>
 
-          <div className="hidden lg:block w-[2px] bg-gray-300 h-[230px]" />
+          <div className="hidden lg:block w-[2px] bg-gray-300 h-[350px]" />
 
           {/* Careers */}
           <div className="flex flex-col flex-1 gap-3 3xl:w-full">
@@ -111,12 +109,14 @@ export const AssessmentResult = () => {
             <div className="flex flex-col sm:flex-row gap-2 md:mt-4 mt-2">
               <SecondaryButton
                 title="Start another assessment"
-                className="text-black bg-custom-orange-dark font-normal text-sm w-full sm:w-fit"
+                variant="dark"
+                textSmall
                 onClickHandler={handleStartNewAssessment}
               />
               <SecondaryButton
                 title="View Previous Results"
-                className="text-black border border-gray-300 font-normal text-sm w-full sm:w-fit"
+                variant="dark"
+                textSmall
                 onClickHandler={handleNavigateToPreviousResults}
               />
             </div>
