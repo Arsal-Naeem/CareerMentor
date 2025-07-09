@@ -5,15 +5,15 @@ const QuizQuestion = sequelize.define("QuizQuestion", {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   },
   lessonId: {
     type: DataTypes.UUID,
-    allowNull: false
+    allowNull: false,
   },
   question: {
     type: DataTypes.TEXT,
-    allowNull: false
+    allowNull: false,
   },
   option1: { type: DataTypes.STRING, allowNull: false },
   option2: { type: DataTypes.STRING, allowNull: false },
@@ -21,7 +21,8 @@ const QuizQuestion = sequelize.define("QuizQuestion", {
   option4: { type: DataTypes.STRING, allowNull: true },
   correctAnswer: { type: DataTypes.INTEGER, allowNull: false }, // index: 0,1,2,3
   explanation: { type: DataTypes.TEXT, allowNull: true },
-  sequence: { type: DataTypes.INTEGER }
+  sequence: { type: DataTypes.INTEGER },
+  xp: { type: DataTypes.INTEGER, defaultValue: 0 },
 });
 
 export default QuizQuestion;
