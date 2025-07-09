@@ -4,6 +4,7 @@ import questionsData from "../data/management_planning_questions_part1.json" wit
 import { seedCareerDomains } from "./SeedData/careerDomainSeed.js";
 import { seedModules } from "./SeedData/moduleSeed.js";
 import { seedLessons } from "./SeedData/lessonSeed.js";
+import { seedQuestionsSkill } from "./SeedData/quizeQuestionSeed.js";
 
 export const insertQuestions = async () => {
  try {
@@ -28,11 +29,12 @@ export const insertQuestions = async () => {
       await AssessmentOptions.bulkCreate(optionsToInsert);
     }
 
-    console.log("✅ All questions and options inserted successfully.");*/}
-    // await seedCareerDomains();
-    // await seedModules();
-    // await seedLessons();
-
+    console.log("✅ All questions and options inserted successfully.");
+     await seedCareerDomains();
+     await seedModules();
+     await seedLessons();
+    await seedQuestionsSkill();
+*/}
 
   } catch (error) {
     console.error("❌ Failed to insert questions:", error.message);

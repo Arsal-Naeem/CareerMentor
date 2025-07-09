@@ -12,6 +12,7 @@ import trainingSample from "./trainingSample.js";
 import CareerDomain from "./skilltracking/careerDomain.js";
 import Module from "./skilltracking/module.js";
 import Lesson from "./skilltracking/lesson.js";
+import QuizQuestion from "./skilltracking/quizQuestion.js";
 
 // 🔁 Define relationships here
 
@@ -126,6 +127,12 @@ Module.belongsTo(CareerDomain, { foreignKey: "careerDomainId" });
 Module.hasMany(Lesson, { foreignKey: "moduleId" });
 Lesson.belongsTo(Module, { foreignKey: "moduleId" });
 
+// One Lesson has many QuizQuestions
+Lesson.hasMany(QuizQuestion, { foreignKey: "lessonId", onDelete: "CASCADE" });
+
+// Each QuizQuestion belongs to a Lesson
+QuizQuestion.belongsTo(Lesson, { foreignKey: "lessonId" });
+
 export {
   Blogs,
   Tag,
@@ -140,5 +147,6 @@ export {
   trainingSample,
   CareerDomain,
   Module,
-  Lesson
+  Lesson,
+  QuizQuestion
 };
