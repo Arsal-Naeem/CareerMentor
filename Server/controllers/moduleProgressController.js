@@ -14,6 +14,23 @@ export const startOrGetModuleProgress = async (req, res) => {
     let progress = await UserModuleProgress.findOne({ where: { userId, moduleId } });
     if (!progress) {
       progress = await UserModuleProgress.create({ userId, moduleId });
+      // Get all lessons for this module
+      const lessons = await Lesson.findAll({ where: { moduleId } });
+      // Bulk create UserLessonProgress for each lesson if not exists
+      for (const lesson of lessons) {
+        const [lessonProgress] = await UserLessonProgress.findOrCreate({
+          where: { userId, lessonId: lesson.id },
+          defaults: { userId, lessonId: lesson.id }
+        });
+        // Optionally, pre-create UserQuizAnswer for each quiz in this lesson
+        const quizzes = await QuizQuestion.findAll({ where: { lessonId: lesson.id } });
+        for (const quiz of quizzes) {
+          await UserQuizAnswer.findOrCreate({
+            where: { userId, lessonId: lesson.id, quizQuestionId: quiz.id },
+            defaults: { userId, lessonId: lesson.id, quizQuestionId: quiz.id, selectedOption: null, isCorrect: null }
+          });
+        }
+      }
     }
     res.json({ success: true, progress });
   } catch (err) {
@@ -57,32 +74,59 @@ export const submitQuizAnswer = async (req, res) => {
     if (!lessonId || !quizQuestionId || selectedOption === undefined) {
       return res.status(400).json({ success: false, message: "lessonId, quizQuestionId, and selectedOption required" });
     }
-    // Check if already answered
+
+    // 1. Check if quiz question exists and belongs to the lesson
+    const question = await QuizQuestion.findByPk(quizQuestionId);
+    if (!question || question.lessonId !== lessonId) {
+      return res.status(404).json({ success: false, message: "Quiz question not found for this lesson" });
+    }
+
+    // 2. Check if lesson exists
+    const lesson = await Lesson.findByPk(lessonId);
+    if (!lesson) {
+      return res.status(404).json({ success: false, message: "Lesson not found" });
+    }
+
+    // 3. Check if user is enrolled in the module of this lesson
+    const moduleProgress = await UserModuleProgress.findOne({ where: { userId, moduleId: lesson.moduleId } });
+    if (!moduleProgress) {
+      return res.status(403).json({ success: false, message: "User not enrolled in the module for this lesson" });
+    }
+
+    // 4. Check if user is enrolled in the lesson
+    const lessonProgress = await UserLessonProgress.findOne({ where: { userId, lessonId } });
+    if (!lessonProgress) {
+      return res.status(403).json({ success: false, message: "User not enrolled in this lesson" });
+    }
+
+    // 5. Check if already answered
     const existing = await UserQuizAnswer.findOne({ where: { userId, lessonId, quizQuestionId } });
-    if (existing) {
+    if (existing && existing.selectedOption !== null) {
       return res.status(400).json({ success: false, message: "Already answered" });
     }
-    const question = await QuizQuestion.findByPk(quizQuestionId);
-    if (!question) return res.status(404).json({ success: false, message: "Quiz question not found" });
+
+    // 6. Save answer
     const isCorrect = question.correctAnswer === selectedOption;
-    await UserQuizAnswer.create({ userId, lessonId, quizQuestionId, selectedOption, isCorrect });
-    // Award XP if correct
+    if (existing) {
+      // Update the existing (pre-created) record
+      existing.selectedOption = selectedOption;
+      existing.isCorrect = isCorrect;
+      existing.answeredAt = new Date();
+      await existing.save();
+    } else {
+      await UserQuizAnswer.create({ userId, lessonId, quizQuestionId, selectedOption, isCorrect });
+    }
+
+    // 7. Award XP if correct
     let xpAwarded = 0;
     if (isCorrect && question.xp) xpAwarded = question.xp;
-    // Update lesson progress XP
-    const lessonProgress = await UserLessonProgress.findOne({ where: { userId, lessonId } });
     if (lessonProgress && xpAwarded > 0) {
       lessonProgress.obtainedXP += xpAwarded;
       await lessonProgress.save();
     }
-    // Update module progress XP
-    const lesson = await Lesson.findByPk(lessonId);
-    if (lesson && lesson.moduleId && xpAwarded > 0) {
-      const moduleProgress = await UserModuleProgress.findOne({ where: { userId, moduleId: lesson.moduleId } });
-      if (moduleProgress) {
-        moduleProgress.obtainedXP += xpAwarded;
-        await moduleProgress.save();
-      }
+    if (moduleProgress && xpAwarded > 0) {
+      moduleProgress.obtainedXP += xpAwarded;
+      await moduleProgress.save();
     }
     res.json({ success: true, isCorrect, xpAwarded });
   } catch (err) {
