@@ -128,6 +128,16 @@ export const submitQuizAnswer = async (req, res) => {
       moduleProgress.obtainedXP += xpAwarded;
       await moduleProgress.save();
     }
+
+    // 8. Check if all quizzes for this lesson are answered, mark lesson as completed if so
+    const totalQuizzes = await QuizQuestion.count({ where: { lessonId } });
+    const answeredQuizzes = await UserQuizAnswer.count({ where: { userId, lessonId, selectedOption: { $ne: null } } });
+    if (lessonProgress && totalQuizzes > 0 && answeredQuizzes === totalQuizzes) {
+      lessonProgress.isCompleted = true;
+      lessonProgress.completedAt = new Date();
+      await lessonProgress.save();
+    }
+
     res.json({ success: true, isCorrect, xpAwarded });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
