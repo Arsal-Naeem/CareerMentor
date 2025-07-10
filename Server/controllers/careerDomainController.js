@@ -10,46 +10,53 @@ export const enrollCareerDomain = async (req, res) => {
       return res
         .status(400)
         .json({ success: false, message: "careerDomainId required" });
+
     const domain = await CareerDomain.findByPk(careerDomainId);
     if (!domain)
       return res
         .status(404)
         .json({ success: false, message: "Career domain not found" });
+
     // Check if already enrolled
     let userDomain = await UserCareerDomain.findOne({
       where: { userId, careerDomainId },
     });
-    if (!userDomain) {
-      userDomain = await UserCareerDomain.create({ userId, careerDomainId });
-      // Auto-enroll in all modules, lessons, quizzes for this domain
-      const modules = await Module.findAll({ where: { careerDomainId } });
-      for (const module of modules) {
-        // UserModuleProgress
-        await UserModuleProgress.findOrCreate({
-          where: { userId, moduleId: module.id },
-          defaults: { userId, moduleId: module.id },
+    if (userDomain) {
+      return res.status(200).json({
+        success: false,
+        message: "User already exists on that domain",
+      });
+    }
+
+    userDomain = await UserCareerDomain.create({ userId, careerDomainId });
+    // Auto-enroll in all modules, lessons, quizzes for this domain
+    const modules = await Module.findAll({ where: { careerDomainId } });
+    for (const module of modules) {
+      // UserModuleProgress
+      await UserModuleProgress.findOrCreate({
+        where: { userId, moduleId: module.id },
+        defaults: { userId, moduleId: module.id },
+      });
+      const lessons = await Lesson.findAll({ where: { moduleId: module.id } });
+      for (const lesson of lessons) {
+        // UserLessonProgress
+        await UserLessonProgress.findOrCreate({
+          where: { userId, lessonId: lesson.id },
+          defaults: { userId, lessonId: lesson.id },
         });
-        const lessons = await Lesson.findAll({ where: { moduleId: module.id } });
-        for (const lesson of lessons) {
-          // UserLessonProgress
-          await UserLessonProgress.findOrCreate({
-            where: { userId, lessonId: lesson.id },
-            defaults: { userId, lessonId: lesson.id },
+        const quizzes = await QuizQuestion.findAll({ where: { lessonId: lesson.id } });
+        for (const quiz of quizzes) {
+          // UserQuizAnswer
+          await UserQuizAnswer.findOrCreate({
+            where: { userId, lessonId: lesson.id, quizQuestionId: quiz.id },
+            defaults: {
+              userId,
+              lessonId: lesson.id,
+              quizQuestionId: quiz.id,
+              selectedOption: null,
+              isCorrect: null,
+            },
           });
-          const quizzes = await QuizQuestion.findAll({ where: { lessonId: lesson.id } });
-          for (const quiz of quizzes) {
-            // UserQuizAnswer
-            await UserQuizAnswer.findOrCreate({
-              where: { userId, lessonId: lesson.id, quizQuestionId: quiz.id },
-              defaults: {
-                userId,
-                lessonId: lesson.id,
-                quizQuestionId: quiz.id,
-                selectedOption: null,
-                isCorrect: null,
-              },
-            });
-          }
         }
       }
     }

@@ -507,13 +507,13 @@ export const projectDropdownItems = [
 
 export const domainSkillDropdownItems = [
   {
-    label: "Take Quiz",
-    key: "quiz",
+    label: "View Lesson",
+    key: "lesson",
   },
   {
     label: "Delete",
     key: "delete",
-  },
+  }
 ];
 
 export const careerDomainDropdownItem = [

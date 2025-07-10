@@ -58,6 +58,7 @@ import {
 } from "./constants/navigation";
 import { CareerDetail } from "./pages/careers/CareerDetail";
 import { EventDetails } from "./pages/events/EventDetails";
+import Lessons from "./pages/dashboard/skillTracking/domainTracker/components/Lessons";
 
 // TODO : lazy load the pages
 
@@ -158,6 +159,14 @@ function Router() {
                   </UserProtectedRoute>
                 }
               />
+              <Route 
+                path={USER_DASHBOARD_ROUTES.LESSON_TRACKER}
+                element={
+                  <UserProtectedRoute>
+                    <Lessons />
+                  </UserProtectedRoute>
+                }
+               />
               <Route
                 path={USER_DASHBOARD_ROUTES.SKILL_ASSESSMENT}
                 element={

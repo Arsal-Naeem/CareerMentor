@@ -30,6 +30,7 @@ export const USER_DASHBOARD_ROUTES = {
   CAREER_ASSESSMENT: "career-assessment",
   SKILL_TRACKER: "skill-tracker",
   DOMAIN_TRACKER: "domain/:name",
+  LESSON_TRACKER: "lesson-tracker/:id",
   SKILL_ASSESSMENT: "skill-assessment",
   MENTORSHIP: "mentorship",
   ACHIEVEMENTS: "achievements",

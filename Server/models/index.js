@@ -173,6 +173,9 @@ UserCareerDomain.belongsTo(User, { foreignKey: "userId" });
 CareerDomain.hasMany(UserCareerDomain, { foreignKey: "careerDomainId", onDelete: "CASCADE" });
 UserCareerDomain.belongsTo(CareerDomain, { foreignKey: "careerDomainId" });
 
+Module.belongsTo(CareerDomain, { foreignKey: 'careerDomainId' }); // Assuming this FK exists
+CareerDomain.hasMany(Module, { foreignKey: 'careerDomainId' });
+
 export {
   Blogs,
   Tag,

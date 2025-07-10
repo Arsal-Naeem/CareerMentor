@@ -9,9 +9,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { domainSkillDropdownItems, individualSkills } from "@/constants";
 import { useScreenSize } from "@/hooks/useScreenSize";
+import axiosReq from "@/services/axiosHelper";
 import { Ellipsis, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const Tracker = () => {
   const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
@@ -88,54 +90,107 @@ const DomainTracker = ({
 
 const SkillTracker = () => {
   const { isMediumScreen, isSmallScreen, isLargeScreen } = useScreenSize();
+
+  const [module, setModules] = useState([]);
+
   const navigate = useNavigate();
-  const handleActions = (action) => {
-    switch (action) {
-      case "quiz":
-        navigate("/user/dashboard/skill-tracker/skill-assessment");
-        break;
-      case "delete":
-        // delete api call
-        break;
-    }
-  };
+  const handleActions = (action, moduleId) => {
+  switch (action) {
+    case "lesson":
+      navigate(`/user/dashboard/skill-tracker/lesson-tracker/${moduleId}`);
+      break;
+    case "delete":
+      // TODO: Add delete logic
+      break;
+  }
+};
+
+
+  useEffect(() => {
+    const fetchAllModuleOfSkills = async () => {
+      try {
+        const response = await axiosReq(
+          "GET",
+          "/skill-modules/module/enrolled"
+        );
+        console.log(response.data);
+        setModules(response.data.modules);
+      } catch (error) {
+        toast.error("Something went wrong. Please try again.");
+        console.log(
+          "Something went wrong on fetchAllModuleOfSkills",
+          error.message
+        );
+      }
+    };
+    fetchAllModuleOfSkills();
+  }, []);
+
+  //console.log("module", module);
+
   return (
     <div className="w-full md:w-3/4 bg-custom-light-white rounded-md p-5 flex flex-col gap-4 h-fit">
       <div className="flex items-center justify-between">
         <h1 className="text-black font-medium text-lg md:text-xl">
-          Frontend Development Skills
+          {module[0]?.careerDomain?.title || "Skill Modules"}
         </h1>
-        <OutlinedActionButton
-          size="sm"
-          icon={<Plus color="black" size={isSmallScreen ? 15 : 18} />}
-          title={isLargeScreen ? "Add" : "Add Skill"}
-          className="text-xs md:text-sm"
-        />
+        <span className="text-xs bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full">
+          {module[0]?.badge}
+        </span>
       </div>
-      <div className="flex flex-col gap-2">
-        {individualSkills.map((skill, index) => (
-          <div key={index} className="flex flex-col gap-0">
-            <h2 className="text-black font-normal text-sm md:base">
-              {skill.name}
-            </h2>
-            <div className="flex items-center gap-5 justify-between">
-              <OrangeProgressBar value={skill.value} />
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Ellipsis
-                    color="black"
-                    size={18}
-                    className="cursor-pointer"
+
+      <div className="flex flex-col gap-4">
+        {module.map((mod) => {
+          const progressPercent = Math.round(
+            (mod.obtainedXP / mod.totalXP) * 100
+          );
+          return (
+            <div
+              key={mod.id}
+              className="flex flex-col gap-1 bg-white p-3 rounded-xl shadow-sm"
+            >
+              {/* Sequence */}
+              <span className="text-xs text-gray-500 mb-1">
+                Module {mod.sequence}
+              </span>
+
+              {/* Title */}
+              <h2 className="text-black font-medium text-base md:text-lg">
+                {mod.title}
+              </h2>
+
+              {/* Description */}
+              <p className="text-sm text-muted-foreground line-clamp-2">
+                {mod.description}
+              </p>
+
+              {/* Progress bar and XP */}
+              <div className="flex items-center justify-between mt-2">
+                <div className="flex flex-col gap-1 w-full">
+                  <OrangeProgressBar value={progressPercent} />
+                  <span className="text-xs text-muted-foreground">
+                    {mod.obtainedXP}/{mod.totalXP} XP
+                  </span>
+                </div>
+
+                {/* Dropdown menu */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Ellipsis
+                      color="black"
+                      size={18}
+                      className="cursor-pointer ml-2"
+                    />
+                  </DropdownMenuTrigger>
+                  <ActionDropdown
+                    items={domainSkillDropdownItems}
+                    onAction={(action) => handleActions(action, mod.id)}
                   />
-                </DropdownMenuTrigger>
-                <ActionDropdown
-                  items={domainSkillDropdownItems}
-                  onAction={handleActions}
-                />
-              </DropdownMenu>
+                </DropdownMenu>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

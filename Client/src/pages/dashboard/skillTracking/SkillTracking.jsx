@@ -2,14 +2,14 @@ import { BreadCrumb } from "@/components/careerAssessment/BreadCrumb";
 import { useGlobalContext } from "@/context/GlobalContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Heading } from "./components/Heading";
 import { OutlinedActionButton } from "@/components/buttons/OutlinedActionButton";
 import { BookOpenCheck, Ellipsis, Plus, Trash2 } from "lucide-react";
 import { SecondaryButton } from "@/components/buttons/SecondaryButton";
 import {
   careerDomainDropdownItem,
-  careerDomains,
+  //careerDomains,
   individualSkills,
   skillDropDownItems,
 } from "@/constants";
@@ -23,15 +23,61 @@ import { useNavigate } from "react-router-dom";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import { SelectionDropdown } from "@/components/dropdowns/SelectionDropdown";
 import { ActionDropdown } from "@/components/dropdowns/ActionDropdown";
+import axiosReq from "@/services/axiosHelper";
+
+import {
+  DropdownMenuItem,
+  DropdownMenuContent,
+} from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 export const SkillTracking = () => {
   usePageTitle("Skills Tracking");
   const { setBreadcrumbText } = useGlobalContext();
   const { isSmallScreen, isLargeScreen } = useScreenSize();
 
+  //state to hold all carrerDomain
+  const [careerDomains, setCareerDomains] = useState([]);
+
   useEffect(() => {
     setBreadcrumbText("Skill Tracker");
   }, []);
+
+  const fetchCareerDomains = async () => {
+    try {
+      const response = await axiosReq("GET", "/careerdomain/all");
+      //console.log(response.data);
+      setCareerDomains(response.data.careerDomains);
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+      console.log("Something went wrong on fetchCareerDomains", error.message);
+    }
+  };
+  const handleDomainSelect = async (domainId) => {
+    //console.log("Selected Domain ID:", domainId);
+    try {
+      const response = await axiosReq("POST", "/careerdomain/enroll", {
+        careerDomainId: domainId,
+      });
+
+      if (response.data.success) {
+        toast.success("Successfully enrolled in this domain!");
+      } else {
+        toast.warning(response.data.message); // Already exists etc.
+      }
+    } catch (error) {
+      toast.error("Enrollment failed. Please try again.");
+      console.error(
+        "Something went wrong on handleDomainSelect",
+        error.message
+      );
+    }
+  };
+
+  useEffect(() => {
+    fetchCareerDomains();
+  }, []);
+  //console.log("Career Domains:", careerDomains);
 
   return (
     <DashboardLayout>
@@ -48,7 +94,23 @@ export const SkillTracking = () => {
                     icon={<Plus size={isSmallScreen ? 15 : 18} color="black" />}
                   />
                 </DropdownMenuTrigger>
-                <SelectionDropdown items={careerDomains} />
+
+                <DropdownMenuContent>
+                  {careerDomains.length === 0 ? (
+                    <DropdownMenuItem disabled>
+                      No domains available
+                    </DropdownMenuItem>
+                  ) : (
+                    careerDomains.map((domain) => (
+                      <DropdownMenuItem
+                        key={domain.id}
+                        onSelect={() => handleDomainSelect(domain.id)}
+                      >
+                        {domain.title}
+                      </DropdownMenuItem>
+                    ))
+                  )}
+                </DropdownMenuContent>
               </DropdownMenu>
             </div>
             {/* domains */}
@@ -64,6 +126,7 @@ export const SkillTracking = () => {
 
 const Domains = () => {
   const navigate = useNavigate();
+  const [enrolledDomains, setEnrolledDomains] = useState([]);
 
   const handleActions = (action) => {
     switch (action) {
@@ -72,50 +135,72 @@ const Domains = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchEnrolledDomains = async () => {
+      try {
+        const response = await axiosReq("GET", "/careerdomain/current");
+        //console.log(response.data);
+        setEnrolledDomains(response.data.careerDomains);
+      } catch (error) {
+        toast.error("Something went wrong. Please try again.");
+        console.log(
+          "Something went wrong on fetchEnrolledDomains",
+          error.message
+        );
+      }
+    };
+    fetchEnrolledDomains();
+  }, [enrolledDomains]);
+
+  //console.log("enrolledDomains", enrolledDomains);
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="flex flex-col gap-4 text-black">
-          <div className="relative">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {enrolledDomains.map((domain) => (
+        <div
+          key={domain.id}
+          className="flex flex-col bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden"
+        >
+          <div className="relative h-40 w-full">
             <img
-              alt="career domain"
-              src={Domain}
-              className="w-full h-full object-cover rounded-md"
+              alt={domain.title}
+              src={domain.coverImage || "/fallback.jpg"}
+              className="absolute inset-0 w-full h-full object-cover"
             />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Ellipsis
                   color="#FDFDFD"
                   size={20}
-                  className="absolute top-2 right-2 cursor-pointer"
+                  className="absolute top-2 right-2 cursor-pointer z-10"
                 />
               </DropdownMenuTrigger>
               <ActionDropdown
                 items={careerDomainDropdownItem}
-                onAction={handleActions}
+                onAction={(action) => handleActions(action, domain.id)}
                 variant="light"
               />
             </DropdownMenu>
           </div>
-          <div>
-            <h1 className="font-medium text-base md:text-xl">
-              Frontend Developer
-            </h1>
-            <p className="font-normal text-xs md:text-sm">
-              Designs intuitive user experiences and interfaces
+
+          <div className="flex flex-col gap-1 p-4">
+            <h1 className="text-lg font-semibold truncate">{domain.title}</h1>
+            <p className="text-sm text-muted-foreground line-clamp-2">
+              {domain.description}
             </p>
           </div>
-          <SecondaryButton
-            variant="dark"
-            title="View Domain"
-            className="py-1"
-            textSmall
-            onClickHandler={() =>
-              navigate(
-                "/user/dashboard/skill-tracker/domain/frontend-development"
-              )
-            }
-          />
+
+          <div className="px-4 pb-4">
+            <SecondaryButton
+              variant="dark"
+              title="View Domain"
+              className="w-full py-1"
+              textSmall
+              onClickHandler={() =>
+                navigate(`/user/dashboard/skill-tracker/domain/${domain.id}`)
+              }
+            />
+          </div>
         </div>
       ))}
     </div>
