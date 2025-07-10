@@ -16,6 +16,7 @@ import QuizQuestion from "./skilltracking/quizQuestion.js";
 import UserModuleProgress from "./skilltracking/userModuleProgress.js";
 import UserLessonProgress from "./skilltracking/userLessonProgress.js";
 import UserQuizAnswer from "./skilltracking/userQuizAnswer.js";
+import UserCareerDomain from "./skilltracking/userCareerDomain.js";
 
 // 🔁 Define relationships here
 
@@ -163,6 +164,14 @@ UserQuizAnswer.belongsTo(Lesson, { foreignKey: "lessonId" });
 // QuizQuestion → UserQuizAnswer (One-to-Many)
 QuizQuestion.hasMany(UserQuizAnswer, { foreignKey: "quizQuestionId", onDelete: "CASCADE" });
 UserQuizAnswer.belongsTo(QuizQuestion, { foreignKey: "quizQuestionId" });
+
+// User → UserCareerDomain (One-to-One)
+User.hasOne(UserCareerDomain, { foreignKey: "userId", onDelete: "CASCADE" });
+UserCareerDomain.belongsTo(User, { foreignKey: "userId" });
+
+// CareerDomain → UserCareerDomain (One-to-Many)
+CareerDomain.hasMany(UserCareerDomain, { foreignKey: "careerDomainId", onDelete: "CASCADE" });
+UserCareerDomain.belongsTo(CareerDomain, { foreignKey: "careerDomainId" });
 
 export {
   Blogs,

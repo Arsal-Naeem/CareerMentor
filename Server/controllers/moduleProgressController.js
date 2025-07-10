@@ -5,6 +5,7 @@ import Module from "../models/skilltracking/module.js";
 import Lesson from "../models/skilltracking/lesson.js";
 import QuizQuestion from "../models/skilltracking/quizQuestion.js";
 import { Op } from "sequelize";
+import UserCareerDomain from "../models/skilltracking/userCareerDomain.js";
 
 // 1. Start or continue a module
 export const startOrGetModuleProgress = async (req, res) => {
@@ -12,6 +13,13 @@ export const startOrGetModuleProgress = async (req, res) => {
     const { moduleId } = req.body;
     const userId = req.userId;
     if (!moduleId) return res.status(400).json({ success: false, message: "moduleId required" });
+    // Check if user is enrolled in the correct career domain for this module
+    const module = await Module.findByPk(moduleId);
+    if (!module) return res.status(404).json({ success: false, message: "Module not found" });
+    const userDomain = await UserCareerDomain.findOne({ where: { userId } });
+    if (!userDomain || userDomain.careerDomainId !== module.careerDomainId) {
+      return res.status(403).json({ success: false, message: "User not enrolled in the required career domain for this module" });
+    }
     let progress = await UserModuleProgress.findOne({ where: { userId, moduleId } });
     if (!progress) {
       progress = await UserModuleProgress.create({ userId, moduleId });
