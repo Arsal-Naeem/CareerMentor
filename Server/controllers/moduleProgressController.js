@@ -219,7 +219,13 @@ export const getUserEnrolledModules = async (req, res) => {
       include: [{ model: Module }],
       order: [[{ model: Module }, "sequence", "ASC"]],
     });
-    const modules = userModules.map((um) => um.Module);
+    const modules = userModules.map((um) => ({
+      ...um.Module.get(),
+      obtainedXP: um.obtainedXP,
+      badge: um.badge,
+      isCompleted: um.isCompleted,
+      completedAt: um.completedAt
+    }));
     res.json({ success: true, modules });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
