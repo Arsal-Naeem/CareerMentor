@@ -35,7 +35,7 @@ export const getCurrentCareerDomain = async (req, res) => {
     if (!userDomain) {
       return res.status(404).json({ success: false, message: "User is not enrolled in any career domain" });
     }
-    res.json({ success: true, careerDomain: userDomain.CareerDomain });
+    res.json({ success: true, careerDomain: userDomain.careerDomain });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
