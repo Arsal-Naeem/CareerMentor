@@ -209,3 +209,67 @@ export const getQuizzesForLesson = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 };
+
+// Get all modules a user is currently enrolled in
+export const getUserEnrolledModules = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const userModules = await UserModuleProgress.findAll({
+      where: { userId },
+      include: [{ model: Module }],
+      order: [[{ model: Module }, "sequence", "ASC"]],
+    });
+    const modules = userModules.map((um) => um.Module);
+    res.json({ success: true, modules });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+};
+
+// Get all lessons a user is enrolled in for a given module
+export const getUserEnrolledLessonsForModule = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { moduleId } = req.params;
+    if (!moduleId) return res.status(400).json({ success: false, message: "moduleId required" });
+    const userLessons = await UserLessonProgress.findAll({
+      where: { userId },
+      include: [{ model: Lesson, where: { moduleId } }],
+      order: [[{ model: Lesson }, "sequence", "ASC"]],
+    });
+    const lessons = userLessons.map((ul) => ul.Lesson);
+    res.json({ success: true, lessons });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+};
+
+// Get all quizzes for a lesson, showing which have been attempted and which are pending
+export const getUserQuizzesForLessonWithStatus = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { lessonId } = req.params;
+    if (!lessonId) return res.status(400).json({ success: false, message: "lessonId required" });
+    const quizzes = await QuizQuestion.findAll({ where: { lessonId }, order: [["sequence", "ASC"]] });
+    const userAnswers = await UserQuizAnswer.findAll({ where: { userId, lessonId } });
+    const answerMap = {};
+    userAnswers.forEach((a) => { answerMap[a.quizQuestionId] = a.selectedOption !== null; });
+    const quizzesWithStatus = quizzes.map((q) => ({ ...q.get(), attempted: !!answerMap[q.id] }));
+    res.json({ success: true, quizzes: quizzesWithStatus });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+};
+
+export default {
+  startOrGetModuleProgress,
+  getLessonsForModule,
+  startOrGetLessonProgress,
+  submitQuizAnswer,
+  getUserModuleProgress,
+  getAllModules,
+  getQuizzesForLesson,
+  getUserEnrolledModules,
+  getUserEnrolledLessonsForModule,
+  getUserQuizzesForLessonWithStatus,
+};

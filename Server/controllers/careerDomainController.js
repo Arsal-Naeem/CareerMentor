@@ -23,3 +23,20 @@ export const enrollCareerDomain = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 };
+
+// Get the current career domain for the user
+export const getCurrentCareerDomain = async (req, res) => {
+  try {
+    const userId = req.userId;
+    const userDomain = await UserCareerDomain.findOne({
+      where: { userId },
+      include: [{ model: CareerDomain }],
+    });
+    if (!userDomain) {
+      return res.status(404).json({ success: false, message: "User is not enrolled in any career domain" });
+    }
+    res.json({ success: true, careerDomain: userDomain.CareerDomain });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
+  }
+};
