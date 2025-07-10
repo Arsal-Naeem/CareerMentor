@@ -6,9 +6,15 @@ export const enrollCareerDomain = async (req, res) => {
   try {
     const { careerDomainId } = req.body;
     const userId = req.userId;
-    if (!careerDomainId) return res.status(400).json({ success: false, message: "careerDomainId required" });
+    if (!careerDomainId)
+      return res
+        .status(400)
+        .json({ success: false, message: "careerDomainId required" });
     const domain = await CareerDomain.findByPk(careerDomainId);
-    if (!domain) return res.status(404).json({ success: false, message: "Career domain not found" });
+    if (!domain)
+      return res
+        .status(404)
+        .json({ success: false, message: "Career domain not found" });
     // Only one domain per user
     let userDomain = await UserCareerDomain.findOne({ where: { userId } });
     if (userDomain) {
@@ -20,7 +26,9 @@ export const enrollCareerDomain = async (req, res) => {
     }
     res.json({ success: true, userCareerDomain: userDomain });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Server error", error: err.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: err.message });
   }
 };
 
@@ -33,10 +41,26 @@ export const getCurrentCareerDomain = async (req, res) => {
       include: [{ model: CareerDomain }],
     });
     if (!userDomain) {
-      return res.status(404).json({ success: false, message: "User is not enrolled in any career domain" });
+      return res.status(404).json({
+        success: false,
+        message: "User is not enrolled in any career domain",
+      });
     }
     res.json({ success: true, careerDomain: userDomain.careerDomain });
   } catch (err) {
-    res.status(500).json({ success: false, message: "Server error", error: err.message });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: err.message });
+  }
+};
+
+export const getAllCareerDomains = async (req, res) => {
+  try {
+    const careerDomains = await CareerDomain.findAll();
+    return res.status(200).json({ success: true, careerDomains });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: err.message });
   }
 };
