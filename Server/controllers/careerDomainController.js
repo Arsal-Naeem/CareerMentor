@@ -1,7 +1,7 @@
+import { CareerDomain, Module, Lesson, QuizQuestion, UserModuleProgress, UserLessonProgress, UserQuizAnswer } from "../models/index.js";
 import UserCareerDomain from "../models/skilltracking/userCareerDomain.js";
-import CareerDomain from "../models/skilltracking/careerDomain.js";
 
-// Enroll or switch user's career domain
+// Enroll user in a new career domain (multi-domain support, auto-enroll modules/lessons/quizzes)
 export const enrollCareerDomain = async (req, res) => {
   try {
     const { careerDomainId } = req.body;
@@ -15,14 +15,43 @@ export const enrollCareerDomain = async (req, res) => {
       return res
         .status(404)
         .json({ success: false, message: "Career domain not found" });
-    // Only one domain per user
-    let userDomain = await UserCareerDomain.findOne({ where: { userId } });
-    if (userDomain) {
-      userDomain.careerDomainId = careerDomainId;
-      userDomain.enrolledAt = new Date();
-      await userDomain.save();
-    } else {
+    // Check if already enrolled
+    let userDomain = await UserCareerDomain.findOne({
+      where: { userId, careerDomainId },
+    });
+    if (!userDomain) {
       userDomain = await UserCareerDomain.create({ userId, careerDomainId });
+      // Auto-enroll in all modules, lessons, quizzes for this domain
+      const modules = await Module.findAll({ where: { careerDomainId } });
+      for (const module of modules) {
+        // UserModuleProgress
+        await UserModuleProgress.findOrCreate({
+          where: { userId, moduleId: module.id },
+          defaults: { userId, moduleId: module.id },
+        });
+        const lessons = await Lesson.findAll({ where: { moduleId: module.id } });
+        for (const lesson of lessons) {
+          // UserLessonProgress
+          await UserLessonProgress.findOrCreate({
+            where: { userId, lessonId: lesson.id },
+            defaults: { userId, lessonId: lesson.id },
+          });
+          const quizzes = await QuizQuestion.findAll({ where: { lessonId: lesson.id } });
+          for (const quiz of quizzes) {
+            // UserQuizAnswer
+            await UserQuizAnswer.findOrCreate({
+              where: { userId, lessonId: lesson.id, quizQuestionId: quiz.id },
+              defaults: {
+                userId,
+                lessonId: lesson.id,
+                quizQuestionId: quiz.id,
+                selectedOption: null,
+                isCorrect: null,
+              },
+            });
+          }
+        }
+      }
     }
     res.json({ success: true, userCareerDomain: userDomain });
   } catch (err) {
@@ -32,21 +61,22 @@ export const enrollCareerDomain = async (req, res) => {
   }
 };
 
-// Get the current career domain for the user
+// Get all career domains the user is enrolled in (array)
 export const getCurrentCareerDomain = async (req, res) => {
   try {
     const userId = req.userId;
-    const userDomain = await UserCareerDomain.findOne({
+    const userDomains = await UserCareerDomain.findAll({
       where: { userId },
       include: [{ model: CareerDomain }],
     });
-    if (!userDomain) {
+    if (!userDomains || userDomains.length === 0) {
       return res.status(404).json({
         success: false,
         message: "User is not enrolled in any career domain",
       });
     }
-    res.json({ success: true, careerDomain: userDomain.careerDomain });
+    const careerDomains = userDomains.map((ud) => ud.careerDomain);
+    res.json({ success: true, careerDomains });
   } catch (err) {
     res
       .status(500)
