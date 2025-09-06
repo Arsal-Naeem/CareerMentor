@@ -1,6 +1,7 @@
 const authController = "/auth/";
 const assessmentController = "/assessments/";
 const careerdomainController = "/careerdomain";
+const skillmoduleController = "/skill-modules/";
 
 export const API_ROUTES = {
   AUTH: {
@@ -28,5 +29,8 @@ export const API_ROUTES = {
     GET_ALL_CAREER_DOMAINS:`${careerdomainController}/all`,
     GET_USER_CAREER_DOMAINS:`${careerdomainController}/current`,
     ENROLL_CAREER_DOMAIN:`${careerdomainController}/enroll`
+  },
+  SKILLMODULE:{
+    GET_USER_ENROLLED: (domainId)=> `${skillmoduleController}module/enrolled/${domainId}`
   }
 };

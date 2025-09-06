@@ -306,40 +306,54 @@ export const getQuizzesForLesson = async (req, res) => {
   }
 };
 
-// Get all modules a user is currently enrolled in
+// Get all modules a user is currently enrolled in (for a specific domain)
 export const getUserEnrolledModules = async (req, res) => {
   try {
     const userId = req.userId;
+    const { domainId } = req.params;
+
+    if (!domainId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "domainId required" });
+    }
+
     const userModules = await UserModuleProgress.findAll({
       where: { userId },
       include: [
         {
           model: Module,
+          where: { careerDomainId: domainId }, // ✅ filter modules by domainId
           include: [
             {
               model: CareerDomain,
-              attributes: ["id", "title"], // Include only needed fields
+              attributes: ["id", "title"], // only needed fields
             },
           ],
         },
       ],
       order: [[{ model: Module }, "sequence", "ASC"]],
     });
+
     const modules = userModules.map((um) => ({
       ...um.Module.get(),
       obtainedXP: um.obtainedXP,
       badge: um.badge,
       isCompleted: um.isCompleted,
       completedAt: um.completedAt,
-      careerDomainTitle: um.Module?.careerDomain?.title || null,
+      careerDomainTitle: um.Module?.CareerDomain?.title || null, // ✅ fix casing too
     }));
+
     res.json({ success: true, modules });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Server error", error: err.message });
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+      error: err.message,
+    });
   }
 };
+
 
 // Get all lessons a user is enrolled in for a given module
 export const getUserEnrolledLessonsForModule = async (req, res) => {

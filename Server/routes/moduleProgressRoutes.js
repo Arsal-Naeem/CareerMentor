@@ -25,7 +25,7 @@ router.get("/module/:moduleId/progress", verifyToken, getUserModuleProgress);
 router.get("/lesson/:lessonId/quizzes", verifyToken, getQuizzesForLesson);
 
 // Get all modules a user is currently enrolled in
-router.get("/module/enrolled", verifyToken, getUserEnrolledModules);
+router.get("/module/enrolled/:domainId", verifyToken, getUserEnrolledModules);
 
 // Get all lessons a user is enrolled in for a given module
 router.get("/module/:moduleId/enrolled-lessons", verifyToken, getUserEnrolledLessonsForModule);
