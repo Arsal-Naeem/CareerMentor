@@ -25,22 +25,25 @@ export const API_ROUTES = {
     GET_RESULTS: (sessionId) =>
       `${assessmentController}result/current-results/${sessionId}`,
     GET_PREVIOUS_RESULTS: `${assessmentController}result/past-results/`,
-    POST_SESSION:()=> `${assessmentController}session/startsession`
+    POST_SESSION: () => `${assessmentController}session/startsession`,
   },
-  SKILLTRACKING:{
-    GET_ALL_CAREER_DOMAINS:`${careerdomainController}/all`,
-    GET_USER_CAREER_DOMAINS:`${careerdomainController}/current`,
-    ENROLL_CAREER_DOMAIN:`${careerdomainController}/enroll`
+  SKILLTRACKING: {
+    GET_ALL_CAREER_DOMAINS: `${careerdomainController}/all`,
+    GET_USER_CAREER_DOMAINS: `${careerdomainController}/current`,
+    ENROLL_CAREER_DOMAIN: `${careerdomainController}/enroll`,
   },
-  SKILLMODULE:{
-    GET_USER_ENROLLED: (domainId)=> `${skillmoduleController}module/enrolled/${domainId}`
+  SKILLMODULE: {
+    GET_USER_ENROLLED: (domainId) =>
+      `${skillmoduleController}module/enrolled/${domainId}`,
   },
   LESSONS: {
-    GET_MODULE_LESSONS: (moduleId) => `${lessonController}module/${moduleId}/enrolled-lessons`,
-    GET_LESSON_QUIZZES: (lessonId) => `${lessonController}lesson/${lessonId}/user-quizzes`,
+    GET_MODULE_LESSONS: (moduleId) =>
+      `${lessonController}module/${moduleId}/enrolled-lessons`,
+    GET_LESSON_QUIZZES: (lessonId) =>
+      `${lessonController}lesson/${lessonId}/user-quizzes`,
     SUBMIT_QUIZ_ANSWER: `${lessonController}quiz/answer`,
   },
   ROADMAPS: {
-    GET_ROADMAPS: (domainId)=> `${roadmapController}${domainId}`,
+    GET_ROADMAPS: (domainId) => `${roadmapController}${domainId}`,
   },
 };

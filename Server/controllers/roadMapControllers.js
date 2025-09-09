@@ -4,7 +4,7 @@ import UserCareerDomain from "../models/skilltracking/userCareerDomain.js";
 export const getRoadMapByDomain = async (req, res) => {
   try {
     const { domainId } = req.params;
-    const userId = req.userId; // ✅ set by JWT middleware
+    const userId = req.userId; 
 
     if (!domainId || !userId) {
       return res.status(400).json({

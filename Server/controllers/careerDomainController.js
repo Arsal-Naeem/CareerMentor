@@ -7,15 +7,11 @@ export const enrollCareerDomain = async (req, res) => {
     const { careerDomainId } = req.body;
     const userId = req.userId;
     if (!careerDomainId)
-      return res
-        .status(400)
-        .json({ success: false, message: "careerDomainId required" });
+      return res.status(400).json({ success: false, message: "careerDomainId required" });
 
     const domain = await CareerDomain.findByPk(careerDomainId);
     if (!domain)
-      return res
-        .status(404)
-        .json({ success: false, message: "Career domain not found" });
+      return res.status(404).json({ success: false, message: "Career domain not found" });
 
     // Check if already enrolled
     let userDomain = await UserCareerDomain.findOne({
@@ -24,29 +20,31 @@ export const enrollCareerDomain = async (req, res) => {
     if (userDomain) {
       return res.status(200).json({
         success: false,
-        message: "User already exists on that domain",
+        message: "User already enrolled in this domain",
       });
     }
 
+    // Enroll user in career domain
     userDomain = await UserCareerDomain.create({ userId, careerDomainId });
-    // Auto-enroll in all modules, lessons, quizzes for this domain
-    const modules = await Module.findAll({ where: { careerDomainId } });
+
+    // Get modules via DomainModuleMapping
+    const modules = await domain.getModules(); // uses the many-to-many relation
     for (const module of modules) {
       // UserModuleProgress
       await UserModuleProgress.findOrCreate({
         where: { userId, moduleId: module.id },
         defaults: { userId, moduleId: module.id },
       });
-      const lessons = await Lesson.findAll({ where: { moduleId: module.id } });
+
+      const lessons = await module.getLessons(); // fetch lessons of this module
       for (const lesson of lessons) {
-        // UserLessonProgress
         await UserLessonProgress.findOrCreate({
           where: { userId, lessonId: lesson.id },
           defaults: { userId, lessonId: lesson.id },
         });
-        const quizzes = await QuizQuestion.findAll({ where: { lessonId: lesson.id } });
+
+        const quizzes = await lesson.getQuizQuestions(); // fetch quizzes of this lesson
         for (const quiz of quizzes) {
-          // UserQuizAnswer
           await UserQuizAnswer.findOrCreate({
             where: { userId, lessonId: lesson.id, quizQuestionId: quiz.id },
             defaults: {
@@ -60,13 +58,13 @@ export const enrollCareerDomain = async (req, res) => {
         }
       }
     }
+
     res.json({ success: true, userCareerDomain: userDomain });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Server error", error: err.message });
+    res.status(500).json({ success: false, message: "Server error", error: err.message });
   }
 };
+
 
 // Get all career domains the user is enrolled in (array)
 export const getCurrentCareerDomain = async (req, res) => {

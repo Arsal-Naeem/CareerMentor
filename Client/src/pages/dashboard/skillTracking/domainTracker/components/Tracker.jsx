@@ -49,7 +49,10 @@ const DomainTracker = ({
   setIsAddCertificationModalOpen,
 }) => {
   const { id: domainId } = useParams();
+  console.log("THIS IS DOMAIN ID", domainId);
   const { data, isLoading, isError } = GetUserEnrolledModule(domainId);
+  console.log("Enrolled modules data:", data);
+
 
   if (isLoading) {
     return (

@@ -123,9 +123,23 @@ AssessmentSessionAns.belongsTo(AssessmentOptions, {
   as: "option",
 });
 
-// One CareerDomain has many Modules
-CareerDomain.hasMany(Module, { foreignKey: "careerDomainId" });
-Module.belongsTo(CareerDomain, { foreignKey: "careerDomainId" });
+// import DomainModuleMapping at the top with other models
+import DomainModuleMapping from "./skilltracking/domainModuleMapping.js";
+
+// direct relations for DomainModuleMapping
+DomainModuleMapping.belongsTo(CareerDomain, {
+  foreignKey: "careerDomainId",
+  as: "domain",
+});
+DomainModuleMapping.belongsTo(Module, { foreignKey: "moduleId", as: "module" });
+CareerDomain.hasMany(DomainModuleMapping, {
+  foreignKey: "careerDomainId",
+  as: "domainModuleMappings",
+});
+Module.hasMany(DomainModuleMapping, {
+  foreignKey: "moduleId",
+  as: "domainModuleMappings",
+});
 
 // One Module has many Lessons
 Module.hasMany(Lesson, { foreignKey: "moduleId" });
@@ -142,7 +156,10 @@ User.hasMany(UserModuleProgress, { foreignKey: "userId", onDelete: "CASCADE" });
 UserModuleProgress.belongsTo(User, { foreignKey: "userId" });
 
 // Module → UserModuleProgress (One-to-Many)
-Module.hasMany(UserModuleProgress, { foreignKey: "moduleId", onDelete: "CASCADE" });
+Module.hasMany(UserModuleProgress, {
+  foreignKey: "moduleId",
+  onDelete: "CASCADE",
+});
 UserModuleProgress.belongsTo(Module, { foreignKey: "moduleId" });
 
 // User → UserLessonProgress (One-to-Many)
@@ -150,7 +167,10 @@ User.hasMany(UserLessonProgress, { foreignKey: "userId", onDelete: "CASCADE" });
 UserLessonProgress.belongsTo(User, { foreignKey: "userId" });
 
 // Lesson → UserLessonProgress (One-to-Many)
-Lesson.hasMany(UserLessonProgress, { foreignKey: "lessonId", onDelete: "CASCADE" });
+Lesson.hasMany(UserLessonProgress, {
+  foreignKey: "lessonId",
+  onDelete: "CASCADE",
+});
 UserLessonProgress.belongsTo(Lesson, { foreignKey: "lessonId" });
 
 // User → UserQuizAnswer (One-to-Many)
@@ -162,7 +182,10 @@ Lesson.hasMany(UserQuizAnswer, { foreignKey: "lessonId", onDelete: "CASCADE" });
 UserQuizAnswer.belongsTo(Lesson, { foreignKey: "lessonId" });
 
 // QuizQuestion → UserQuizAnswer (One-to-Many)
-QuizQuestion.hasMany(UserQuizAnswer, { foreignKey: "quizQuestionId", onDelete: "CASCADE" });
+QuizQuestion.hasMany(UserQuizAnswer, {
+  foreignKey: "quizQuestionId",
+  onDelete: "CASCADE",
+});
 UserQuizAnswer.belongsTo(QuizQuestion, { foreignKey: "quizQuestionId" });
 
 // User → UserCareerDomain (One-to-One)
@@ -170,11 +193,11 @@ User.hasOne(UserCareerDomain, { foreignKey: "userId", onDelete: "CASCADE" });
 UserCareerDomain.belongsTo(User, { foreignKey: "userId" });
 
 // CareerDomain → UserCareerDomain (One-to-Many)
-CareerDomain.hasMany(UserCareerDomain, { foreignKey: "careerDomainId", onDelete: "CASCADE" });
+CareerDomain.hasMany(UserCareerDomain, {
+  foreignKey: "careerDomainId",
+  onDelete: "CASCADE",
+});
 UserCareerDomain.belongsTo(CareerDomain, { foreignKey: "careerDomainId" });
-
-Module.belongsTo(CareerDomain, { foreignKey: 'careerDomainId' }); // Assuming this FK exists
-CareerDomain.hasMany(Module, { foreignKey: 'careerDomainId' });
 
 export {
   Blogs,
@@ -194,5 +217,5 @@ export {
   QuizQuestion,
   UserModuleProgress,
   UserLessonProgress,
-  UserQuizAnswer
+  UserQuizAnswer,
 };

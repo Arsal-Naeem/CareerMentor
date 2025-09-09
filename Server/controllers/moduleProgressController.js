@@ -7,44 +7,59 @@ import QuizQuestion from "../models/skilltracking/quizQuestion.js";
 import { Op } from "sequelize";
 import UserCareerDomain from "../models/skilltracking/userCareerDomain.js";
 import { CareerDomain } from "../models/index.js";
+import DomainModuleMapping from "../models/skilltracking/domainModuleMapping.js";
 
 // 1. Start or continue a module
 export const startOrGetModuleProgress = async (req, res) => {
   try {
     const { moduleId } = req.body;
     const userId = req.userId;
+
     if (!moduleId)
       return res
         .status(400)
         .json({ success: false, message: "moduleId required" });
-    // Check if user is enrolled in the correct career domain for this module
+
     const module = await Module.findByPk(moduleId);
     if (!module)
       return res
         .status(404)
         .json({ success: false, message: "Module not found" });
+
+    // ✅ NEW: validate mapping
     const userDomain = await UserCareerDomain.findOne({ where: { userId } });
-    if (!userDomain || userDomain.careerDomainId !== module.careerDomainId) {
+    if (!userDomain) {
       return res.status(403).json({
         success: false,
-        message:
-          "User not enrolled in the required career domain for this module",
+        message: "User not enrolled in any career domain",
       });
     }
+
+    const mapping = await DomainModuleMapping.findOne({
+      where: { careerDomainId: userDomain.careerDomainId, moduleId },
+    });
+
+    if (!mapping) {
+      return res.status(403).json({
+        success: false,
+        message: "This module does not belong to user’s enrolled domain",
+      });
+    }
+
+    // Progress check
     let progress = await UserModuleProgress.findOne({
       where: { userId, moduleId },
     });
     if (!progress) {
       progress = await UserModuleProgress.create({ userId, moduleId });
-      // Get all lessons for this module
+
+      // Pre-create lesson + quiz progress
       const lessons = await Lesson.findAll({ where: { moduleId } });
-      // Bulk create UserLessonProgress for each lesson if not exists
       for (const lesson of lessons) {
         const [lessonProgress] = await UserLessonProgress.findOrCreate({
           where: { userId, lessonId: lesson.id },
           defaults: { userId, lessonId: lesson.id },
         });
-        // Optionally, pre-create UserQuizAnswer for each quiz in this lesson
         const quizzes = await QuizQuestion.findAll({
           where: { lessonId: lesson.id },
         });
@@ -62,6 +77,7 @@ export const startOrGetModuleProgress = async (req, res) => {
         }
       }
     }
+
     res.json({ success: true, progress });
   } catch (err) {
     res
@@ -83,7 +99,6 @@ export const getLessonsForModule = async (req, res) => {
       order: [["sequence", "ASC"]],
     });
     res.json({ success: true, lessons });
-
   } catch (err) {
     res
       .status(500)
@@ -275,11 +290,23 @@ export const getUserModuleProgress = async (req, res) => {
 export const getAllModules = async (req, res) => {
   try {
     const { careerDomainId } = req.query;
-    const where = careerDomainId ? { careerDomainId } : {};
-    const modules = await Module.findAll({
-      where,
-      order: [["sequence", "ASC"]],
-    });
+
+    let modules;
+    if (careerDomainId) {
+      // ✅ join with mapping
+      modules = await Module.findAll({
+        include: [
+          {
+            model: DomainModuleMapping,
+            where: { careerDomainId },
+          },
+        ],
+        order: [["sequence", "ASC"]],
+      });
+    } else {
+      modules = await Module.findAll({ order: [["sequence", "ASC"]] });
+    }
+
     res.json({ success: true, modules });
   } catch (err) {
     res
@@ -324,11 +351,20 @@ export const getUserEnrolledModules = async (req, res) => {
       include: [
         {
           model: Module,
-          where: { careerDomainId: domainId }, // ✅ filter modules by domainId
+          required: true,
           include: [
             {
-              model: CareerDomain,
-              attributes: ["id", "title"], // only needed fields
+              model: DomainModuleMapping,
+              as: "domainModuleMappings",
+              required: true,
+              where: { careerDomainId: domainId },
+              include: [
+                {
+                  model: CareerDomain,
+                  as: "domain",
+                  attributes: ["id", "title"],
+                },
+              ],
             },
           ],
         },
@@ -336,25 +372,31 @@ export const getUserEnrolledModules = async (req, res) => {
       order: [[{ model: Module }, "sequence", "ASC"]],
     });
 
+    // 🔍 check if user is not enrolled in this domain
+    if (!userModules || userModules.length === 0) {
+      return res.json({
+        success: false,
+        message: "User not enrolled in this domain",
+      });
+    }
+
     const modules = userModules.map((um) => ({
       ...um.Module.get(),
       obtainedXP: um.obtainedXP,
       badge: um.badge,
       isCompleted: um.isCompleted,
       completedAt: um.completedAt,
-      careerDomainTitle: um.Module?.CareerDomain?.title || null, // ✅ fix casing too
+      careerDomainTitle:
+        um.Module?.domainModuleMappings?.[0]?.domain?.title || null,
     }));
 
     res.json({ success: true, modules });
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-      error: err.message,
-    });
+    res
+      .status(500)
+      .json({ success: false, message: "Server error", error: err.message });
   }
 };
-
 
 // Get all lessons a user is enrolled in for a given module
 export const getUserEnrolledLessonsForModule = async (req, res) => {

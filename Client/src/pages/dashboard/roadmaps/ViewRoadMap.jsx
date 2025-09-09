@@ -10,7 +10,6 @@ import { useEnrollInCareerDomain } from "@/apis/skillTracking/skillTracking.serv
 import { useScreenSize } from "@/hooks/useScreenSize";
 import ModuleCard from "@/components/roadmap/ModuleCard";
 
-
 const ViewRoadMap = () => {
   const { id } = useParams();
   usePageTitle("Roadmap Tracking");
@@ -18,13 +17,13 @@ const ViewRoadMap = () => {
   const [expandedModuleId, setExpandedModuleId] = useState(null);
   const { isSmallScreen } = useScreenSize();
 
-  useEffect(() => {
-    setBreadcrumbText("Roadmaps");
-  }, []);
-
   const { data: roadmapData, isLoading } = useRoadmaps(id);
   const { mutate: enrollDomain, isPending: enrolling } =
     useEnrollInCareerDomain();
+
+  useEffect(() => {
+    setBreadcrumbText(`Roadmaps/${roadmapData?.domain?.title}`);
+  }, []);
 
   const toggleModule = (moduleId) => {
     setExpandedModuleId((prev) => (prev === moduleId ? null : moduleId));

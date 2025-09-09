@@ -6,7 +6,7 @@ import axiosReq from "@/services/axiosHelper";
 export const getAllCareerDomains = async () => {
   const url = API_ROUTES.SKILLTRACKING.GET_ALL_CAREER_DOMAINS;
   const res = await axiosReq(API_MODES.GET, url);
-  //console.log("This is response from getAllCareerDomains", res);
+  console.log("This is response from getAllCareerDomains", res);
   return res.data;
 }
 
@@ -14,7 +14,7 @@ export const getAllCareerDomains = async () => {
 export const getUserEnrolledDomains = async () => {
   const url = API_ROUTES.SKILLTRACKING.GET_USER_CAREER_DOMAINS;
   const res = await axiosReq(API_MODES.GET, url);
-  //console.log("This is response from getUserEnrolledDomains", res);
+  console.log("This is response from getUserEnrolledDomains", res);
   return res.data;
 }
 
