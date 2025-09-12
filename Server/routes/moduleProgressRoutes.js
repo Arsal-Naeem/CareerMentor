@@ -19,10 +19,10 @@ const router = express.Router();
 // All routes require authentication
 
 //@GET || all modules available
-router.get("/module/all", verifyToken, getAllModules);
+// router.get("/module/all", verifyToken, getAllModules);
 
-//@POST || start or get module progress
-router.post("/module/start", verifyToken, startOrGetModuleProgress);
+// //@POST || start or get module progress
+// router.post("/module/start", verifyToken, startOrGetModuleProgress);
 
 //@GET || get lessons for a module
 router.get("/module/:moduleId/lessons", verifyToken, getLessonsForModule);
@@ -30,11 +30,16 @@ router.get("/module/:moduleId/lessons", verifyToken, getLessonsForModule);
 // @POST || start or get lesson progress
 router.post("/lesson/start", verifyToken, startOrGetLessonProgress);
 
-// @POST || submit or update quiz answer
-router.post("/quiz/answer", verifyToken, submitQuizAnswer);
+
 
 router.get("/module/:moduleId/progress", verifyToken, getUserModuleProgress);
 router.get("/lesson/:lessonId/quizzes", verifyToken, getQuizzesForLesson);
+
+
+
+
+
+
 
 // Get all modules a user is currently enrolled in
 router.get("/module/enrolled/:domainId", verifyToken, getUserEnrolledModules);
@@ -52,5 +57,9 @@ router.get(
   verifyToken,
   getUserQuizzesForLessonWithStatus
 );
+
+
+// @POST || submit or update quiz answer
+router.post("/quiz/answer", verifyToken, submitQuizAnswer);
 
 export default router;

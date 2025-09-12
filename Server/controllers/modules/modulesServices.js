@@ -286,24 +286,73 @@ export const getUserEnrolledModulesService = async (userId, domainId) => {
     }));
 };
 
-
 // 2. Get all lessons a user is enrolled in for a given module
-export const getUserEnrolledLessonsForModuleService = async (
-  userId,
-  moduleId
-) => {
+export const getUserEnrolledLessonsForModuleService = async (userId, moduleId) => {
   if (!moduleId) throw { status: 400, message: "moduleId required" };
 
   const userLessons = await UserLessonProgress.findAll({
     where: { userId },
-    include: [{ model: Lesson, where: { moduleId } }],
+    include: [
+      {
+        model: Lesson,
+        where: { moduleId },
+        attributes: [
+          "id",
+          "title",
+          "description",
+          "content",
+          "sequence",
+          "estimatedTime",
+          "xp",
+        ],
+        include: [
+          {
+            model: QuizQuestion,
+            attributes: ["id"], // only need ids for counting
+            include: [
+              {
+                model: UserQuizAnswer,
+                required: false,
+                attributes: ["selectedOption"], // only needed for answered check
+                where: { userId },
+              },
+            ],
+          },
+        ],
+      },
+    ],
     order: [[{ model: Lesson }, "sequence", "ASC"]],
   });
 
-  console.log("userLessons",userLessons)
+  return userLessons.map((ul) => {
+    const lesson = ul.Lesson.toJSON();
 
-  return userLessons.map((ul) => ul.Lesson);
+    const totalQuiz = lesson.QuizQuestions?.length || 0;
+
+    const answeredQuiz =
+      lesson.QuizQuestions?.filter(
+        (qq) =>
+          qq.user_quiz_answers &&
+          qq.user_quiz_answers.length > 0 &&
+          qq.user_quiz_answers[0].selectedOption !== null
+      ).length || 0;
+
+    return {
+      id: lesson.id,
+      title: lesson.title,
+      description: lesson.description,
+      content: lesson.content,
+      sequence: lesson.sequence,
+      estimatedTime: lesson.estimatedTime,
+      xp: lesson.xp,
+      obtainedXP: ul.obtainedXP,
+      totalQuiz,
+      answeredQuiz,
+    };
+  });
 };
+
+
 
 // 3. Get quizzes for a lesson (only unanswered)
 export const getUserQuizzesForLessonWithStatusService = async (

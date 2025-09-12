@@ -137,7 +137,8 @@ const Lessons = () => {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
             {lessons.map((lesson) => {
-              const isDisabled = lesson.isCompleted;
+              const isCompleted = lesson.answeredQuiz === lesson.totalQuiz;
+
               return (
                 <div
                   key={lesson.id}
@@ -154,7 +155,7 @@ const Lessons = () => {
                       {lesson.description}
                     </p>
 
-                    {/* XP and completion info */}
+                    {/* Info section */}
                     <div className="flex items-center justify-between text-xs mt-2 text-gray-600">
                       <span>⏱ {lesson.estimatedTime || "N/A"}</span>
                       <span>
@@ -162,10 +163,15 @@ const Lessons = () => {
                       </span>
                     </div>
 
-                    {lesson.isCompleted && lesson.completedAt && (
-                      <div className="text-xs text-green-600 mt-1">
-                        Completed on:{" "}
-                        {format(new Date(lesson.completedAt), "MMM dd, yyyy")}
+                    {/* Quiz progress */}
+                    <div className="text-xs text-gray-500 mt-1">
+                      Quiz Progress: {lesson.answeredQuiz} / {lesson.totalQuiz}
+                    </div>
+
+                    {/* Completion badge */}
+                    {isCompleted && (
+                      <div className="text-xs font-medium text-green-600 mt-1">
+                        ✅ Completed
                       </div>
                     )}
                   </div>
@@ -182,9 +188,9 @@ const Lessons = () => {
                     <Button
                       className="flex-1"
                       onClick={() => handleQuizeStart(lesson)}
-                      disabled={isDisabled}
+                      disabled={isCompleted}
                     >
-                      {isDisabled ? "Completed" : "Start Quiz"}
+                      {isCompleted ? "Completed" : "Start Quiz"}
                     </Button>
                   </div>
                 </div>

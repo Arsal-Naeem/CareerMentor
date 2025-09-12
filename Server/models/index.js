@@ -199,6 +199,22 @@ CareerDomain.hasMany(UserCareerDomain, {
 });
 UserCareerDomain.belongsTo(CareerDomain, { foreignKey: "careerDomainId" });
 
+// CareerDomain ↔ Module (Many-to-Many through DomainModuleMapping)
+CareerDomain.belongsToMany(Module, {
+  through: DomainModuleMapping,
+  foreignKey: "careerDomainId",
+  otherKey: "moduleId",
+  as: "modules",
+});
+
+Module.belongsToMany(CareerDomain, {
+  through: DomainModuleMapping,
+  foreignKey: "moduleId",
+  otherKey: "careerDomainId",
+  as: "domains",
+});
+
+
 export {
   Blogs,
   Tag,

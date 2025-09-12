@@ -7,7 +7,8 @@ import {
 import UserCareerDomain from "../../models/skilltracking/userCareerDomain.js";
 
 export const enrollCareerDomainService = async (userId, careerDomainId) => {
-  if (!careerDomainId) throw { status: 400, message: "careerDomainId required" };
+  if (!careerDomainId)
+    throw { status: 400, message: "careerDomainId required" };
 
   const domain = await CareerDomain.findByPk(careerDomainId);
   if (!domain) throw { status: 404, message: "Career domain not found" };
@@ -25,6 +26,7 @@ export const enrollCareerDomainService = async (userId, careerDomainId) => {
 
   // Auto-enroll in modules, lessons, quizzes
   const modules = await domain.getModules();
+
   for (const module of modules) {
     await UserModuleProgress.findOrCreate({
       where: { userId, moduleId: module.id },

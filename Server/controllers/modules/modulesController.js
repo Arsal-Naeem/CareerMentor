@@ -110,6 +110,7 @@ export const getUserEnrolledModules = async (req, res) => {
   try {
     const userId = req.userId;
     const { domainId } = req.params;
+    console.log("Fetching enrolled modules for user:", userId);
 
     const modules = await getUserEnrolledModulesService(userId, domainId);
     return successResponse(res, { modules });
@@ -121,7 +122,7 @@ export const getUserEnrolledModules = async (req, res) => {
 // 2. Get lessons for a module user enrolled in
 export const getUserEnrolledLessonsForModule = async (req, res) => {
   try {
-    const userId = 3;
+    const userId = req.userId;
     const { moduleId } = req.params;
 
     console.log("Fetching lessons for user:", userId, "module:", moduleId);
