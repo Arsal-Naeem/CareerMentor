@@ -116,7 +116,7 @@ const Modules = () => {
                   title="Project"
                   textSmall
                   className="w-1/2 text-center"
-                  variant="light"
+                  variant="dark"
                   onClickHandler={() => console.log("Project clicked")}
                 />
               </div>

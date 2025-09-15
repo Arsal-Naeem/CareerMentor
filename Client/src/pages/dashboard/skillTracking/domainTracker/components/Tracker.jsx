@@ -7,6 +7,7 @@ import { ActionDropdown } from "@/components/dropdowns/ActionDropdown";
 import CertificationModal from "@/components/modals/CertificationModal";
 import ProjectModal from "@/components/modals/ProjectModal";
 import { OrangeProgressBar } from "@/components/OrangeProgressBar";
+import { BuddyConversation } from "@/components/skillTracking/buddy/BuddyConversation";
 import Modules from "@/components/skillTracking/Modules";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,6 +29,7 @@ export const Tracker = () => {
     useState(false);
   return (
     <div className="flex flex-col gap-10">
+     <BuddyConversation />
       {/* top row: domain + skill trackers */}
       <div className="flex flex-col lg:flex-row justify-around gap-10">
         <DomainTracker
@@ -61,15 +63,7 @@ const DomainTracker = ({
 }) => {
   const { id: domainId } = useParams();
 
-  // keep hooks (not used, but preserved for now)
-  const { data, isLoading, isError } = GetUserEnrolledModule(domainId);
-  const {
-    data: allModulesData,
-    isLoading: allModulesLoading,
-    isError: allModulesError,
-  } = GetAllModulesFromDomain(domainId);
-
-  // --- Mock data ---
+  // --- Mock data (replace with API later) ---
   const modules = [
     {
       id: 1,
@@ -93,7 +87,7 @@ const DomainTracker = ({
     },
   ];
 
-  // calculate overall stats
+  // calculate stats
   const totalXP = modules.reduce((acc, m) => acc + m.totalXP, 0);
   const obtainedXP = modules.reduce((acc, m) => acc + m.obtainedXP, 0);
   const progressPercent = totalXP
@@ -112,12 +106,19 @@ const DomainTracker = ({
             "linear-gradient(107deg, rgba(243, 179, 78, 0.40) 0%, rgba(255, 210, 114, 0.40) 50%, rgba(89, 164, 192, 0.40) 100%)",
         }}
       >
-        <div className="bg-white rounded-full h-52 w-52 flex flex-col items-center justify-center">
-          <OrangeProgressBar variant="rounded" value={progressPercent} />
+        {/* Replace circle with buddy image */}
+        <div className="bg-white rounded-full h-52 w-52 flex items-center justify-center overflow-hidden shadow">
+          <img
+            src="/buddy.png"
+            alt="Buddy"
+            className="object-contain h-full w-full"
+          />
         </div>
+
         <h2 className="text-lg md:text-xl font-medium text-black">
           {modules[0]?.careerDomain?.title || "Career Domain"}
         </h2>
+
         <div className="flex justify-between w-full gap-5 text-black text-sm font-normal">
           <div className="flex-1">
             <p>Modules</p>
@@ -128,11 +129,12 @@ const DomainTracker = ({
             <p>
               {completedModules}/{totalModules}
             </p>
-            <p>02</p> {/* placeholder for projects count */}
-            <p>01</p> {/* placeholder for certifications count */}
+            <p>02</p>
+            <p>01</p>
           </div>
         </div>
       </div>
+
       <OutlinedActionButton
         size="lg"
         title="Add Project"

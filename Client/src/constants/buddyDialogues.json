@@ -1,0 +1,94 @@
+{
+  "frontend": {
+    "welcome": {
+      "message": "👋 Hey! Welcome to our platform! I’m Buddy, your learning companion 🚀",
+      "options": ["Next"]
+    },
+    "intro": {
+      "start": {
+        "message": "You’ve chosen *Frontend Development*! That’s exciting! Tell me, are you completely new or do you already know some basics?",
+        "options": ["I'm a Newbie", "I know some basics"]
+      }
+    },
+    "newbie": {
+      "message": "Perfect! Since you’re starting fresh, let me explain the modules one by one:",
+      "modules": [
+        "Module 1: HTML & Web Structure — Learn how to build the skeleton of web pages.",
+        "Module 2: CSS & Layout — Style and design your pages beautifully.",
+        "Module 3: JavaScript Essentials — Add interactivity and logic to your apps."
+      ],
+      "options": ["Got it 👍"]
+    },
+    "experienced": {
+      "askSkills": {
+        "message": "Cool 😎 Which of these do you already know?",
+        "options": ["HTML", "CSS", "JavaScript", "React", "None"]
+      },
+      "responses": {
+        "HTML+CSS": {
+          "message": "Since you already know *HTML* and *CSS*, you can skip Modules 1 & 2. Start with *Module 3: JavaScript Essentials*."
+        },
+        "HTML": {
+          "message": "Great! Since you know *HTML*, we’ll start from *Module 2: CSS Fundamentals*."
+        },
+        "CSS": {
+          "message": "Awesome! Since you know *CSS*, we’ll start from *Module 1: HTML Basics* and then move forward."
+        },
+        "JavaScript": {
+          "message": "Amazing! You already know *JavaScript*. Skip to *Module 4: React Essentials*."
+        },
+        "React": {
+          "message": "Wow 🚀 You know *React*! Then you should focus on *Module 5: Advanced React* and projects."
+        },
+        "None": {
+          "message": "No worries! We’ll start right at the beginning — HTML first!"
+        }
+      }
+    }
+  },
+
+  "backend": {
+    "welcome": {
+      "message": "👋 Hey! Welcome to our platform! I’m Buddy, your learning companion 🚀",
+      "options": ["Next"]
+    },
+    "intro": {
+      "start": {
+        "message": "You’ve chosen *Backend Development*! Are you completely new, or do you already know some basics?",
+        "options": ["I'm a Newbie 🙋", "I know some basics ✨"]
+      }
+    },
+    "newbie": {
+      "message": "Perfect! Let’s start with these modules:",
+      "modules": [
+        "Module 1: Intro to Servers — Understand what servers do.",
+        "Module 2: Node.js Basics — Learn the foundations of Node.js.",
+        "Module 3: Databases — Work with SQL/NoSQL databases."
+      ],
+      "options": ["Got it 👍"]
+    },
+    "experienced": {
+      "askSkills": {
+        "message": "Which of these backend skills do you already know?",
+        "options": ["Node.js", "Databases", "Express.js", "Authentication", "None"]
+      },
+      "responses": {
+        "Node.js": {
+          "message": "Nice! Since you know Node.js, move ahead to *Module 3: Express.js Fundamentals*."
+        },
+        "Databases": {
+          "message": "Cool! Since you know Databases, focus on *Module 4: API Development*."
+        },
+        "Express.js": {
+          "message": "Sweet! You know Express.js, so jump into *Module 5: Authentication & Security*."
+        },
+        "Authentication": {
+          "message": "Awesome! Head straight to *Module 6: Advanced Backend Patterns*."
+        },
+        "None": {
+          "message": "No problem — we’ll start with *Intro to Servers* and build a strong foundation."
+        }
+      }
+    }
+  }
+}

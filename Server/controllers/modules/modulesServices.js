@@ -3,7 +3,7 @@
 //import { CareerDomain } from "../../models/index.js";
 import { Op } from "sequelize";
 
-import {CareerDomain, DomainModuleMapping, Lesson, Module, QuizQuestion, UserCareerDomain, UserModuleProgress, UserQuizAnswer} from "../../models/index.js";
+import {CareerDomain, DomainModuleMapping, Lesson, Module, QuizQuestion, UserCareerDomain, UserLessonProgress, UserModuleProgress, UserQuizAnswer} from "../../models/index.js";
 
 
 export const fetchModules = async (careerDomainId) => {
