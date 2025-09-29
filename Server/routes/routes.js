@@ -17,6 +17,4 @@ router.use("/skill-modules/", moduleProgressRoutes)
 router.use("/careerdomain", careerDomainRoutes)
 router.use("/roadmap", roadMapRoutes)
 
-router.use("/admin", adminRoutes)
-
 export default router;

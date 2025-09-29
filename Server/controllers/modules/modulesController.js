@@ -1,4 +1,4 @@
-import { UserModuleProgress } from "../../models/index.js";
+import { QuizQuestion, UserModuleProgress } from "../../models/index.js";
 import {
   successResponse,
   errorResponse,
@@ -199,3 +199,15 @@ export const getUserQuizzesForLessonWithStatus = async (req, res) => {
     return errorResponse(res, err);
   }
 };
+
+
+//GET LESSONS QUESTIONS
+export const getLessonQuestions = async (req, res) => {
+  const {lessonId} = req.params
+  const quizzes = await QuizQuestion.findAll({
+    where: { lessonId },
+    order: [["sequence", "ASC"]],
+  });
+
+  return successResponse(res, { quizzes });
+}

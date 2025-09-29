@@ -15,6 +15,7 @@ import assessmentsRoutes from "./routes/assessmentsRoute.js";
 import startApp from "./config/sync.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import { insertQuestions } from "./utils/seedQuestions.js";
+import { seedModules } from "./utils/SeedData/skilllTracking/frontendSeed.js";
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.listen(PORT, () => {
   connectDB();
   startApp();
   // insertQuestions();
+  //seedModules()
   console.log(`Server is running on port ${PORT}`);
   console.log(
     `📚 Swagger docs available at: http://localhost:${PORT}/api-docs`

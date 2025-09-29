@@ -13,6 +13,7 @@ import {
   getUserEnrolledLessonsForModule,
   getUserQuizzesForLessonWithStatus,
   patchModulesActive,
+  getLessonQuestions,
 } from "../controllers/modules/modulesController.js";
 
 const router = express.Router();
@@ -70,6 +71,12 @@ router.post("/quiz/answer", verifyToken, submitQuizAnswer);
 router.get("/module/:domainId", verifyToken, getAllModules);
 
 router.patch("/setActive/:moduleId", verifyToken, patchModulesActive);
+
+
+router.get("/lesson/quizes/:lessonId", verifyToken, getLessonQuestions)
+
+//--------------POST ADMIN------------------
+//router.post("/module/post/:moduleId", verifyToken, postModules);
 
 
 

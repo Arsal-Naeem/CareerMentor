@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const poseMap = {
-  waving: "/public/buddy.png",
+  waving: "/buddy.png",
   standing: "/src/assets/mascot/standing.webp",
   laptop: "/src/assets/mascot/laptop.webp",
   explaining: "/src/assets/mascot/explaining.webp",
