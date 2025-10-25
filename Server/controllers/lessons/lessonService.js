@@ -1,4 +1,11 @@
-import { Lesson, LessonExample, LessonLearningPoint, LessonResource, Module, UserLessonProgress } from "../../models/index.js";
+import {
+  Lesson,
+  LessonExample,
+  LessonLearningPoint,
+  LessonResource,
+  Module,
+  UserLessonProgress,
+} from "../../models/index.js";
 
 export const PostLessonEnrollment = async ({ userId }) => {
   // 1️⃣ Get all lessons
@@ -27,19 +34,26 @@ export const PostLessonEnrollment = async ({ userId }) => {
   return result;
 };
 
-export const GetAllUserLessons = async ({ moduleId}) => {
+export const GetAllUserLessons = async ({ moduleId }) => {
   const moduleWithLessons = await Module.findByPk(moduleId, {
     attributes: ["id", "title", "description", "totalXp", "badge", "slug"],
     include: [
       {
         model: Lesson,
-        as: "lessons", // must match association alias
-        attributes: ["id", "title", "description", "isMandatory", "sequence", "createdAt", "updatedAt"],
-        order: [["sequence", "ASC"]] // optional: order lessons
-      }
+        as: "lessons", 
+        attributes: [
+          "id",
+          "title",
+          "description",
+          "isMandatory",
+          "sequence",
+          "createdAt",
+          "updatedAt",
+        ],
+        order: [["sequence", "ASC"]],
+      },
     ],
   });
-  console.log(moduleWithLessons)
 
   if (!moduleWithLessons) return null;
 
@@ -51,31 +65,39 @@ export const GetDetailLesson = async (lessonId) => {
   if (!lessonId) return null;
 
   const lesson = await Lesson.findByPk(lessonId, {
-    attributes: ["id", "title", "description", "isMandatory", "sequence", "createdAt", "updatedAt"],
+    attributes: [
+      "id",
+      "title",
+      "description",
+      "isMandatory",
+      "sequence",
+      "createdAt",
+      "updatedAt",
+    ],
     include: [
       {
         model: LessonExample,
         as: "examples", // must match association alias
         attributes: ["id", "codeSnippet", "description"],
-        order: [["createdAt", "ASC"]]
+        order: [["createdAt", "ASC"]],
       },
       {
         model: LessonLearningPoint,
         as: "learningPoints", // must match alias
         attributes: ["id", "point"],
-        order: [["id", "ASC"]]
+        order: [["id", "ASC"]],
       },
       {
         model: LessonResource,
         as: "resources", // must match alias
         attributes: ["id", "type", "url"],
-        order: [["id", "ASC"]]
-      }
-    ]
+        order: [["id", "ASC"]],
+      },
+    ],
   });
 
   if (!lesson) return null;
 
   // convert to plain object to safely return JSON
   return lesson.get({ plain: true });
-}
+};

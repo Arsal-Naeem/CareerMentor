@@ -7,7 +7,10 @@ import {
   postLesson,
   getSingleLesson,
   getAllUserLessons,
+  deleteSingleLesson,
+  getSingleUserLesson,
 } from "./lessonTracking.api";
+import { toast } from "sonner";
 
 // Hook: get all lessons of a module
 export const useModuleLessons = (moduleId) =>
@@ -45,6 +48,16 @@ export const useAllUserLessons = (moduleId) => {
   });
 };
 
+export const useGetSingleLessonDetails = (lessonId) => {
+  return useQuery({
+    queryKey: ["singleLessonDetails", lessonId],
+    queryFn: () => getSingleUserLesson(lessonId),
+    enabled: !!lessonId,
+    refetchOnWindowFocus: false,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
 //--------------ADMIN-------------
 
 export const useAllModuleLessonAdmin = (moduleId) => {
@@ -76,5 +89,18 @@ export const useGetSingleLessonAdmin = (lessonId) => {
     enabled: !!lessonId,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useDeleteLessonAdmin = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn:(lessonId)=> deleteSingleLesson(lessonId),
+    onSuccess: (data) => {
+      // Refetch lessons after a successful deletion
+      queryClient.invalidateQueries(["allModuleLessons"]);
+      toast.success(data.message || "Lesson deleted successfully!");
+    },
   });
 };

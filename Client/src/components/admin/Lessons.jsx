@@ -4,30 +4,52 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Star, BookOpen, Plus, ArrowLeft, Eye } from "lucide-react";
-import { useAllModuleLessonAdmin } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
+import { Star, BookOpen, Plus, ArrowLeft, Eye, Trash } from "lucide-react";
+import {
+  useAllModuleLessonAdmin,
+  useDeleteLessonAdmin,
+} from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
 import AddLessonModal from "./AddLessonModal";
 import ViewLessonModal from "./ViewLessonModal";
 
 const Lesson = () => {
   const { moduleId } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useAllModuleLessonAdmin(moduleId);
+  const { data, isLoading, isError, refetch } =
+    useAllModuleLessonAdmin(moduleId);
+  const deleteLessonMutation = useDeleteLessonAdmin(); 
+
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
 
   if (isLoading)
-    return <div className="p-6 text-center text-gray-500">Loading module...</div>;
+    return (
+      <div className="p-6 text-center text-gray-500">Loading module...</div>
+    );
 
   if (isError || !data?.success)
-    return <div className="p-6 text-center text-red-500">Failed to load module data.</div>;
+    return (
+      <div className="p-6 text-center text-red-500">
+        Failed to load module data.
+      </div>
+    );
 
   const module = data;
 
   const handleViewLesson = (lesson) => {
     setSelectedLesson(lesson);
     setIsViewModalOpen(true);
+  };
+
+  const handleDeleteLesson = async (lessonId) => {
+    try {
+      console.log("Deleting Lesson ID:", lessonId);
+      await deleteLessonMutation.mutateAsync(lessonId);
+      await refetch();
+    } catch (error) {
+      console.error("Error deleting lesson:", error);
+    }
   };
 
   return (
@@ -53,7 +75,9 @@ const Lesson = () => {
                 <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-1">
                   {module.title}
                 </h1>
-                <p className="text-sm text-gray-600 max-w-2xl">{module.description}</p>
+                <p className="text-sm text-gray-600 max-w-2xl">
+                  {module.description}
+                </p>
               </div>
               <Badge className="text-xs sm:text-sm bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full self-start sm:self-center">
                 {module.badge || "No Badge"}
@@ -111,8 +135,12 @@ const Lesson = () => {
                   </div>
                   <div>
                     <div className="flex justify-between text-xs text-gray-700 mb-3">
-                      <span>{lesson.isMandatory ? "Mandatory" : "Optional"}</span>
-                      <span className="font-medium">Seq: {lesson.sequence}</span>
+                      <span>
+                        {lesson.isMandatory ? "Mandatory" : "Optional"}
+                      </span>
+                      <span className="font-medium">
+                        Seq: {lesson.sequence}
+                      </span>
                     </div>
                     <Button
                       variant="outline"
@@ -122,13 +150,27 @@ const Lesson = () => {
                     >
                       <Eye size={14} /> View
                     </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      className="w-full mt-2 flex items-center justify-center gap-1"
+                      onClick={() => handleDeleteLesson(lesson.id)}
+                      disabled={deleteLessonMutation.isLoading}
+                    >
+                      <Trash size={14} />
+                      {deleteLessonMutation.isLoading
+                        ? "Deleting..."
+                        : "Delete"}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : (
-          <div className="text-gray-500 text-sm text-center">No lessons available.</div>
+          <div className="text-gray-500 text-sm text-center">
+            No lessons available.
+          </div>
         )}
       </div>
 

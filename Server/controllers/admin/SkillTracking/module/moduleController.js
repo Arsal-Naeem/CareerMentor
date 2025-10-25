@@ -54,7 +54,7 @@ export const createModule = async (req, res) => {
 
 export const getAllModules = async (req, res) => {
   const { domainId } = req.params;
-  const { page = 1, limit = 5 } = req.query; // default 9 modules per page
+  const { page = 1, limit = 5 } = req.query; // default 5 modules per page
 
   try {
     if (!domainId) return errorResponse(res, "Domain ID is required", 400);

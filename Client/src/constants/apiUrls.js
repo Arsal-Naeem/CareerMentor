@@ -46,8 +46,8 @@ export const API_ROUTES = {
       `${lessonController}lesson/${lessonId}/user-quizzes`,
     SUBMIT_QUIZ_ANSWER: `${lessonController}quiz/answer`,
 
-    GET_ALL_USER_LESSONS: (moduleId) =>
-      `$/lessons/all-lessons/${moduleId}`,
+    GET_ALL_USER_LESSONS: (moduleId) => `/lessons/all-lessons/${moduleId}`,
+    GET_SINGLE_USER_LESSON: (lessonId) => `/lessons/details/${lessonId}`,
   },
   ROADMAPS: {
     GET_ROADMAPS: (domainId) => `${roadmapController}${domainId}`,
@@ -86,5 +86,7 @@ export const ADMIN_API_ROUTES = {
       `${adminController}/skill-lessons/create-lesson/${moduleId}`,
     GET_SINGLE_LESSON: (lessonId) =>
       `${adminController}/skill-lessons/get-single-lesson/${lessonId}`,
+    DELETE_LESSON: (lessonId) =>
+      `${adminController}/skill-lessons/delete-lesson/${lessonId}`,
   },
 };

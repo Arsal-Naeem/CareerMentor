@@ -7,11 +7,11 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
-import { useGetSingleLessonAdmin } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
+import { useGetSingleLessonDetails } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
 
 const ViewLessonModal = ({ open, onClose, lesson }) => {
   const lessonId = lesson?.id;
-  const { data, isLoading, isError, refetch } = useGetSingleLessonAdmin(
+  const { data, isLoading, isError, refetch } = useGetSingleLessonDetails(
     lessonId,
     { enabled: !!lessonId }
   );
@@ -24,9 +24,17 @@ const ViewLessonModal = ({ open, onClose, lesson }) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl rounded-2xl p-5 sm:p-6">
+      <DialogContent
+        className="
+          w-[95vw] sm:w-[90vw] md:w-[80vw]
+          max-w-full sm:max-w-3xl
+          max-h-[90vh]
+          overflow-y-auto overflow-x-hidden
+          rounded-2xl p-5 sm:p-6
+        "
+      >
         <DialogHeader>
-          <DialogTitle className="text-lg font-semibold text-gray-900">
+          <DialogTitle className="text-xl sm:text-2xl font-semibold text-gray-900 text-center">
             {data?.title || "Lesson Details"}
           </DialogTitle>
         </DialogHeader>
@@ -41,81 +49,84 @@ const ViewLessonModal = ({ open, onClose, lesson }) => {
             Failed to load lesson details.
           </div>
         ) : (
-          <>
-            <Separator className="my-3" />
-
-            <div className="space-y-3 text-sm text-gray-700">
-              <p>
-                <strong>Description:</strong> {data?.description}
-              </p>
-              <p>
-                <strong>Mandatory:</strong> {data?.isMandatory ? "Yes" : "No"}
-              </p>
-              <p>
-                <strong>Sequence:</strong> {data?.sequence}
-              </p>
-              <p>
-                <strong>Created At:</strong>{" "}
-                {new Date(data?.createdAt).toLocaleString()}
-              </p>
-            </div>
+          <div className="space-y-8 text-sm sm:text-base text-gray-700">
+            {/* Lesson Info */}
+            <section>
+              <h3 className="font-semibold text-gray-900 mb-3 text-lg">
+                Lesson Information
+              </h3>
+              <div className="space-y-3 pl-1">
+                <p>
+                  <strong className="text-gray-900">Description:</strong>{" "}
+                  {data?.description || "No description available."}
+                </p>
+              </div>
+            </section>
 
             {/* Learning Points */}
             {data?.learningPoints?.length > 0 && (
-              <div className="mt-5">
-                <h3 className="font-semibold text-gray-900 mb-2">
+              <section>
+                <h3 className="font-semibold text-gray-900 mb-2 text-lg">
                   Learning Points
                 </h3>
-                <ul className="list-disc list-inside space-y-1 text-gray-700 text-sm">
+                <ul className="list-disc list-inside space-y-1">
                   {data.learningPoints.map((point) => (
                     <li key={point.id}>{point.point}</li>
                   ))}
                 </ul>
-              </div>
+              </section>
             )}
 
             {/* Examples */}
             {data?.examples?.length > 0 && (
-              <div className="mt-5">
-                <h3 className="font-semibold text-gray-900 mb-2">Examples</h3>
-                <div className="space-y-3">
+              <section>
+                <h3 className="font-semibold text-gray-900 mb-2 text-lg">
+                  Examples
+                </h3>
+                <div className="space-y-4">
                   {data.examples.map((ex) => (
                     <div
                       key={ex.id}
-                      className="p-3 bg-gray-50 rounded-lg border border-gray-100"
+                      className="p-4 bg-gray-50 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition"
                     >
-                      <p className="text-sm text-gray-700 mb-1 font-medium">
+                      <p className="text-sm text-gray-800 mb-2 font-medium">
                         {ex.description}
                       </p>
-                      <pre className="bg-gray-900 text-white text-xs p-2 rounded-md overflow-x-auto">
-                        {ex.codeSnippet}
-                      </pre>
+                      {ex.codeSnippet && (
+                        <pre className="bg-gray-900 text-white text-xs sm:text-sm p-3 rounded-lg overflow-x-auto whitespace-pre-wrap break-words">
+                          {ex.codeSnippet}
+                        </pre>
+                      )}
                     </div>
                   ))}
                 </div>
-              </div>
+              </section>
             )}
 
             {/* Resources */}
             {data?.resources?.length > 0 && (
-              <div className="mt-5">
-                <h3 className="font-semibold text-gray-900 mb-2">Resources</h3>
-                <ul className="space-y-1 text-sm text-blue-600 underline">
+              <section>
+                <Separator className="my-3" />
+                <h3 className="font-semibold text-gray-900 mb-2 text-lg">
+                  Resources
+                </h3>
+                <ul className="space-y-2 text-sm">
                   {data.resources.map((res) => (
                     <li key={res.id}>
                       <a
                         href={res.url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="text-blue-600 hover:text-blue-800 underline break-all"
                       >
                         {res.type} → {res.url}
                       </a>
                     </li>
                   ))}
                 </ul>
-              </div>
+              </section>
             )}
-          </>
+          </div>
         )}
       </DialogContent>
     </Dialog>

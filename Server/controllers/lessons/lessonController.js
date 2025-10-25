@@ -18,14 +18,13 @@ export const postLessonEnrollment = async (req, res) => {
 export const getAllUserLessons = async (req, res) => {
  try {
      const { moduleId } = req.params;
-     console.log(moduleId)
 
  
      if (!moduleId) {
        return errorResponse(res, "Module ID is required", "Bad Request", 400);
      }
  
-     const moduleAndLessons = await GetAllUserLessons(moduleId);
+     const moduleAndLessons = await GetAllUserLessons({moduleId});
      return successResponse(res, moduleAndLessons, "Module and lessons fetched successfully", 200);
      
    } catch (error) {
