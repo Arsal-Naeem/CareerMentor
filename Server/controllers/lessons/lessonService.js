@@ -43,39 +43,39 @@ export const GetDetailLesson = async (lessonId) => {
   if (!lessonId) return null;
 
   const lesson = await Lesson.findByPk(lessonId, {
-    attributes: [
-      "id",
-      "title",
-      "description",
-      "isMandatory",
-      "sequence",
-      "createdAt",
-      "updatedAt",
-    ],
+    attributes: ["id", "title", "description", "isMandatory", "sequence", "createdAt", "updatedAt"],
     include: [
       {
         model: LessonExample,
-        as: "examples", // must match association alias
-        attributes: ["id", "codeSnippet", "description"],
+        as: "examples",
+        attributes: [ "codeSnippet", "description"],
         order: [["createdAt", "ASC"]],
       },
       {
         model: LessonLearningPoint,
-        as: "learningPoints", // must match alias
-        attributes: ["id", "point"],
-        order: [["id", "ASC"]],
+        as: "learningPoints",
+        attributes: [ "point", "subPoints"], // include subPoints JSON
+        order: [[ "ASC"]],
       },
       {
         model: LessonResource,
-        as: "resources", // must match alias
-        attributes: ["id", "type", "url"],
-        order: [["id", "ASC"]],
+        as: "resources",
+        attributes: ["type", "url"],
+        order: [["ASC"]],
       },
     ],
   });
 
   if (!lesson) return null;
 
-  // convert to plain object to safely return JSON
-  return lesson.get({ plain: true });
+  // convert plain object and parse JSON subPoints if stored as string
+  const result = lesson.get({ plain: true });
+  if (result.learningPoints && result.learningPoints.length > 0) {
+    result.learningPoints = result.learningPoints.map((lp) => ({
+      ...lp,
+      subPoints: typeof lp.subPoints === "string" ? JSON.parse(lp.subPoints) : lp.subPoints || [],
+    }));
+  }
+
+  return result;
 };

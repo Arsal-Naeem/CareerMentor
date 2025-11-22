@@ -69,11 +69,28 @@ const ViewLessonModal = ({ open, onClose, lesson }) => {
                 <h3 className="font-semibold text-gray-900 mb-2 text-lg">
                   Learning Points
                 </h3>
-                <ul className="list-disc list-inside space-y-1">
-                  {data.learningPoints.map((point) => (
-                    <li key={point.id}>{point.point}</li>
+                <ol className="list-decimal list-inside space-y-2">
+                  {" "}
+                  {/* Main points numbered */}
+                  {data.learningPoints.map((point, i) => (
+                    <li key={point.id} className="ml-1">
+                      <span className="font-medium">{point.point}</span>
+                      {/* Optional SubPoints */}
+                      {point.subPoints && point.subPoints.length > 0 && (
+                        <ul className="list-disc list-inside ml-5 mt-1 space-y-1">
+                          {" "}
+                          {/* Subpoints as bullets */}
+                          {point.subPoints.map((sp, idx) => (
+                            <li key={idx}>
+                              {sp.label && <strong>{sp.label}:</strong>}{" "}
+                              {sp.description}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </li>
                   ))}
-                </ul>
+                </ol>
               </section>
             )}
 

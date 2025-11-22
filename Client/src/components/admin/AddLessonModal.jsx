@@ -9,11 +9,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useForm, useFieldArray } from "react-hook-form";
 import { Plus, Trash2 } from "lucide-react";
 import { useAddNewLessonAdmin } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
 
-const AddLessonModal = ({ open, onClose, moduleId }) => {
+const AddLessonTabs = ({ open, onClose, moduleId }) => {
   const { mutateAsync: addLesson, isLoading } = useAddNewLessonAdmin(moduleId);
 
   const {
@@ -21,21 +22,22 @@ const AddLessonModal = ({ open, onClose, moduleId }) => {
     register,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
       title: "",
       description: "",
       isMandatory: true,
-      resources: [{ type: "Other", url: "" }],
-      learningPoints: [""],
+      learningPoints: [
+        { point: "", subPoints: [{ label: "", description: "" }] },
+      ],
       examples: [{ codeSnippet: "", description: "" }],
+      resources: [{ type: "Other", url: "" }],
     },
   });
 
-  // 🧩 Dynamic Field Arrays
-  const { fields: resourceFields, append: addResource, remove: removeResource } =
-    useFieldArray({ control, name: "resources" });
   const {
     fields: learningFields,
     append: addLearningPoint,
@@ -46,88 +48,247 @@ const AddLessonModal = ({ open, onClose, moduleId }) => {
     append: addExample,
     remove: removeExample,
   } = useFieldArray({ control, name: "examples" });
+  const {
+    fields: resourceFields,
+    append: addResource,
+    remove: removeResource,
+  } = useFieldArray({ control, name: "resources" });
 
-  // 🚀 Submit handler
+  const watchLearningPoints = watch("learningPoints");
+
+  const handleClose = () => {
+    reset();
+    onClose();
+  };
+
   const onSubmit = async (data) => {
     try {
-      console.log("Submitting Lesson Data:", data);
-      await addLesson(data);
-      reset();
-      onClose();
+      // Clean subPoints
+      const cleanedData = {
+        ...data,
+        learningPoints: data.learningPoints.map((lp) => {
+          if (!lp.subPoints || lp.subPoints.length === 0)
+            return { ...lp, subPoints: null };
+
+          const validSubPoints = lp.subPoints.filter(
+            (sp) => sp.label?.trim() || sp.description?.trim()
+          );
+
+          return {
+            ...lp,
+            subPoints: validSubPoints.length ? validSubPoints : null,
+          };
+        }),
+      };
+
+      //console.log("Submitting New Lesson (Cleaned):", cleanedData);
+      await addLesson(cleanedData);
+      handleClose();
     } catch (err) {
-      console.error("Error adding lesson:", err);
+      console.error(err);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="w-full sm:max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 bg-white shadow-xl">
+    <Dialog open={open} onOpenChange={handleClose}>
+      <DialogContent className="w-full sm:max-w-3xl max-h-[90vh] overflow-y-auto rounded-2xl p-6 bg-white shadow-xl">
         <DialogHeader className="pb-4 border-b">
           <DialogTitle className="text-xl font-semibold text-gray-800">
             Add New Lesson
           </DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 mt-4">
-          {/* === Lesson Info Section === */}
-          <section className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Lesson Title
-              </label>
-              <Input
-                {...register("title", { required: "Title is required" })}
-                placeholder="Enter lesson title"
-                className="mt-1"
-              />
-              {errors.title && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.title.message}
-                </p>
-              )}
-            </div>
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4">
+          <Tabs defaultValue="lessonInfo">
+            <TabsList className="mb-4 border-b">
+              <TabsTrigger value="lessonInfo">Lesson Info</TabsTrigger>
+              <TabsTrigger value="learningPoints">Learning Points</TabsTrigger>
+              <TabsTrigger value="examples">Examples</TabsTrigger>
+              <TabsTrigger value="resources">Resources</TabsTrigger>
+            </TabsList>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Description
-              </label>
-              <Textarea
-                {...register("description", { required: "Description is required" })}
-                placeholder="Write a short description"
-                rows={3}
-                className="mt-1"
-              />
-              {errors.description && (
-                <p className="text-sm text-red-500 mt-1">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
-          </section>
+            {/* ===== Tab 1: Lesson Info ===== */}
+            <TabsContent value="lessonInfo" className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Lesson Title
+                </label>
+                <Input
+                  {...register("title")}
+                  placeholder="Enter lesson title"
+                />
+                {errors.title && (
+                  <p className="text-red-500 text-sm">{errors.title.message}</p>
+                )}
+              </div>
 
-          {/* === Resources Section === */}
-          <section className="space-y-3 border rounded-xl p-4 bg-gray-50">
-            <div className="flex justify-between items-center mb-1">
-              <h3 className="text-base font-semibold text-gray-800">Resources</h3>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => addResource({ type: "Other", url: "" })}
-              >
-                <Plus className="w-4 h-4 mr-1" /> Add Resource
-              </Button>
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Description
+                </label>
+                <Textarea
+                  {...register("description")}
+                  rows={3}
+                  placeholder="Enter lesson description"
+                />
+                {errors.description && (
+                  <p className="text-red-500 text-sm">
+                    {errors.description.message}
+                  </p>
+                )}
+              </div>
+            </TabsContent>
 
-            <div className="space-y-3">
-              {resourceFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="flex flex-col sm:flex-row gap-2 items-start sm:items-center bg-white p-3 rounded-lg shadow-sm border"
+            {/* ===== Tab 2: Learning Points ===== */}
+            <TabsContent value="learningPoints" className="space-y-4">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold text-gray-800">Learning Points</h3>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() =>
+                    addLearningPoint({
+                      point: "",
+                      subPoints: [{ label: "", description: "" }],
+                    })
+                  }
                 >
+                  <Plus className="w-4 h-4 mr-1" /> Add Point
+                </Button>
+              </div>
+
+              {learningFields.map((lp, i) => (
+                <div
+                  key={lp.id}
+                  className="border p-3 rounded-lg bg-white space-y-2"
+                >
+                  <div className="flex gap-2 items-start">
+                    <Input
+                      {...register(`learningPoints.${i}.point`)}
+                      placeholder={`Learning Point #${i + 1}`}
+                    />
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => removeLearningPoint(i)}
+                      className="text-red-500 hover:bg-red-50"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+
+                  {/* Subpoints */}
+                  <div className="space-y-1">
+                    {watchLearningPoints[i]?.subPoints?.map((sp, j) => (
+                      <div key={j} className="flex gap-2 items-start">
+                        <Input
+                          {...register(
+                            `learningPoints.${i}.subPoints.${j}.label`
+                          )}
+                          placeholder="Label"
+                          className="w-36"
+                        />
+                        <Input
+                          {...register(
+                            `learningPoints.${i}.subPoints.${j}.description`
+                          )}
+                          placeholder="Description"
+                          className="flex-1"
+                        />
+                        <Button
+                          type="button"
+                          size="icon"
+                          variant="ghost"
+                          onClick={() => {
+                            const arr = [...watchLearningPoints[i].subPoints];
+                            arr.splice(j, 1);
+                            setValue(`learningPoints.${i}.subPoints`, arr);
+                          }}
+                          className="text-red-500 hover:bg-red-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    ))}
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() =>
+                        setValue(`learningPoints.${i}.subPoints`, [
+                          ...watchLearningPoints[i].subPoints,
+                          { label: "", description: "" },
+                        ])
+                      }
+                    >
+                      <Plus className="w-4 h-4 mr-1" /> Add Subpoint
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </TabsContent>
+
+            {/* ===== Tab 3: Examples ===== */}
+            <TabsContent value="examples" className="space-y-4">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold text-gray-800">Examples</h3>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() =>
+                    addExample({ codeSnippet: "", description: "" })
+                  }
+                >
+                  <Plus className="w-4 h-4 mr-1" /> Add Example
+                </Button>
+              </div>
+
+              {exampleFields.map((ex, i) => (
+                <div
+                  key={ex.id}
+                  className="border p-3 rounded-lg bg-white space-y-2"
+                >
+                  <Textarea
+                    {...register(`examples.${i}.codeSnippet`)}
+                    placeholder="Code Snippet"
+                    rows={3}
+                  />
+                  <Input
+                    {...register(`examples.${i}.description`)}
+                    placeholder="Description"
+                  />
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => removeExample(i)}
+                    className="text-red-500 hover:bg-red-50"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </TabsContent>
+
+            {/* ===== Tab 4: Resources ===== */}
+            <TabsContent value="resources" className="space-y-4">
+              <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold text-gray-800">Resources</h3>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => addResource({ type: "Other", url: "" })}
+                >
+                  <Plus className="w-4 h-4 mr-1" /> Add Resource
+                </Button>
+              </div>
+
+              {resourceFields.map((res, i) => (
+                <div key={res.id} className="flex gap-2 items-start">
                   <select
-                    {...register(`resources.${index}.type`)}
-                    className="border rounded-md px-2 py-1 text-sm w-full sm:w-32"
+                    {...register(`resources.${i}.type`)}
+                    className="border rounded-md px-2 py-1 w-36"
                   >
                     <option value="YouTube">YouTube</option>
                     <option value="Udemy">Udemy</option>
@@ -136,126 +297,28 @@ const AddLessonModal = ({ open, onClose, moduleId }) => {
                     <option value="Other">Other</option>
                   </select>
                   <Input
-                    {...register(`resources.${index}.url`, {
-                      required: "URL is required",
-                    })}
-                    placeholder="Enter resource URL"
+                    {...register(`resources.${i}.url`)}
+                    placeholder="Resource URL"
                     className="flex-1"
                   />
                   <Button
                     type="button"
                     size="icon"
                     variant="ghost"
-                    onClick={() => removeResource(index)}
+                    onClick={() => removeResource(i)}
                     className="text-red-500 hover:bg-red-50"
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
               ))}
-            </div>
-          </section>
+            </TabsContent>
+          </Tabs>
 
-          {/* === Learning Points === */}
-          <section className="space-y-3 border rounded-xl p-4 bg-gray-50">
-            <div className="flex justify-between items-center mb-1">
-              <h3 className="text-base font-semibold text-gray-800">
-                Learning Points
-              </h3>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => addLearningPoint("")}
-              >
-                <Plus className="w-4 h-4 mr-1" /> Add Point
-              </Button>
-            </div>
-            <div className="space-y-3">
-              {learningFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="flex gap-2 items-center bg-white p-3 rounded-lg shadow-sm border"
-                >
-                  <Input
-                    {...register(`learningPoints.${index}`, {
-                      required: "Learning point cannot be empty",
-                    })}
-                    placeholder={`Learning Point #${index + 1}`}
-                  />
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => removeLearningPoint(index)}
-                    className="text-red-500 hover:bg-red-50"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* === Examples Section === */}
-          <section className="space-y-3 border rounded-xl p-4 bg-gray-50">
-            <div className="flex justify-between items-center mb-1">
-              <h3 className="text-base font-semibold text-gray-800">Examples</h3>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={() => addExample({ codeSnippet: "", description: "" })}
-              >
-                <Plus className="w-4 h-4 mr-1" /> Add Example
-              </Button>
-            </div>
-
-            <div className="space-y-4">
-              {exampleFields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className="border p-3 rounded-lg bg-white shadow-sm space-y-3"
-                >
-                  <Textarea
-                    {...register(`examples.${index}.codeSnippet`)}
-                    placeholder="Code Snippet"
-                    rows={3}
-                  />
-                  <Input
-                    {...register(`examples.${index}.description`)}
-                    placeholder="Example description"
-                  />
-                  <div className="flex justify-end">
-                    <Button
-                      type="button"
-                      size="icon"
-                      variant="ghost"
-                      onClick={() => removeExample(index)}
-                      className="text-red-500 hover:bg-red-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* === Footer === */}
-          <DialogFooter className="flex justify-end gap-3 pt-4 border-t">
+          <DialogFooter className="flex justify-end pt-4 border-t">
             <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="w-full sm:w-auto"
-            >
-              Cancel
-            </Button>
-            <Button
-              className="bg-[#59A4C0] hover:bg-[#4b93ad] w-full sm:w-auto"
               type="submit"
-              disabled={isLoading}
+              className="bg-[#59A4C0] text-white w-full sm:w-auto"
             >
               {isLoading ? "Adding..." : "Add Lesson"}
             </Button>
@@ -266,4 +329,4 @@ const AddLessonModal = ({ open, onClose, moduleId }) => {
   );
 };
 
-export default AddLessonModal;
+export default AddLessonTabs;

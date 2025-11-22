@@ -54,9 +54,10 @@ export const useGetSingleLessonDetails = (lessonId) => {
     queryFn: () => getSingleUserLesson(lessonId),
     enabled: !!lessonId,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0, //1000 * 60 * 5
+    cacheTime: 0,
   });
-}
+};
 
 //--------------ADMIN-------------
 
@@ -66,7 +67,7 @@ export const useAllModuleLessonAdmin = (moduleId) => {
     queryFn: () => getAllModuleLessons(moduleId),
     enabled: !!moduleId,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 5, //1000 * 60 * 5
   });
 };
 
@@ -79,6 +80,10 @@ export const useAddNewLessonAdmin = (moduleId) => {
       // Refetch lessons after a successful addition
       queryClient.invalidateQueries(["allModuleLessons", moduleId]);
     },
+    onError: (error) => {
+      console.error("Error adding new lesson:", error);
+      toast.error(error?.response?.data?.message || "Failed to add new lesson");
+    },
   });
 };
 
@@ -88,7 +93,8 @@ export const useGetSingleLessonAdmin = (lessonId) => {
     queryFn: () => getSingleLesson(lessonId),
     enabled: !!lessonId,
     refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 0,
+    cacheTime: 0,
   });
 };
 
@@ -96,7 +102,7 @@ export const useDeleteLessonAdmin = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn:(lessonId)=> deleteSingleLesson(lessonId),
+    mutationFn: (lessonId) => deleteSingleLesson(lessonId),
     onSuccess: (data) => {
       // Refetch lessons after a successful deletion
       queryClient.invalidateQueries(["allModuleLessons"]);

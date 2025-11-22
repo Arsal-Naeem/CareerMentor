@@ -14,6 +14,7 @@ export const PostLesson = async (lessonData) => {
   let lesson;
 
   try {
+    // Find last sequence
     const lastLesson = await Lesson.findOne({
       where: { moduleId },
       order: [["sequence", "DESC"]],
@@ -22,11 +23,13 @@ export const PostLesson = async (lessonData) => {
 
     const nextSequence = lastLesson ? lastLesson.sequence + 1 : 1;
 
+    // Create lesson
     lesson = await Lesson.create(
       { moduleId, title, description, isMandatory, sequence: nextSequence },
       { transaction }
     );
 
+    // Insert resources
     if (Array.isArray(resources) && resources.length > 0) {
       await LessonResource.bulkCreate(
         resources.map((r) => ({
@@ -38,16 +41,19 @@ export const PostLesson = async (lessonData) => {
       );
     }
 
+    // Insert learning points WITH SUBPOINTS
     if (Array.isArray(learningPoints) && learningPoints.length > 0) {
       await LessonLearningPoint.bulkCreate(
-        learningPoints.map((point) => ({
+        learningPoints.map(lp => ({
           lessonId: lesson.id,
-          point,
+          point: lp.point,
+          subPoints: lp.subPoints || null, // 😎 JSON field
         })),
         { transaction }
       );
     }
 
+    // Insert examples
     if (Array.isArray(examples) && examples.length > 0) {
       await LessonExample.bulkCreate(
         examples.map((ex) => ({
@@ -59,25 +65,26 @@ export const PostLesson = async (lessonData) => {
       );
     }
 
-    await transaction.commit(); // ✅ commit once everything in txn succeeds
+    await transaction.commit();
+
   } catch (error) {
-    await transaction.rollback(); // only rollback if still pending
+    await transaction.rollback();
     throw new Error(`Lesson creation failed: ${error.message}`);
   }
 
-  // ✅ Fetch lesson outside transaction safely
- const createdLesson = await Lesson.findOne({
-  where: { id: lesson.id },
-  include: [
-    { model: LessonResource, as: "resources" },
-    { model: LessonLearningPoint, as: "learningPoints" },
-    { model: LessonExample, as: "examples" },
-  ],
-});
-
+  // Fetch full lesson with includes
+  const createdLesson = await Lesson.findOne({
+    where: { id: lesson.id },
+    include: [
+      { model: LessonResource, as: "resources" },
+      { model: LessonLearningPoint, as: "learningPoints" },
+      { model: LessonExample, as: "examples" },
+    ],
+  });
 
   return createdLesson.get({ plain: true });
 };
+
 
 
 
@@ -109,30 +116,40 @@ export const GetSingleLesson = async (lessonId) => {
     include: [
       {
         model: LessonExample,
-        as: "examples", // must match association alias
-        attributes: ["id", "codeSnippet", "description"],
-        order: [["createdAt", "ASC"]]
+        as: "examples",
+        attributes: ["codeSnippet", "description"],
+        order: [["createdAt", "ASC"]],
       },
       {
         model: LessonLearningPoint,
-        as: "learningPoints", // must match alias
-        attributes: ["id", "point"],
-        order: [["id", "ASC"]]
+        as: "learningPoints",
+        attributes: ["point", "subPoints"], // include subPoints JSON
+        order: [["ASC"]],
       },
       {
         model: LessonResource,
-        as: "resources", // must match alias
-        attributes: ["id", "type", "url"],
-        order: [["id", "ASC"]]
-      }
-    ]
+        as: "resources",
+        attributes: ["type", "url"],
+        order: [["ASC"]],
+      },
+    ],
   });
 
   if (!lesson) return null;
 
-  // convert to plain object to safely return JSON
-  return lesson.get({ plain: true });
+  // convert plain object and parse JSON subPoints if stored as string
+  const result = lesson.get({ plain: true });
+  if (result.learningPoints && result.learningPoints.length > 0) {
+    result.learningPoints = result.learningPoints.map((lp) => ({
+      ...lp,
+      subPoints: typeof lp.subPoints === "string" ? JSON.parse(lp.subPoints) : lp.subPoints || [],
+    }));
+  }
+  console.log("Fetched Lesson Details:", result);
+
+  return result;
 };
+
 
 export const DeleteLesson = async (lessonId) => {
   // Start a new transaction

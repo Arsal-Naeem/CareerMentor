@@ -18,6 +18,10 @@ const LessonLearningPoint = sequelize.define(
       allowNull: false,
       comment: "Single learning point",
     },
+    subPoints: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
   },
   {
     tableName: "lesson_learning_points",
