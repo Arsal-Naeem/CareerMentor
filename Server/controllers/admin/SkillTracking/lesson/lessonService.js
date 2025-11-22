@@ -8,7 +8,15 @@ import {
 import { sequelize } from "../../../../config/connectDB.js";
 
 export const PostLesson = async (lessonData) => {
-  const { moduleId, title, description, isMandatory, resources, learningPoints, examples } = lessonData;
+  const {
+    moduleId,
+    title,
+    description,
+    isMandatory,
+    resources,
+    learningPoints,
+    examples,
+  } = lessonData;
   const transaction = await sequelize.transaction();
 
   let lesson;
@@ -44,7 +52,7 @@ export const PostLesson = async (lessonData) => {
     // Insert learning points WITH SUBPOINTS
     if (Array.isArray(learningPoints) && learningPoints.length > 0) {
       await LessonLearningPoint.bulkCreate(
-        learningPoints.map(lp => ({
+        learningPoints.map((lp) => ({
           lessonId: lesson.id,
           point: lp.point,
           subPoints: lp.subPoints || null, // 😎 JSON field
@@ -60,13 +68,16 @@ export const PostLesson = async (lessonData) => {
           lessonId: lesson.id,
           codeSnippet: ex.codeSnippet || null,
           description: ex.description || null,
+          descriptionPoints:
+            ex.descriptionPoints && ex.descriptionPoints.length > 0
+              ? ex.descriptionPoints
+              : null, // Only store if points exist
         })),
         { transaction }
       );
     }
 
     await transaction.commit();
-
   } catch (error) {
     await transaction.rollback();
     throw new Error(`Lesson creation failed: ${error.message}`);
@@ -85,9 +96,6 @@ export const PostLesson = async (lessonData) => {
   return createdLesson.get({ plain: true });
 };
 
-
-
-
 export const GetModuleAndLessons = async (moduleId) => {
   const moduleWithLessons = await Module.findByPk(moduleId, {
     attributes: ["id", "title", "description", "totalXp", "badge", "slug"],
@@ -95,10 +103,18 @@ export const GetModuleAndLessons = async (moduleId) => {
       {
         model: Lesson,
         as: "lessons", // must match association alias
-        attributes: ["id", "title", "description", "isMandatory", "sequence", "createdAt", "updatedAt"],
-        order: [["sequence", "ASC"]] // optional: order lessons
-      }
-    ]
+        attributes: [
+          "id",
+          "title",
+          "description",
+          "isMandatory",
+          "sequence",
+          "createdAt",
+          "updatedAt",
+        ],
+        order: [["sequence", "ASC"]], // optional: order lessons
+      },
+    ],
   });
 
   if (!moduleWithLessons) return null;
@@ -107,17 +123,24 @@ export const GetModuleAndLessons = async (moduleId) => {
   return moduleWithLessons.get({ plain: true });
 };
 
-
 export const GetSingleLesson = async (lessonId) => {
   if (!lessonId) return null;
 
   const lesson = await Lesson.findByPk(lessonId, {
-    attributes: ["id", "title", "description", "isMandatory", "sequence", "createdAt", "updatedAt"],
+    attributes: [
+      "id",
+      "title",
+      "description",
+      "isMandatory",
+      "sequence",
+      "createdAt",
+      "updatedAt",
+    ],
     include: [
       {
         model: LessonExample,
         as: "examples",
-        attributes: ["codeSnippet", "description"],
+        attributes: ["codeSnippet", "description", "descriptionPoints"],
         order: [["createdAt", "ASC"]],
       },
       {
@@ -142,14 +165,16 @@ export const GetSingleLesson = async (lessonId) => {
   if (result.learningPoints && result.learningPoints.length > 0) {
     result.learningPoints = result.learningPoints.map((lp) => ({
       ...lp,
-      subPoints: typeof lp.subPoints === "string" ? JSON.parse(lp.subPoints) : lp.subPoints || [],
+      subPoints:
+        typeof lp.subPoints === "string"
+          ? JSON.parse(lp.subPoints)
+          : lp.subPoints || [],
     }));
   }
-  console.log("Fetched Lesson Details:", result);
+  //console.log("Fetched Lesson Details:", result);
 
   return result;
 };
-
 
 export const DeleteLesson = async (lessonId) => {
   // Start a new transaction

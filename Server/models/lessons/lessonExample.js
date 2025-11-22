@@ -21,6 +21,10 @@ const LessonExample = sequelize.define(
       type: DataTypes.TEXT,
       allowNull: true,
     },
+    descriptionPoints: {
+      type: DataTypes.JSON, // array of objects like [{ label: '', description: '' }]
+      allowNull: true,
+    },
   },
   {
     tableName: "lesson_examples",

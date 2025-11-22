@@ -48,14 +48,14 @@ export const GetDetailLesson = async (lessonId) => {
       {
         model: LessonExample,
         as: "examples",
-        attributes: [ "codeSnippet", "description"],
+        attributes: ["codeSnippet", "description", "descriptionPoints"],
         order: [["createdAt", "ASC"]],
       },
       {
         model: LessonLearningPoint,
         as: "learningPoints",
-        attributes: [ "point", "subPoints"], // include subPoints JSON
-        order: [[ "ASC"]],
+        attributes: ["point", "subPoints"], // include subPoints JSON
+        order: [["ASC"]],
       },
       {
         model: LessonResource,
@@ -68,12 +68,26 @@ export const GetDetailLesson = async (lessonId) => {
 
   if (!lesson) return null;
 
-  // convert plain object and parse JSON subPoints if stored as string
+  // Convert to plain object
   const result = lesson.get({ plain: true });
+
+  // Parse learningPoints.subPoints if stored as string
   if (result.learningPoints && result.learningPoints.length > 0) {
     result.learningPoints = result.learningPoints.map((lp) => ({
       ...lp,
-      subPoints: typeof lp.subPoints === "string" ? JSON.parse(lp.subPoints) : lp.subPoints || [],
+      subPoints:
+        typeof lp.subPoints === "string" ? JSON.parse(lp.subPoints) : lp.subPoints || [],
+    }));
+  }
+
+  // Parse examples.descriptionPoints if stored as string
+  if (result.examples && result.examples.length > 0) {
+    result.examples = result.examples.map((ex) => ({
+      ...ex,
+      descriptionPoints:
+        typeof ex.descriptionPoints === "string"
+          ? JSON.parse(ex.descriptionPoints)
+          : ex.descriptionPoints || [],
     }));
   }
 

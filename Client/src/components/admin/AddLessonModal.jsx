@@ -33,7 +33,13 @@ const AddLessonTabs = ({ open, onClose, moduleId }) => {
       learningPoints: [
         { point: "", subPoints: [{ label: "", description: "" }] },
       ],
-      examples: [{ codeSnippet: "", description: "" }],
+      examples: [
+        {
+          codeSnippet: "",
+          description: "",
+          descriptionPoints: [{ label: "", description: "" }],
+        },
+      ],
       resources: [{ type: "Other", url: "" }],
     },
   });
@@ -244,31 +250,84 @@ const AddLessonTabs = ({ open, onClose, moduleId }) => {
                 </Button>
               </div>
 
-              {exampleFields.map((ex, i) => (
-                <div
-                  key={ex.id}
-                  className="border p-3 rounded-lg bg-white space-y-2"
-                >
-                  <Textarea
-                    {...register(`examples.${i}.codeSnippet`)}
-                    placeholder="Code Snippet"
-                    rows={3}
-                  />
-                  <Input
-                    {...register(`examples.${i}.description`)}
-                    placeholder="Description"
-                  />
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={() => removeExample(i)}
-                    className="text-red-500 hover:bg-red-50"
+              {exampleFields.map((ex, i) => {
+                const descriptionPoints =
+                  watch(`examples.${i}.descriptionPoints`) || [];
+                return (
+                  <div
+                    key={ex.id}
+                    className="border p-3 rounded-lg bg-white space-y-2"
                   >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
-              ))}
+                    <Textarea
+                      {...register(`examples.${i}.codeSnippet`)}
+                      placeholder="Code Snippet"
+                      rows={3}
+                    />
+                    <Input
+                      {...register(`examples.${i}.description`)}
+                      placeholder="Description"
+                    />
+
+                    {/* Description Points */}
+                    <div className="space-y-1 mt-2">
+                      {descriptionPoints.map((dp, j) => (
+                        <div key={j} className="flex gap-2 items-start">
+                          <Input
+                            {...register(
+                              `examples.${i}.descriptionPoints.${j}.label`
+                            )}
+                            placeholder="Label"
+                            className="w-36"
+                          />
+                          <Input
+                            {...register(
+                              `examples.${i}.descriptionPoints.${j}.description`
+                            )}
+                            placeholder="Description"
+                            className="flex-1"
+                          />
+                          <Button
+                            type="button"
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => {
+                              const arr = [...descriptionPoints];
+                              arr.splice(j, 1);
+                              setValue(`examples.${i}.descriptionPoints`, arr);
+                            }}
+                            className="text-red-500 hover:bg-red-50"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          setValue(`examples.${i}.descriptionPoints`, [
+                            ...descriptionPoints,
+                            { label: "", description: "" },
+                          ])
+                        }
+                      >
+                        <Plus className="w-4 h-4 mr-1" /> Add Point
+                      </Button>
+                    </div>
+
+                    <Button
+                      type="button"
+                      size="icon"
+                      variant="ghost"
+                      onClick={() => removeExample(i)}
+                      className="text-red-500 hover:bg-red-50 mt-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                );
+              })}
             </TabsContent>
 
             {/* ===== Tab 4: Resources ===== */}

@@ -46,7 +46,7 @@ const Lesson = () => {
   const handleDeleteLesson = async (lessonId) => {
     try {
       console.log("Deleting Lesson ID:", lessonId);
-      await deleteLessonMutation.mutateAsync(lessonId);
+      //await deleteLessonMutation.mutateAsync(lessonId);
       await refetch();
     } catch (error) {
       console.error("Error deleting lesson:", error);
@@ -125,6 +125,7 @@ const Lesson = () => {
                 key={lesson.id}
                 className="rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition"
               >
+              {console.log("Rendering Lesson ID:", lesson.sequence)}
                 <CardContent className="p-5 flex flex-col h-full justify-between">
                   <div>
                     <h3 className="text-sm font-semibold text-gray-900 mb-2">
