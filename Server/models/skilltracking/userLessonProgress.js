@@ -10,28 +10,38 @@ const UserLessonProgress = sequelize.define(
       primaryKey: true,
     },
     userId: {
-      type: DataTypes.INTEGER, // Must match users.id type
+      type: DataTypes.INTEGER, // must match users.id
       allowNull: false,
       references: {
-        model: 'users',
+        model: "users",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "CASCADE",
+    },
+    moduleId: {
+      type: DataTypes.INTEGER.UNSIGNED, // must match modules.id
+      allowNull: false,
+      references: {
+        model: "modules",
         key: "id",
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
     lessonId: {
-      type: DataTypes.UUID, // Must match lessons.id type
+      type: DataTypes.UUID, // must match lessons.id
       allowNull: false,
       references: {
-        model: 'lessons',
+        model: "lessons",
         key: "id",
       },
       onUpdate: "CASCADE",
       onDelete: "CASCADE",
     },
-    quizCompleted: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
+    status: {
+      type: DataTypes.ENUM("not_started", "in_progress", "completed"),
+      defaultValue: "not_started",
     },
     xpEarned: {
       type: DataTypes.INTEGER,
@@ -41,7 +51,7 @@ const UserLessonProgress = sequelize.define(
   {
     tableName: "user_lesson_progress",
     timestamps: true,
-    underscored: true, // optional, makes column names snake_case
+    underscored: true,
     indexes: [{ unique: true, fields: ["user_id", "lesson_id"] }],
   }
 );

@@ -8,6 +8,7 @@ import { Star, BookOpen, ArrowLeft, Eye } from "lucide-react";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { useAllUserLessons } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
 import ViewLessonModal from "./ViewLessonModal";
+import BuddyLessons from "@/components/skillTracking/buddy/BuddyLessons";
 
 const Lessons = () => {
   const { moduleId } = useParams();
@@ -43,6 +44,7 @@ const Lessons = () => {
 
   return (
     <DashboardLayout>
+    <BuddyLessons/>
       <div className="p-6 space-y-6">
         {/* --- Back Button --- */}
         <div className="flex items-center justify-between">

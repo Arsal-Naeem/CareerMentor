@@ -58,18 +58,7 @@ export const BuddyConversation = () => {
     }
 
     try {
-      const domainId = 3; // 🔥 hardcoded for now
-      const token = localStorage.getItem("token"); // or however you store auth
-      // const res = await axios.post(
-      //   `http://localhost:3000/api/enrollment/module/${domainId}`,
-      //   { userResponse: userResponses },
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
-      //console.log("✅ Backend response:", res.data);
+     console.log("🚀 Sending responses to server...", userResponses);
     } catch (err) {
       console.error("❌ Failed to send responses:", err);
     }

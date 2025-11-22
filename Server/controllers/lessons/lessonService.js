@@ -8,30 +8,8 @@ import {
 } from "../../models/index.js";
 
 export const PostLessonEnrollment = async ({ userId }) => {
-  // 1️⃣ Get all lessons
-  const lessons = await Lesson.findAll({ attributes: ["id"] });
 
-  if (!lessons || lessons.length === 0) {
-    throw new Error("No lessons found to enroll the user.");
-  }
-
-  // 2️⃣ Map lessons to enrollment entries
-  const enrollments = lessons.map((lesson) => ({
-    id: uuidv4(), // unique id for UserLessonProgress
-    userId,
-    lessonId: lesson.id,
-    quizCompleted: false,
-    xpEarned: 0,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
-
-  // 3️⃣ Bulk create in UserLessonProgress
-  const result = await UserLessonProgress.bulkCreate(enrollments, {
-    ignoreDuplicates: true, // avoids inserting duplicates if user already enrolled
-  });
-
-  return result;
+  
 };
 
 export const GetAllUserLessons = async ({ moduleId }) => {

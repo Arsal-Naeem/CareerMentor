@@ -6,7 +6,7 @@ import { postLessonEnrollment,getAllUserLessons,getDetailsOfLesson } from "../co
 const router = express.Router();
 
 //@POST || Enroll Lesson for User
-router.post("/enroll-lesson", verifyToken, postLessonEnrollment);
+router.post("/enroll-lesson/:moduleId", verifyToken, postLessonEnrollment);
 
 router.get("/all-lessons/:moduleId", verifyToken, getAllUserLessons)
 

@@ -40,6 +40,16 @@ const Module = sequelize.define(
       onUpdate: "CASCADE",
       onDelete: "SET NULL",
     },
+    xpWeightId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: true,
+      references: {
+        model: "xp_weights",
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "SET NULL",
+    },
 
     sequence: {
       type: DataTypes.INTEGER,

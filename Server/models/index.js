@@ -30,6 +30,7 @@ import LessonExample from "./lessons/lessonExample.js";
 import LessonLearningPoint from "./lessons/lessonLearningPoint.js";
 import LessonResource from "./lessons/lessonResources.js";
 import UserLessonProgress from "./skilltracking/userLessonProgress.js";
+import XpWeight from "./skilltracking/xpWeight.js";
 
 // 🔁 Define relationships here
 
@@ -276,6 +277,10 @@ SkillEvalResponse.belongsTo(CareerDomain, {
 });
 
 
+Module.belongsTo(XpWeight, { foreignKey: "xpWeightId", as: "xpWeight" });
+XpWeight.hasMany(Module, { foreignKey: "xpWeightId", as: "modules" });
+
+
 // --------------------
 // REPONSIBEL FOR LESSONS
 // --------------------
@@ -308,13 +313,17 @@ Lesson.hasMany(LessonResource, {
 });
 LessonResource.belongsTo(Lesson, { foreignKey: "lessonId", as: "lesson" });
 
-// User ↔ Lesson (Many-to-Many through UserLessonProgress)
+// 👤 User ↔ Lesson Progress
 User.hasMany(UserLessonProgress, { foreignKey: "userId", as: "lessonProgress" });
 UserLessonProgress.belongsTo(User, { foreignKey: "userId", as: "user" });
 
+// 📘 Module ↔ Lesson Progress
+Module.hasMany(UserLessonProgress, { foreignKey: "moduleId", as: "moduleProgress" });
+UserLessonProgress.belongsTo(Module, { foreignKey: "moduleId", as: "module" });
+
+// 📗 Lesson ↔ Lesson Progress
 Lesson.hasMany(UserLessonProgress, { foreignKey: "lessonId", as: "userProgress" });
 UserLessonProgress.belongsTo(Lesson, { foreignKey: "lessonId", as: "lesson" });
-
 
 export {
   Blogs,
