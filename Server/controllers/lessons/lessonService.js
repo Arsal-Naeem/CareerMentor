@@ -13,12 +13,12 @@ export const PostLessonEnrollment = async ({ userId }) => {
 };
 
 export const GetAllUserLessons = async ({ moduleId }) => {
-  const moduleWithLessons = await Module.findByPk(moduleId, {
+ const moduleWithLessons = await Module.findByPk(moduleId, {
     attributes: ["id", "title", "description", "totalXp", "badge", "slug"],
     include: [
       {
         model: Lesson,
-        as: "lessons", 
+        as: "lessons",
         attributes: [
           "id",
           "title",
@@ -28,14 +28,13 @@ export const GetAllUserLessons = async ({ moduleId }) => {
           "createdAt",
           "updatedAt",
         ],
-        order: [["sequence", "ASC"]],
       },
     ],
+    order: [[{ model: Lesson, as: "lessons" }, "sequence", "ASC"]],
   });
 
   if (!moduleWithLessons) return null;
 
-  // convert to plain object to safely return as JSON
   return moduleWithLessons.get({ plain: true });
 };
 

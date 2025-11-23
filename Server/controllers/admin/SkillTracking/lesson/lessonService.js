@@ -102,7 +102,7 @@ export const GetModuleAndLessons = async (moduleId) => {
     include: [
       {
         model: Lesson,
-        as: "lessons", // must match association alias
+        as: "lessons",
         attributes: [
           "id",
           "title",
@@ -112,14 +112,13 @@ export const GetModuleAndLessons = async (moduleId) => {
           "createdAt",
           "updatedAt",
         ],
-        order: [["sequence", "ASC"]], // optional: order lessons
       },
     ],
+    order: [[{ model: Lesson, as: "lessons" }, "sequence", "ASC"]],
   });
 
   if (!moduleWithLessons) return null;
 
-  // convert to plain object to safely return as JSON
   return moduleWithLessons.get({ plain: true });
 };
 
