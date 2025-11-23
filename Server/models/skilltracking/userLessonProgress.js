@@ -44,8 +44,13 @@ const UserLessonProgress = sequelize.define(
       defaultValue: "not_started",
     },
     xpEarned: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(5, 2),
       defaultValue: 0,
+    },
+
+    locked: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
     },
   },
   {

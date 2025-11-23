@@ -6,7 +6,7 @@ import { PostLessonEnrollment,GetAllUserLessons,GetDetailLesson } from "./lesson
 
 export const postLessonEnrollment = async (req, res) => {
   try {
-    const { userId } = req.userId;
+    const  userId  = req.userId;
     const { moduleId } = req.params;
     const enrolled = await PostLessonEnrollment({ userId,moduleId });
     return successResponse(res, enrolled, "Lesson enrollment successful", 201);

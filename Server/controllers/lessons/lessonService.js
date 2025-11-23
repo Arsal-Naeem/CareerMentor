@@ -1,3 +1,4 @@
+import { generateLessonProgress } from "../../helper/lessonHelper.js";
 import {
   Lesson,
   LessonExample,
@@ -5,15 +6,56 @@ import {
   LessonResource,
   Module,
   UserLessonProgress,
+  XpWeight,
 } from "../../models/index.js";
 
-export const PostLessonEnrollment = async ({ userId }) => {
+export const PostLessonEnrollment = async ({ userId, moduleId }) => {
+  // 1️⃣ Check if user already enrolled in this module
+  const existingProgress = await UserLessonProgress.findOne({
+    where: { userId, moduleId },
+  });
+  if (existingProgress) {
+    throw new Error("User is already enrolled in this module");
+  }
 
-  
+  // 2️⃣ Fetch module
+  const module = await Module.findByPk(moduleId, {
+    attributes: ["id", "totalXP", "xpWeightId"],
+  });
+  if (!module) throw new Error("Module not found");
+
+  // 3️⃣ Fetch XP weight
+  const xpWeight = await XpWeight.findByPk(module.xpWeightId);
+  if (!xpWeight) throw new Error("XP Weight not found");
+
+  // 4️⃣ Fetch lessons ordered by sequence
+  const lessons = await Lesson.findAll({
+    where: { moduleId },
+    attributes: ["id", "sequence"],
+    order: [["sequence", "ASC"]],
+  });
+  if (!lessons.length) throw new Error("No lessons found for this module");
+
+  // 5️⃣ Calculate total lesson XP
+  const totalLessonXP = module.totalXP * xpWeight.lesson_weight;
+
+  // 6️⃣ Generate lesson progress array
+  const lessonProgress = generateLessonProgress(userId, module.id, lessons, totalLessonXP);
+
+  // 7️⃣ Insert all lesson progress into DB
+  const insertedProgress = await UserLessonProgress.bulkCreate(lessonProgress, { returning: true });
+
+  // 8️⃣ Optional: Console log for debugging
+  insertedProgress.forEach((item, i) => {
+    console.log(`Inserted Lesson Progress ${i + 1}:`, item.dataValues);
+  });
+
+  return insertedProgress;
+
 };
 
 export const GetAllUserLessons = async ({ moduleId }) => {
- const moduleWithLessons = await Module.findByPk(moduleId, {
+  const moduleWithLessons = await Module.findByPk(moduleId, {
     attributes: ["id", "title", "description", "totalXp", "badge", "slug"],
     include: [
       {
@@ -42,7 +84,15 @@ export const GetDetailLesson = async (lessonId) => {
   if (!lessonId) return null;
 
   const lesson = await Lesson.findByPk(lessonId, {
-    attributes: ["id", "title", "description", "isMandatory", "sequence", "createdAt", "updatedAt"],
+    attributes: [
+      "id",
+      "title",
+      "description",
+      "isMandatory",
+      "sequence",
+      "createdAt",
+      "updatedAt",
+    ],
     include: [
       {
         model: LessonExample,
@@ -75,7 +125,9 @@ export const GetDetailLesson = async (lessonId) => {
     result.learningPoints = result.learningPoints.map((lp) => ({
       ...lp,
       subPoints:
-        typeof lp.subPoints === "string" ? JSON.parse(lp.subPoints) : lp.subPoints || [],
+        typeof lp.subPoints === "string"
+          ? JSON.parse(lp.subPoints)
+          : lp.subPoints || [],
     }));
   }
 

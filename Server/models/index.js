@@ -348,6 +348,7 @@ export {
   skillEvalType,
   skillEvalCategory,
   Lesson,
+  XpWeight,
   LessonExample,
   LessonLearningPoint,
   LessonResource,
