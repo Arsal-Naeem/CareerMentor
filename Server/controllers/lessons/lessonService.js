@@ -194,13 +194,13 @@ export const PatchLessonProgress = async (userId, lessonId, status) => {
   // Validate status
   const validStatuses = ["not_started", "in_progress", "completed"];
   if (!validStatuses.includes(status)) return null;
-  // Find existing progress
+
   const progress = await UserLessonProgress.findOne({
     where: { userId, lessonId },
-    attributes: ["id","xp_earned"],
+    attributes: ["id", "xp_earned"],
   });
   if (!progress) return null;
-  // Update progress
+  
   progress.status = status;
   await progress.save();
   return progress.get({ plain: true });
