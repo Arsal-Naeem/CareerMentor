@@ -6,6 +6,7 @@ import assessmentsRoutes from "./assessmentsRoute.js";
 import careerDomainRoutes from "./careerDomainRoutes.js";
 import domainProgressRoutes from "./domainProgressRoutes.js";
 import lessonRoutes from "./lessonRoutes.js";
+import quizRoutes from "./quizRoutes.js";
 
 
 const router = express.Router();
@@ -17,5 +18,7 @@ router.use("/assessments", assessmentsRoutes)
 router.use("/careerdomain", careerDomainRoutes)
 router.use("/enrollment", domainProgressRoutes)
 router.use("/lessons", lessonRoutes)
+
+router.use("/quiz", quizRoutes)
 
 export default router;

@@ -9,11 +9,14 @@ import {
   PatchLessonProgress,
 } from "./lessonService.js";
 
+import { PostQuizeSession } from "../quiz/quizServices.js";
+
 export const postLessonEnrollment = async (req, res) => {
   try {
     const userId = req.userId;
     const { moduleId } = req.params;
     const enrolled = await PostLessonEnrollment({ userId, moduleId });
+    const generateQuzizSession = await PostQuizeSession(userId, moduleId);
     return successResponse(res, enrolled, "Lesson enrollment successful", 201);
   } catch (error) {
     console.log("Error in postLessonEnrollment", error);

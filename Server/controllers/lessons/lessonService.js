@@ -6,6 +6,7 @@ import {
   LessonLearningPoint,
   LessonResource,
   Module,
+  QuizSession,
   UserLessonProgress,
   UserModuleMapping,
   XpWeight,
@@ -280,25 +281,28 @@ export const PatchLessonProgress = async (
   }
 
   return {
-  ...progress.get({ plain: true }),
-  unlockMessage
-};
-
+    ...progress.get({ plain: true }),
+    unlockMessage,
+  };
 };
 
 export const unlockLessons = async (userId, moduleId) => {
-  // 1. Count completed quizzes
+  // 1. Count completed lessons
   const completedCount = await UserLessonProgress.count({
     where: { userId, moduleId, status: "completed" },
   });
 
-  // 2. Fetch all lessons sorted by sequence
+  // 2. Fetch all lessons in the module
   const allLessons = await Lesson.findAll({
     where: { moduleId },
     order: [["sequence", "ASC"]],
   });
 
-  // Case 1: Completed 3 lesson → unlock seq 4,5,6
+  let message = null;
+
+  /* ----------------------- UNLOCK LESSONS ------------------------ */
+
+  // Case 1 → 3 lessons completed → unlock seq 4–6
   if (completedCount === 3) {
     const toUnlock = allLessons
       .filter((l) => l.sequence >= 4 && l.sequence <= 6)
@@ -309,13 +313,18 @@ export const unlockLessons = async (userId, moduleId) => {
       { where: { userId, lessonId: toUnlock } }
     );
 
-    return (
-      "🎉 Amazing job! You've successfully completed your first milestone. " +
-      "You've now unlocked access to the First quiz. Keep going! 🚀"
+    /* ----------------------- UNLOCK QUIZ 1 ------------------------ */
+    await QuizSession.update(
+      { locked: 0 },
+      {
+        where: { userId, moduleId, quizNumber: 1 },
+      }
     );
+
+    message = "🎉 Great job! You completed 3 lessons and unlocked Quiz 1! 🚀";
   }
 
-  // Case 2: Completed 6 lesson → unlock everything else
+  // Case 2 → 6 lessons completed
   if (completedCount === 6) {
     const toUnlock = allLessons.filter((l) => l.sequence > 6).map((l) => l.id);
 
@@ -324,10 +333,33 @@ export const unlockLessons = async (userId, moduleId) => {
       { where: { userId, lessonId: toUnlock } }
     );
 
-     return (
-      "🔥 Outstanding progress! You've completed 6 lessons and unlocked all remaining quizzes. "
+    /* ----------------------- UNLOCK QUIZ 2 ------------------------ */
+    await QuizSession.update(
+      { locked: 0 },
+      {
+        where: { userId, moduleId, quizNumber: 2 },
+      }
     );
+
+    message =
+      "🔥 You completed 6 lessons! Quiz 2 has been unlocked. Keep pushing! 🔓";
   }
 
-  return null; // no unlock
+  // Case 3 → All lessons completed → unlock last quiz
+  const totalLessons = allLessons.length;
+
+  if (completedCount === totalLessons) {
+    /* ----------------------- UNLOCK QUIZ 3 ------------------------ */
+    await QuizSession.update(
+      { locked: 0 },
+      {
+        where: { userId, moduleId, quizNumber: 3 },
+      }
+    );
+
+    message =
+      "🏆 You completed ALL lessons! Quiz 3 is now unlocked. Amazing work!";
+  }
+
+  return message;
 };

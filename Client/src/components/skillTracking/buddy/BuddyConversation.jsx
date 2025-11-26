@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Buddy } from "./buddy";
 import { motion, AnimatePresence } from "framer-motion";
+import { useParams } from "react-router-dom";
 import axios from "axios";
+import axiosInstance from "@/services/axiosInstance";
 
 export const BuddyConversation = () => {
+  const { id } = useParams();
+
   const [buddyPose, setBuddyPose] = useState("waving");
   const [conversationStep, setConversationStep] = useState("intro");
   const [showChat, setShowChat] = useState(true);
@@ -25,54 +29,43 @@ export const BuddyConversation = () => {
   const handleChoice = async (choice) => {
     recordResponse(choice);
 
-    // Step 1: Intro → ask if beginner
+    // Intro → Experience
     if (conversationStep === "intro") {
       setBuddyPose("waving");
       setConversationStep("askExperience");
       return;
     }
 
-    // Step 2: Beginner or Experienced
     if (conversationStep === "askExperience") {
-      if (choice.toLowerCase().includes("beginner")) {
-        setBuddyPose("explainingBook");
-        setConversationStep("newbieIntro");
-      } else {
-        setBuddyPose("standing");
-        setConversationStep("experiencedIntro");
+      setBuddyPose(choice.includes("Beginner") ? "explainingBook" : "standing");
+      setConversationStep(
+        choice.includes("Beginner") ? "newbieIntro" : "experiencedIntro"
+      );
+      return;
+    }
+
+    if (
+      (conversationStep === "newbieIntro" ||
+        conversationStep === "experiencedIntro") &&
+      choice === "Let's Go"
+    ) {
+      setBuddyPose("laptop");
+      setConversationStep("assigningModules");
+
+      try {
+        console.log("🚀 Starting module enrollment with responses:", userResponses);
+        const res = await axiosInstance.post(
+          `/enrollment/module/${id}`,
+          { userResponse: userResponses },
+          { headers: { "Content-Type": "application/json" } }
+        );
+        console.log("✅ Enrollment response:", res.data);
+      } catch (err) {
+        console.error("❌ Enrollment failed:", err);
       }
-      return;
-    }
 
-    // Step 3: When user clicks "Let's Go" (final)
-    if (conversationStep === "newbieIntro" && choice === "Let's Go") {
-      setBuddyPose("laptop");
-      setConversationStep("assigningModules");
-
-      // Wait and hide chat
-      setTimeout(() => {
-        console.log("📦 Final Collected Responses:", userResponses);
-        setShowChat(false);
-      }, 3000);
-      return;
-    }
-
-    try {
-     console.log("🚀 Sending responses to server...", userResponses);
-    } catch (err) {
-      console.error("❌ Failed to send responses:", err);
-    }
-
-    // Step 3 (for experienced)
-    if (conversationStep === "experiencedIntro" && choice === "Let's Go") {
-      setBuddyPose("laptop");
-      setConversationStep("assigningModules");
-
-      // Wait and hide chat
-      setTimeout(() => {
-        console.log("📦 Final Collected Responses:", userResponses);
-        setShowChat(false);
-      }, 3000);
+      // hide buddy after enrollment
+      setTimeout(() => setShowChat(false), 3000);
       return;
     }
   };

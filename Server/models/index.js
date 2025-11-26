@@ -31,6 +31,7 @@ import LessonLearningPoint from "./lessons/lessonLearningPoint.js";
 import LessonResource from "./lessons/lessonResources.js";
 import UserLessonProgress from "./skilltracking/userLessonProgress.js";
 import XpWeight from "./skilltracking/xpWeight.js";
+import QuizSession from "./quiz/quizSession.js";
 
 // 🔁 Define relationships here
 
@@ -352,5 +353,6 @@ export {
   LessonExample,
   LessonLearningPoint,
   LessonResource,
-  UserLessonProgress
+  UserLessonProgress,
+  QuizSession
 };

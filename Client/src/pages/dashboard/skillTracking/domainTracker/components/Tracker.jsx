@@ -25,13 +25,33 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export const Tracker = () => {
+   const { id: domainId } = useParams();
   const [isAddProjectModalOpen, setIsAddProjectModalOpen] = useState(false);
   const [isAddCertificationModalOpen, setIsAddCertificationModalOpen] =
     useState(false);
+  const [showBuddy, setShowBuddy] = useState(false);
+  const [userResponses, setUserResponses] = useState([]);
+
+  const { data, isLoading, isError } = GetUserEnrolledModule(domainId);
+
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      const activeModules = data?.userModules?.modules || [];
+      setShowBuddy(activeModules.length === 0); // show buddy only if no modules
+    }
+  }, [data, isLoading, isError]);
+
   return (
     <div className="flex flex-col gap-10">
-     <BuddyConversation />
-      {/* top row: domain + skill trackers */}
+      {showBuddy && (
+        <BuddyConversation
+          userResponses={userResponses}
+          setUserResponses={setUserResponses}
+          domainId={domainId}
+          setShowBuddy={setShowBuddy} // hide buddy after enrollment
+        />
+      )}
+
       <div className="flex flex-col lg:flex-row justify-around gap-10">
         <DomainTracker
           setIsAddProjectModalOpen={setIsAddProjectModalOpen}
@@ -40,10 +60,8 @@ export const Tracker = () => {
         <SkillTracker />
       </div>
 
-      {/* bottom row: modules */}
       <Modules />
 
-      {/* modals */}
       <ProjectModal
         mode="add"
         open={isAddProjectModalOpen}
@@ -156,6 +174,8 @@ const SkillTracker = () => {
 
   // API hook
   const { data, isLoading, isError } = GetUserEnrolledModule(domainId);
+
+  console.log("Enrolled modules data:", data);
   const activeModules = data?.userModules?.activeModules || [];
 
   // Only show first 3 active modules
@@ -173,9 +193,7 @@ const SkillTracker = () => {
   };
 
   if (isLoading) {
-    return (
-      <TrackerSkeletons />
-    );
+    return <TrackerSkeletons />;
   }
 
   if (isError) {
@@ -256,4 +274,3 @@ const SkillTracker = () => {
     </div>
   );
 };
-

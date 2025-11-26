@@ -5,6 +5,8 @@ const skillmoduleController = "/skill-modules/";
 const lessonController = "/skill-modules/";
 const roadmapController = "/roadmap/";
 
+const quizController = "/quiz/";
+
 const skillEnrollment = "/enrollment/";
 
 export const API_ROUTES = {
@@ -49,7 +51,14 @@ export const API_ROUTES = {
     GET_ALL_USER_LESSONS: (moduleId) => `/lessons/all-lessons/${moduleId}`,
     GET_SINGLE_USER_LESSON: (lessonId) => `/lessons/details/${lessonId}`,
 
+    ADD_USER_LESSON: (moduleId) => `/lessons/enroll-lesson/${moduleId}`,
+
     UPDATE_LESSON_STATUS: (lessonId)=>`/lessons/update-progress/${lessonId}`,
+  },
+  QUIZZES: {
+    UNLOCK_QUIZ: (moduleId) => `${quizController}start-quiz/${moduleId}`,
+    GET_ALL_QUIZZES: (moduleId) => `${quizController}all-quiz/${moduleId}`,
+    START_QUIZ: (quizId) => `${quizController}quiz-questions/${quizId}`,
   },
   ROADMAPS: {
     GET_ROADMAPS: (domainId) => `${roadmapController}${domainId}`,

@@ -11,46 +11,84 @@ import {
 } from "@/components/ui/tooltip";
 import { Star, BookOpen, ArrowLeft, Eye, Lock } from "lucide-react";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import { useAllUserLessons } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
+import {
+  useAddUserLesson,
+  useAllUserLessons,
+} from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
 import ViewLessonModal from "./ViewLessonModal";
-import BuddyLessons from "@/components/skillTracking/buddy/BuddyLessons";
-
 import peekImg from "@/assets/mascot/peaking.webp";
+import tabletImg from "@/assets/mascot/tablet.webp";
 import { CustomLessonProgressBar } from "@/components/CustomLessonProgressBar";
+import BuddyLessons from "@/components/skillTracking/buddy/BuddyLessons";
+import { useGetAllQuiz } from "@/apis/skillTracking/quizTracking/quizetracking.api";
+import QuizModal from "./QuizModal";
 
 const Lessons = () => {
   const { moduleId } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading, isError } = useAllUserLessons(moduleId);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [showBuddyWelcome, setShowBuddyWelcome] = useState(true); // show by default if all locked
+  const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
+  const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-  if (isLoading)
-    return (
-      <DashboardLayout>
-        <div className="p-6 text-center text-gray-500">Loading lessons...</div>
-      </DashboardLayout>
-    );
+  const { data, isLoading, isError } = useAllUserLessons(moduleId);
+  const { data: quizData, isLoading: isLoadingQuizzes } = useGetAllQuiz(moduleId);
+  const { mutate: addLesson } = useAddUserLesson(moduleId);
 
+  if (isLoading) return <DashboardLayout>Loading lessons...</DashboardLayout>;
   if (isError || !data?.success)
-    return (
-      <DashboardLayout>
-        <div className="p-6 text-center text-red-500">
-          Failed to load lessons.
-        </div>
-      </DashboardLayout>
-    );
+    return <DashboardLayout>Failed to load lessons.</DashboardLayout>;
+  if (isLoadingQuizzes) return <DashboardLayout>Loading quizzes...</DashboardLayout>;
+
+  //console.log("QUIZ DATA IN LESSONS PAGE:", quizData);
+  const quizzes = Object.values(quizData).filter((q) => typeof q === "object");
 
   const module = data;
+  const allLocked = module.lessons?.every((lesson) => lesson.locked);
 
   const handleViewLesson = (lesson) => {
-    if (lesson.locked) return; // locked, do nothing
+    if (lesson.locked) return;
     setSelectedLesson(lesson);
     setIsViewModalOpen(true);
   };
 
+  const handleGetStarted = () => {
+    addLesson();
+    setShowBuddyWelcome(false);
+  };
+
+  console.log("WHOLE LESSON DATA:", data);
+
   return (
     <DashboardLayout>
+      {/* Buddy Welcome Modal */}
+      {allLocked && showBuddyWelcome && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl p-8 shadow-lg max-w-md w-full text-center relative">
+            <img
+              src={tabletImg}
+              alt="Buddy Mascot"
+              className="w-20 mx-auto mb-4"
+            />
+            <h2 className="text-xl font-semibold mb-2">
+              Hey, welcome to the module!
+            </h2>
+            <p className="text-gray-700 font-medium mb-2">{module.title}</p>
+            <p className="text-gray-600 mb-4">
+              There are {module.lessons.length} lessons in this module. You need
+              to complete all of them to achieve full XP. It also has{" "}
+              {module.quizzes?.length || 0} quizzes that unlock based on your
+              lesson progress.
+            </p>
+            <Button onClick={handleGetStarted} size="lg">
+              Get Started
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Lessons Content */}
       <BuddyLessons />
       <div className="p-6 space-y-6">
         {/* Back Button */}
@@ -111,102 +149,103 @@ const Lessons = () => {
 
         {/* Lessons List */}
         <div className="flex items-center justify-between mb-4">
+          {/* Left: Lessons Title */}
           <h2 className="text-lg font-semibold text-gray-800">Lessons</h2>
-          <div className="flex gap-2">
-            {module.quizzes?.map((quiz) => (
+
+          <div className="flex gap-3">
+            {quizzes.map((quiz) => (
               <Button
-                key={quiz.quizId}
+                key={quiz.id}
+                variant="outline"
                 size="sm"
-                variant={quiz.unlocked ? "default" : "secondary"}
-                disabled={!quiz.unlocked}
-                onClick={() => console.log(`Quiz ${quiz.quizId} clicked`)}
+                disabled={quiz.locked}
+                className={`${
+                  quiz.locked ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+                onClick={() => {
+                  if (!quiz.locked) {
+                    setSelectedQuiz(quiz);
+                    setIsQuizModalOpen(true);
+                  }
+                }}
               >
-                Quiz {quiz.quizId}
+                {quiz.quizTitle}
               </Button>
             ))}
           </div>
         </div>
 
-        {module.lessons && module.lessons.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {module.lessons.map((lesson) => (
-              <Card
-                key={lesson.id}
-                className={`rounded-xl border border-gray-100 shadow-sm transition relative ${
-                  lesson.locked
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:shadow-md"
-                }`}
-              >
-                <CardContent className="p-5 flex flex-col justify-between h-full">
-                  <div>
-                    <h3 className="text-base font-semibold text-gray-900 mb-2">
-                      {lesson.title}
-                    </h3>
-                    <p className="text-sm text-gray-600 line-clamp-3 mb-3">
-                      {lesson.description}
-                    </p>
-                  </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {module.lessons.map((lesson) => (
+            <Card
+              key={lesson.id}
+              className={`rounded-xl border border-gray-100 shadow-sm transition relative ${
+                lesson.locked
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:shadow-md"
+              }`}
+            >
+              <CardContent className="p-5 flex flex-col justify-between h-full">
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900 mb-2">
+                    {lesson.title}
+                  </h3>
+                  <p className="text-sm text-gray-600 line-clamp-3 mb-3">
+                    {lesson.description}
+                  </p>
+                </div>
 
-                  <div className="flex justify-between text-xs text-gray-700 mb-3">
-                    <span className="font-medium">Status: {lesson.status}</span>
-                    <span className="font-medium">Seq: {lesson.sequence}</span>
-                  </div>
+                <div className="flex justify-between text-xs text-gray-700 mb-3">
+                  <span className="font-medium">Status: {lesson.status}</span>
+                  <span className="font-medium">Seq: {lesson.sequence}</span>
+                </div>
 
-                  {lesson.locked ? (
-                    <div className="relative group select-none flex flex-col items-center">
-                      {/* Mascot with tooltip */}
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <img
-                            src={peekImg}
-                            alt="Peek"
-                            className="
-            absolute -top-14 left-1/2 -translate-x-1/2 w-14
-            opacity-0 group-hover:opacity-100
-            transition-opacity duration-300
-            z-[50] pointer-events-auto
-          "
-                          />
-                        </TooltipTrigger>
+                {lesson.locked ? (
+                  <div className="relative group select-none flex flex-col items-center">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <img
+                          src={peekImg}
+                          alt="Peek"
+                          className="absolute -top-14 left-1/2 -translate-x-1/2 w-14 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-[50] pointer-events-auto"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent side="top" className="z-[60] text-center">
+                        Complete previous lesson
+                      </TooltipContent>
+                    </Tooltip>
 
-                        <TooltipContent
-                          side="top"
-                          className="z-[60] text-center"
-                        >
-                          Complete previous lesson
-                        </TooltipContent>
-                      </Tooltip>
-
-                      {/* Lock label */}
-                      <div className="flex items-center justify-center gap-1 text-gray-600 font-medium text-sm">
-                        <Lock size={14} /> Locked
-                      </div>
+                    <div className="flex items-center justify-center gap-1 text-gray-600 font-medium text-sm">
+                      <Lock size={14} /> Locked
                     </div>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="w-full flex items-center justify-center gap-1"
-                      onClick={() => handleViewLesson(lesson)}
-                    >
-                      <Eye size={14} /> View Lesson
-                    </Button>
-                  )}
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="text-gray-500 text-sm">No lessons available.</div>
-        )}
+                  </div>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="w-full flex items-center justify-center gap-1"
+                    onClick={() => handleViewLesson(lesson)}
+                  >
+                    <Eye size={14} /> View Lesson
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
 
-      {/* View Modal */}
+      {/* View Lesson Modal */}
       <ViewLessonModal
         open={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         lesson={selectedLesson}
+      />
+      {/* Quiz Modal */}
+      <QuizModal
+        open={isQuizModalOpen}
+        onClose={() => setIsQuizModalOpen(false)}
+        quiz={selectedQuiz}
       />
     </DashboardLayout>
   );

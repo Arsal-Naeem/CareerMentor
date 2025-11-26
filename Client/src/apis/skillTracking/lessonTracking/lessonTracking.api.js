@@ -29,6 +29,12 @@ export const getAllUserLessons = async (moduleId) => {
   return res.data;
 };
 
+export const addUserLesson = async (moduleId) => {
+  const url = API_ROUTES.LESSONS.ADD_USER_LESSON(moduleId);
+  const res = await axiosReq(API_MODES.POST, url);
+  return res.data;
+}
+
 export const getSingleUserLesson = async (lessonId) => {
   const url = API_ROUTES.LESSONS.GET_SINGLE_USER_LESSON(lessonId);
   const res = await axiosReq(API_MODES.GET, url);

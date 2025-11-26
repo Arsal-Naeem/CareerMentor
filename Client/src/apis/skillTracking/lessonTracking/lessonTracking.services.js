@@ -10,6 +10,7 @@ import {
   deleteSingleLesson,
   getSingleUserLesson,
   updateStatusLesson,
+  addUserLesson
 } from "./lessonTracking.api";
 import { toast } from "sonner";
 
@@ -48,6 +49,18 @@ export const useAllUserLessons = (moduleId) => {
     staleTime: 1000 * 60 * 5,
   });
 };
+
+export const useAddUserLesson = (moduleId) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (data) => addUserLesson(moduleId),
+    onSuccess: (data) => {
+      toast.success(data.message || "Lesson added successfully!");
+      queryClient.invalidateQueries(["allUserLessons", moduleId]);
+    },
+  });
+}
 
 export const useGetSingleLessonDetails = (lessonId) => {
   return useQuery({
