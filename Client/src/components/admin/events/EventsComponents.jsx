@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { EventCardsSkeleton } from "./AdminEventsSkeletons";
+import DeleteConfirmModal from "@/components/modals/DeleteConfirmationModal";
 
 export const EventsHeader = ({ onAddButtonClick }) => {
   return (
@@ -38,8 +39,9 @@ export const EventsHeader = ({ onAddButtonClick }) => {
   );
 };
 
-export const EventsGrid = ({ isLoading, events = [] }) => {
+export const EventsGrid = ({ isLoading, events = [], onDelete }) => {
   const navigate = useNavigate();
+
   return (
     <>
       {isLoading ? (
@@ -120,7 +122,7 @@ export const EventsGrid = ({ isLoading, events = [] }) => {
                   <Button
                     size="sm"
                     variant="destructive"
-                    onClick={() => handleDelete(event.id)}
+                    onClick={() => onDelete(event.id)}
                   >
                     <Trash2 className="w-4 h-4" />
                   </Button>
@@ -130,6 +132,7 @@ export const EventsGrid = ({ isLoading, events = [] }) => {
           })}
         </div>
       )}
+      <DeleteConfirmModal open={open} />
     </>
   );
 };

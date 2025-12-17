@@ -1,3 +1,4 @@
+import Editor from "@/components/editor/examples/full/editor";
 import { TagInput } from "@/components/inputs/TagsInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,12 +11,13 @@ const EventForm = ({
   submitLabel = "Save Event",
   loading = false,
 }) => {
+  // WIP: Validations aren't added yet
   const [formData, setFormData] = useState(
     initialValues
       ? initialValues
       : {
           name: "",
-          description: "",
+          description: null,
           date: "",
           time: "",
           venue: "",
@@ -24,7 +26,11 @@ const EventForm = ({
           tags: [],
         }
   );
-  const [tags, setTags] = useState(initialValues.tags || []);
+  const [tags, setTags] = useState(initialValues?.tags ?? []);
+
+  const [descriptionContent, setDescriptionContent] = useState(
+    initialValues?.description ? initialValues.description : null
+  );
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,21 +39,16 @@ const EventForm = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ ...formData, tags });
+    onSubmit({
+      ...formData,
+      tags,
+      description: JSON.stringify(descriptionContent),
+    });
   };
 
-  const [value, setValue] = useState("simple text");
-
-  function onChange(e) {
-    setValue(e.target.value);
-  }
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="grid grid-cols-1 lg:grid-cols-2 gap-10"
-    >
-      <div className="lg:col-span-2 space-y-8 min-h-screen">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-10 grow">
+      <div className="space-y-8">
         {/* Event Info */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-700">
@@ -61,17 +62,15 @@ const EventForm = ({
               value={formData.name}
               onChange={handleChange}
               placeholder="e.g. AI Career Fair 2025"
+              className="lg:max-w-md"
             />
           </div>
 
           <div className="space-y-3 col-span-1 lg:col-span-2">
             <Label>Description</Label>
-            <Textarea
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              placeholder="Describe the event..."
-              className="min-h-32"
+            <Editor
+              initialContent={descriptionContent}
+              onChange={(content) => setDescriptionContent(content)}
             />
           </div>
         </section>
@@ -157,7 +156,7 @@ const EventForm = ({
       </div>
 
       {/* Actions */}
-      <div className="lg:col-span-1 flex justify-end">
+      <div className="w-full md:w-fit md:self-end">
         <Button className="w-full bg-custom-text-orange" disabled={loading}>
           {submitLabel}
         </Button>

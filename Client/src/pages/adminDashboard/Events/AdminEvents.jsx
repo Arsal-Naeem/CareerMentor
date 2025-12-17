@@ -34,6 +34,10 @@ const AdminEvents = () => {
     return matchesSearch;
   });
 
+  const handleEventDelete = (eventId) => {
+    // console.log("Event id to delete", eventId);
+  };
+
   return (
     <AdminDashboardLayout>
       <div className="min-h-screen bg-gray-50">
@@ -49,7 +53,11 @@ const AdminEvents = () => {
             variant="compact"
           />
 
-          <EventsGrid events={filteredEvents} isLoading={loading} />
+          <EventsGrid
+            events={filteredEvents}
+            isLoading={loading}
+            onDelete={handleEventDelete}
+          />
         </div>
       </div>
     </AdminDashboardLayout>

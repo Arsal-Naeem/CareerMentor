@@ -247,9 +247,9 @@ function Router() {
             <Route
               index
               element={
-                <AdminProtectedRoute>
-                  <AdminDashboard />
-                </AdminProtectedRoute>
+                // <AdminProtectedRoute>
+                <AdminDashboard />
+                // </AdminProtectedRoute>
               }
             />
             <Route
