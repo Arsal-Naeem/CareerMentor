@@ -13,9 +13,6 @@ export default function Sidebar({ items, variant = "sidebar" }) {
   const { open, setOpen } = useGlobalContext();
   const { logout } = useAuth();
 
-  // TODO : fix the active item styling on admin screens
-  // Fix the width of sidebar on admin pages
-
   return (
     <>
       {/* Sidebar */}

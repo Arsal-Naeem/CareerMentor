@@ -2,7 +2,6 @@ import React from "react";
 import { Progress } from "./ui/progress";
 
 export const OrangeProgressBar = ({
-  // TODO : Fix the stylings of the circular progress bar
   value,
   variant = "default",
   size = 180, // Size for circular progress (width and height)

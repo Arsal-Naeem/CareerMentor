@@ -17,7 +17,7 @@ import {
   Trophy,
   User,
   Users,
-  Route
+  Route,
 } from "lucide-react";
 import Brain from "@/assets/icons/brain.svg";
 import CircleCheck from "@/assets/icons/circle-check.svg";
@@ -179,10 +179,6 @@ export const sidebarItems = [
     label: "Blogs",
     icon: Newspaper,
     href: "/blogs",
-    children: [
-      { label: "My Blogs", href: "/user/dashboard/my-blogs" },
-      { label: "View All Blogs", href: "/blogs" },
-    ],
   },
   { label: "Achievements", icon: Trophy, href: "/user/dashboard/achievements" },
 ];
@@ -519,7 +515,7 @@ export const domainSkillDropdownItems = [
   {
     label: "Delete",
     key: "delete",
-  }
+  },
 ];
 
 export const careerDomainDropdownItem = [

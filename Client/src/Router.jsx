@@ -34,14 +34,12 @@ import {
 import { Events } from "./pages/events/Events";
 
 // blogs
-import AddNewBlog from "./pages/blogs/AddNewBlog";
+import AddBlog from "./pages/adminDashboard/Blogs/AddBlog";
 import { BlogDetail } from "./pages/blogs/BlogDetail";
 import { Blogs } from "./pages/blogs/Blogs";
 
 // admin
 import { AdminDashboard } from "./pages/adminDashboard/AdminDashboard";
-import AdminBlogDetails from "./pages/adminDashboard/Blogs/AdminBlogDetails";
-import AdminBlogs from "./pages/adminDashboard/Blogs/AdminBlogs";
 import CareerExplorer from "./pages/adminDashboard/CareerExplorer/CareerExplorer";
 import AdminEvents from "./pages/adminDashboard/Events/AdminEvents";
 
@@ -55,18 +53,19 @@ import {
   HOME_ROUTE,
   USER_DASHBOARD_ROUTES,
 } from "./constants/navigation";
+import AddEvent from "./pages/adminDashboard/Events/AddEvent";
+import EditEvent from "./pages/adminDashboard/Events/EditEvent";
 import EditDomainPage from "./pages/adminDashboard/SkillTracking/EditDomainPage";
 import LessonPage from "./pages/adminDashboard/SkillTracking/LessonPage";
 import ModuleTracking from "./pages/adminDashboard/SkillTracking/ModuleTracking";
 import SkilltrackingManagement from "./pages/adminDashboard/SkillTracking/SkilltrackingManagement";
 import { CareerDetail } from "./pages/careers/CareerDetail";
-import UserBlogs from "./pages/dashboard/blogs/UserBlogs";
 import Roadmap from "./pages/dashboard/roadmaps/Roadmap";
 import ViewRoadMap from "./pages/dashboard/roadmaps/ViewRoadMap";
 import Lessons from "./pages/dashboard/skillTracking/domainTracker/components/Lessons";
 import { EventDetails } from "./pages/events/EventDetails";
-import EditEvent from "./pages/adminDashboard/Events/EditEvent";
-import AddEvent from "./pages/adminDashboard/Events/AddEvent";
+import AdminBlogs from "./pages/adminDashboard/Blogs/AdminBlogs";
+import { EditBlog } from "./pages/adminDashboard/Blogs/EditBlog";
 
 // TODO : lazy load the pages
 
@@ -77,6 +76,8 @@ function Router() {
         <Routes>
           {/* Public Routes - Accessible to everyone */}
           <Route path={HOME_ROUTE} element={<Home />} />
+
+          {/* Public Blogs */}
           <Route path={BLOG_ROUTES.INDEX}>
             <Route index element={<Blogs />} />
             <Route path={BLOG_ROUTES.DETAILS} element={<BlogDetail />} />
@@ -137,9 +138,9 @@ function Router() {
             <Route
               index
               element={
-                <UserProtectedRoute>
-                  <Dashboard />
-                </UserProtectedRoute>
+                // <UserProtectedRoute>
+                <Dashboard />
+                // </UserProtectedRoute>
               }
             />
             <Route
@@ -224,22 +225,6 @@ function Router() {
                 </UserProtectedRoute>
               }
             />
-            <Route
-              path={USER_DASHBOARD_ROUTES.VIEW_MY_BLOGS}
-              element={
-                <UserProtectedRoute>
-                  <UserBlogs />
-                </UserProtectedRoute>
-              }
-            />
-            <Route
-              path={USER_DASHBOARD_ROUTES.CREATE_BLOG}
-              element={
-                <UserProtectedRoute>
-                  <AddNewBlog />
-                </UserProtectedRoute>
-              }
-            />
           </Route>
 
           {/* Admin Dashboard Routes - Protected for admin users only */}
@@ -252,24 +237,34 @@ function Router() {
                 // </AdminProtectedRoute>
               }
             />
+            {/* admin blogs */}
             <Route
-              path={ADMIN_DASHBOARD_ROUTES.BLOGS}
+              path={ADMIN_DASHBOARD_ROUTES.VIEW_BLOGS}
               element={
-                <AdminProtectedRoute>
-                  <AdminBlogs />
-                </AdminProtectedRoute>
+                // <AdminProtectedRoute>
+                <AdminBlogs />
+                // </AdminProtectedRoute>
               }
             />
             <Route
-              path={ADMIN_DASHBOARD_ROUTES.VIEW_BLOG}
+              path={ADMIN_DASHBOARD_ROUTES.ADD_BLOG}
               element={
-                <AdminProtectedRoute>
-                  <AdminBlogDetails />
-                </AdminProtectedRoute>
+                // <AdminProtectedRoute>
+                <AddBlog />
+                // </AdminProtectedRoute>
               }
             />
             <Route
-              path={ADMIN_DASHBOARD_ROUTES.EVENTS_MANAGEMENT}
+              path={ADMIN_DASHBOARD_ROUTES.EDIT_BLOG}
+              element={
+                // <AdminProtectedRoute>
+                <EditBlog />
+                // </AdminProtectedRoute>
+              }
+            />
+            {/* admin events */}
+            <Route
+              path={ADMIN_DASHBOARD_ROUTES.VIEW_ADMIN_EVENTS}
               element={
                 // <AdminProtectedRoute>
                 <AdminEvents />

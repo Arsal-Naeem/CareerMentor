@@ -11,29 +11,45 @@ import {
 import { useNavigate } from "react-router-dom";
 import { EventCardsSkeleton } from "./AdminEventsSkeletons";
 import DeleteConfirmModal from "@/components/modals/DeleteConfirmationModal";
+import clsx from "clsx";
 
-export const EventsHeader = ({ onAddButtonClick }) => {
+export const EventsHeader = ({
+  onAddButtonClick,
+  icon,
+  iconContainerClassName,
+  buttonClassName,
+  buttonTitle = "Add Event",
+  title = "Events Management",
+  subtitle = " Review, approve or reject community and campus events",
+}) => {
   return (
     <div className="flex justify-between">
       <div>
         <h1 className="text-lg md:text-3xl font-bold text-custom-black-light flex items-center gap-3">
-          <div className="p-2 bg-custom-text-orange rounded-xl">
-            <CalendarDays className="w-4 h-4 md:w-7 md:h-7 text-custom-light-white font-light" />
+          <div
+            className={clsx(
+              "p-2 bg-custom-text-orange rounded-xl",
+              iconContainerClassName
+            )}
+          >
+            {icon ? (
+              icon
+            ) : (
+              <CalendarDays className="w-4 h-4 md:w-7 md:h-7 text-custom-light-white font-light" />
+            )}
           </div>
-          Events Management
+          {title}
         </h1>
-        <p className="text-gray-600 text-sm md:text-lg mt-2">
-          Review, approve or reject community and campus events
-        </p>
+        <p className="text-gray-600 text-sm md:text-lg mt-2">{subtitle}</p>
       </div>
 
       <Button
         variant="primary"
-        className="bg-custom-text-orange text-white"
+        className={clsx("bg-custom-text-orange text-white", buttonClassName)}
         onClick={onAddButtonClick}
       >
         <Plus className="w-4 h-4 text-white font-bold" />
-        <p>Add Event</p>
+        <p>{buttonTitle}</p>
       </Button>
     </div>
   );

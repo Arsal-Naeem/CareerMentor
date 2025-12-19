@@ -1,413 +1,185 @@
-import { SelectInput } from "@/components/inputs/SelectInput/SelectInput";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { EventsHeader } from "@/components/admin/events/EventsComponents";
+import AdminBlogCard from "@/components/blogs/AdminBlogCard";
+import { SearchBar } from "@/components/search/SearchBar";
 import { Skeleton } from "@/components/ui/skeleton";
-import usePageTitle from "@/hooks/usePageTitle";
 import AdminDashboardLayout from "@/layouts/AdmindashboardLayout";
-import {
-  Calendar,
-  CheckCircle,
-  Clock,
-  Eye,
-  FileText,
-  Search,
-  TrendingUp,
-  User,
-  XCircle,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+import { Book, Edit, Plus } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+// Sample data (replace with API call later)
 const mockBlogs = [
   {
     id: 5,
     title: "Web Development Best Practices for Modern Applications",
     coverImage:
       "https://careermentor-blogs.s3.eu-north-1.amazonaws.com/blogs/296eb834-aa38-4907-a632-f26d1fa48bc9.png",
-    author: "Ali Khan",
     tags: ["AI", "Education", "Technology"],
-    status: "pending",
     publishedAt: "2025-06-12",
-    views: 1250,
     excerpt:
-      "Explore the latest trends and best practices in web development...",
+      "Explore the latest trends and best practices in web development that will help you build scalable and maintainable applications...",
+    views: 1250,
+    readTime: "5 min read",
   },
   {
     id: 2,
     title: "DevOps Best Practices for Scalable Infrastructure",
     coverImage:
       "https://careermentor-blogs.s3.eu-north-1.amazonaws.com/blogs/2a82cae9-011a-4424-9d74-136aed18fe59.jpg",
-    author: "Sara Ahmed",
     tags: ["DevOps", "CI/CD", "Infrastructure"],
-    status: "approved",
     publishedAt: "2025-06-10",
-    views: 2840,
-    excerpt: "Learn how to implement robust DevOps practices for your team...",
+    excerpt:
+      "Learn how to implement robust DevOps practices for your team and scale your infrastructure effectively...",
+    views: 890,
+    readTime: "7 min read",
   },
   {
     id: 3,
     title: "Career in Game Development: A Complete Guide",
-    coverImage: "https://source.unsplash.com/400x200/?gaming,career",
-    author: "Umar Yousuf",
+    coverImage:
+      "https://careermentor-blogs.s3.eu-north-1.amazonaws.com/blogs/296eb834-aa38-4907-a632-f26d1fa48bc9.png",
     tags: ["GameDev", "Unity", "Career", "Cloud"],
-    status: "rejected",
     publishedAt: "2025-06-08",
-    views: 890,
     excerpt:
-      "Everything you need to know about starting a career in game development...",
+      "Everything you need to know about starting a career in game development, from learning the basics to landing your first job...",
+    views: 2100,
+    readTime: "12 min read",
   },
   {
     id: 4,
     title: "Cloud Computing Trends and Future Predictions",
-    coverImage: "https://source.unsplash.com/400x200/?cloud,technology",
-    author: "Zain Raza",
+    coverImage:
+      "https://careermentor-blogs.s3.eu-north-1.amazonaws.com/blogs/2a82cae9-011a-4424-9d74-136aed18fe59.jpg",
     tags: ["Cloud", "Infrastructure", "AWS"],
-    status: "pending",
     publishedAt: "2025-06-11",
-    views: 1560,
     excerpt:
-      "Discover the latest trends shaping the future of cloud computing...",
-  },
-];
-
-const statusConfig = {
-  pending: {
-    color: "bg-amber-50 text-amber-700 border-amber-200",
-    icon: Clock,
-    label: "Pending Review",
-  },
-  approved: {
-    color: "bg-emerald-50 text-emerald-700 border-emerald-200",
-    icon: CheckCircle,
-    label: "Approved",
-  },
-  rejected: {
-    color: "bg-red-50 text-red-700 border-red-200",
-    icon: XCircle,
-    label: "Rejected",
-  },
-};
-
-const filterOptions = [
-  { value: "all", label: "All Blogs", icon: FileText },
-  { value: "pending", label: "Pending", icon: Clock },
-  { value: "approved", label: "Approved", icon: CheckCircle },
-  { value: "rejected", label: "Rejected", icon: XCircle },
-];
-
-const selectOptions = [
-  {
-    value: "pending",
-    label: "Pending",
-    icon: Clock,
+      "Discover the latest trends shaping the future of cloud computing and how they'll impact businesses worldwide...",
+    views: 1580,
+    readTime: "8 min read",
   },
   {
-    value: "approved",
-    label: "Approved",
-    icon: CheckCircle,
+    id: 6,
+    title: "Machine Learning Fundamentals for Beginners",
+    coverImage:
+      "https://careermentor-blogs.s3.eu-north-1.amazonaws.com/blogs/296eb834-aa38-4907-a632-f26d1fa48bc9.png",
+    tags: ["ML", "AI", "Python", "Data Science"],
+    publishedAt: "2025-06-09",
+    excerpt:
+      "A comprehensive introduction to machine learning concepts, algorithms, and practical applications for beginners...",
+    views: 980,
+    readTime: "10 min read",
   },
   {
-    value: "rejected",
-    label: "Rejected",
-    icon: XCircle,
+    id: 7,
+    title: "React Performance Optimization Techniques",
+    coverImage:
+      "https://careermentor-blogs.s3.eu-north-1.amazonaws.com/blogs/2a82cae9-011a-4424-9d74-136aed18fe59.jpg",
+    tags: ["React", "Performance", "JavaScript", "Frontend"],
+    publishedAt: "2025-06-07",
+    excerpt:
+      "Master the art of optimizing React applications for better performance and user experience...",
+    views: 1750,
+    readTime: "6 min read",
   },
 ];
 
 const AdminBlogs = () => {
-  // TODO : fix the pending review hover styles
-  usePageTitle("Admin Blogs");
+  const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
   const navigate = useNavigate();
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
-  const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setBlogs(mockBlogs);
-      setLoading(false);
-    }, 1500);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const handleStatusChange = (id, newStatus) => {
-    const updatedBlogs = blogs.map((blog) =>
-      blog.id === id ? { ...blog, status: newStatus } : blog
-    );
-    setBlogs(updatedBlogs);
+  const handleEdit = (post) => {
+    console.log("Edit Blog ID:", post.id);
+    navigate(`/admin/dashboard/blogs/edit/${post.id}`);
   };
 
-  const filteredBlogs = blogs.filter((blog) => {
-    const matchesFilter = filter === "all" || blog.status === filter;
-    const matchesSearch =
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      blog.tags.some((tag) =>
-        tag.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    return matchesFilter && matchesSearch;
-  });
-
-  const getStatusCounts = () => {
-    return {
-      all: blogs.length,
-      pending: blogs.filter((b) => b.status === "pending").length,
-      approved: blogs.filter((b) => b.status === "approved").length,
-      rejected: blogs.filter((b) => b.status === "rejected").length,
-    };
+  const handleDelete = (id) => {
+    console.log("Delete Blog ID:", id);
   };
 
-  const statusCounts = getStatusCounts();
-
-  const LoadingSkeleton = () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <Card
-          key={`loading-${i}`}
-          className="overflow-hidden border-0 shadow-sm bg-white"
-        >
-          <div className="relative">
-            <Skeleton className="w-full h-48" />
-            <div className="absolute top-3 right-3">
-              <Skeleton className="w-16 h-6 rounded-full" />
-            </div>
-          </div>
-          <CardContent className="p-6 space-y-4">
-            <Skeleton className="w-3/4 h-6" />
-            <div className="flex items-center gap-2">
-              <Skeleton className="w-4 h-4 rounded-full" />
-              <Skeleton className="w-24 h-4" />
-            </div>
-            <Skeleton className="w-full h-4" />
-            <div className="flex gap-2">
-              <Skeleton className="w-12 h-5 rounded-full" />
-              <Skeleton className="w-16 h-5 rounded-full" />
-            </div>
-            <div className="flex justify-between items-center pt-2">
-              <Skeleton className="w-20 h-4" />
-              <Skeleton className="w-[120px] h-8 rounded-md" />
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
+  const handleAddNew = () => {
+    console.log("Add new blog clicked");
+    navigate("/admin/dashboard/blogs/add");
+  };
 
   return (
     <AdminDashboardLayout>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50/30">
-        <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
-          {/* Header Section */}
-          <div className="mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-bold text-custom-black-light flex items-center gap-3">
-                  <div className="p-2 bg-blue-100 rounded-xl">
-                    <FileText className="w-8 h-8 text-blue-600" />
-                  </div>
-                  Blog Management
-                </h1>
-                <p className="text-gray-600 mt-2">
-                  Review and manage blog submissions
-                </p>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-custom-black-dark">
-                <TrendingUp className="w-4 h-4" />
-                <span>{blogs.length} total blogs</span>
-              </div>
-            </div>
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 py-8 space-y-4">
+          <EventsHeader
+            icon={<Book className="h-7 w-7 text-white" />}
+            iconContainerClassName="bg-custom-light-blue"
+            buttonClassName="bg-custom-light-blue"
+            title="Blogs Management"
+            buttonTitle="Add Blog"
+            onAddButtonClick={handleAddNew}
+          />
 
-            {/* Search and Filter Section */}
-            <div className="flex flex-col lg:flex-row gap-4 mb-6">
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                <Input
-                  placeholder="Search blogs, authors, or tags..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-gray-200 focus:border-blue-300 focus:ring-blue-100"
-                />
-              </div>
-
-              <div className="flex gap-2 overflow-x-auto pb-2 lg:pb-0">
-                {filterOptions.map((option) => {
-                  const IconComponent = option.icon;
-                  return (
-                    <Button
-                      key={option.value}
-                      variant={filter === option.value ? "default" : "outline"}
-                      onClick={() => setFilter(option.value)}
-                      className={`whitespace-nowrap flex items-center gap-2 ${
-                        filter === option.value
-                          ? "bg-blue-600 hover:bg-blue-700 text-white"
-                          : "hover:bg-blue-50 border-gray-200"
-                      }`}
-                      size="sm"
-                    >
-                      <IconComponent className="w-4 h-4" />
-                      {option.label}
-                      <Badge variant="secondary" className="ml-1 text-xs">
-                        {statusCounts[option.value]}
-                      </Badge>
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Results Info */}
-          {!loading && (
-            <div className="mb-6 flex items-center justify-between">
-              <p className="text-sm text-gray-600">
-                Showing {filteredBlogs.length} of {blogs.length} blogs
-                {searchTerm && (
-                  <span className="ml-1">
-                    for "<span className="font-medium">{searchTerm}</span>"
-                  </span>
-                )}
-              </p>
-            </div>
-          )}
+          <SearchBar
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            wrapperClassName="flex-1 max-w-md"
+            variant="compact"
+            placeholder="Search blogs by title, tags and more.."
+          />
 
           {/* Blog Grid */}
           {loading ? (
-            <LoadingSkeleton />
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredBlogs.map((blog) => {
-                const statusInfo = statusConfig[blog.status];
-                const StatusIcon = statusInfo.icon;
-
-                return (
-                  <Card
-                    key={blog.id}
-                    className="group overflow-hidden border-0 shadow-sm hover:shadow-xl transition-all duration-300 bg-white hover:-translate-y-1"
-                  >
-                    <div className="relative">
-                      <img
-                        src={blog.coverImage}
-                        alt={blog.title}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                      <Badge
-                        className={`absolute top-3 right-3 ${statusInfo.color} border flex items-center gap-1`}
-                      >
-                        <StatusIcon className="w-3 h-3" />
-                        {statusInfo.label}
-                      </Badge>
-                    </div>
-
-                    <CardContent className="p-6 space-y-4">
-                      <div>
-                        <CardTitle className="text-lg font-semibold line-clamp-2 group-hover:text-blue-600 transition-colors">
-                          {blog.title}
-                        </CardTitle>
-                        <div className="flex items-center gap-2 mt-2 text-sm text-custom-black-dark">
-                          <User className="w-4 h-4" />
-                          <span>{blog.author}</span>
-                          <span>•</span>
-                          <Calendar className="w-4 h-4" />
-                          <span>
-                            {new Date(blog.publishedAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                      </div>
-
-                      {blog.excerpt && (
-                        <p className="text-sm text-custom-black-dark line-clamp-2">
-                          {blog.excerpt}
-                        </p>
-                      )}
-
-                      <div className="flex flex-wrap gap-1">
-                        {blog.tags.slice(0, 3).map((tag, i) => (
-                          <Badge
-                            key={i}
-                            variant="secondary"
-                            className="text-xs bg-gray-100 hover:bg-gray-200"
-                          >
-                            {tag}
-                          </Badge>
-                        ))}
-                        {blog.tags.length > 3 && (
-                          <Badge
-                            variant="secondary"
-                            className="text-xs bg-gray-100"
-                          >
-                            +{blog.tags.length - 3}
-                          </Badge>
-                        )}
-                      </div>
-
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                        <div className="flex items-center gap-2 text-sm text-custom-black-dark">
-                          <Eye className="w-4 h-4" />
-                          <span>
-                            {blog.views?.toLocaleString() || "0"} views
-                          </span>
-                        </div>
-
-                        <SelectInput
-                          value={blog.status}
-                          onValueChange={(value) =>
-                            handleStatusChange(blog.id, value)
-                          }
-                          items={selectOptions}
-                          customItem={(item) => (
-                            <div className="flex items-center gap-2">
-                              <item.icon className="w-3 h-3" />
-                              {item.label}
-                            </div>
-                          )}
-                          selectTriggerClassName="w-[130px] h-8 text-sm border-gray-200"
-                        />
-                      </div>
-
-                      <Button
-                        variant="outline"
-                        className="w-full mt-4 text-sm hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-colors"
-                        onClick={() =>
-                          navigate(`/admin/dashboard/blogs/${blog.id}`)
-                        }
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        View Details
-                      </Button>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Empty State */}
-          {!loading && filteredBlogs.length === 0 && (
-            <div className="text-center py-16">
-              <div className="p-4 bg-gray-100 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center">
-                <FileText className="w-8 h-8 text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No blogs found
-              </h3>
-              <p className="text-custom-black-dark mb-4">
-                {searchTerm
-                  ? `No blogs match your search "${searchTerm}"`
-                  : `No blogs with status "${filter}"`}
-              </p>
-              {searchTerm && (
-                <Button
-                  variant="outline"
-                  onClick={() => setSearchTerm("")}
-                  className="hover:bg-blue-50"
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(6)].map((_, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl bg-white border border-[#59A4C0]/20 overflow-hidden"
                 >
-                  Clear search
-                </Button>
-              )}
+                  <Skeleton className="h-44 w-full" />
+                  <div className="p-4 space-y-3">
+                    <Skeleton className="h-4 w-3/4" />
+                    <div className="flex gap-2">
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                      <Skeleton className="h-5 w-20 rounded-full" />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+                {mockBlogs.map((post) => (
+                  <AdminBlogCard
+                    key={post.id}
+                    post={post}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+
+              {/* Empty State */}
+              {mockBlogs.length === 0 && (
+                <div className="text-center py-24">
+                  <div className="w-20 h-20 mx-auto mb-6 rounded-fullbg-[#59A4C0]/10 flex items-center justify-center">
+                    <Edit size={28} className="text-[#59A4C0]" />
+                  </div>
+
+                  <h3 className="text-2xl font-semibold text-custom-black-dark mb-2">
+                    No blogs yet
+                  </h3>
+
+                  <p className="text-custom-gray-light mb-6 max-w-md mx-auto">
+                    Start writing blogs to share your knowledge with your
+                    audience.
+                  </p>
+
+                  <button
+                    onClick={handleAddNew}
+                    className="px-6 py-3 rounded-fullbg-[#59A4C0]text-white font-medium hover:bg-[#4A94AF] transition"
+                  >
+                    Create First Blog
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

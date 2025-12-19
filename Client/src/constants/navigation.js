@@ -37,15 +37,14 @@ export const USER_DASHBOARD_ROUTES = {
   MENTORSHIP: "mentorship",
   ACHIEVEMENTS: "achievements",
   SETTINGS: "settings",
-  VIEW_MY_BLOGS: "my-blogs",
-  CREATE_BLOG: "add-new-blog",
 };
 
 export const ADMIN_DASHBOARD_ROUTES = {
   INDEX: "/admin/dashboard",
-  BLOGS: "blogs",
-  VIEW_BLOG: "blogs/:id",
-  EVENTS_MANAGEMENT: "events",
+  VIEW_BLOGS: "blogs",
+  ADD_BLOG: "blogs/add",
+  EDIT_BLOG: "blogs/edit/:id",
+  VIEW_ADMIN_EVENTS: "events",
   ADD_EVENT: "events/add",
   EDIT_EVENT: "events/edit/:id",
   SKILL_TRACKING_MANAGEMENT: "skill-tracking",

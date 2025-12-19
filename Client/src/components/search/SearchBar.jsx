@@ -55,7 +55,7 @@ export const SearchBar = ({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             className={clsx(inputClassName, "pl-10")}
-            placeholder="Search events, venue or tags..."
+            placeholder={placeholder || "Search events, venue or tags..."}
             {...rest}
           />
         </div>
