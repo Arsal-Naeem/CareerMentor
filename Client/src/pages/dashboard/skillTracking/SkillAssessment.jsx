@@ -1,6 +1,7 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
 import React from "react";
 
-export const SkillAssessment = () => {
+const SkillAssessment = () => {
   return <DashboardLayout>Skill Assessment Page</DashboardLayout>;
 };
+export default SkillAssessment;

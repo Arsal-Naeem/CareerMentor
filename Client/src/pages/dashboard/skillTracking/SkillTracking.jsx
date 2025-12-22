@@ -30,7 +30,7 @@ import {
 import { useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-export const SkillTracking = () => {
+const SkillTracking = () => {
   usePageTitle("Skills Tracking");
   const { setBreadcrumbText } = useGlobalContext();
   const { isSmallScreen, isLargeScreen } = useScreenSize();
@@ -92,6 +92,8 @@ export const SkillTracking = () => {
     </DashboardLayout>
   );
 };
+
+export default SkillTracking;
 
 const Domains = () => {
   const navigate = useNavigate();

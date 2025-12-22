@@ -1,20 +1,17 @@
-import { useEffect, useState } from "react";
+import { Suspense } from "react";
+import { RouterProvider } from "react-router-dom";
 import "./App.css";
 import { SplashScreen } from "./pages/splash/SplashScreen";
-import Router from "./Router";
+import { getRoutes } from "./routes";
 
 function App() {
-  const [showSplash, setShowSplash] = useState(true);
+  const router = getRoutes();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSplash(false);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  return showSplash ? <SplashScreen /> : <Router />;
+  return (
+    <Suspense fallback={<SplashScreen />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  );
 }
 
 export default App;

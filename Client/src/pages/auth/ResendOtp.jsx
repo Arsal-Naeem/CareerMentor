@@ -12,7 +12,7 @@ import { validations } from "@/validations/auth/validations";
 import { useNavigate } from "react-router-dom";
 import { AppButton } from "@/components/buttons/AppButton";
 
-export const ResendOtp = () => {
+const ResendOtp = () => {
   usePageTitle("Resend Otp");
 
   const [cooldown, setCooldown] = useState(0);
@@ -115,3 +115,5 @@ export const ResendOtp = () => {
     </AuthLayout>
   );
 };
+
+export default ResendOtp;

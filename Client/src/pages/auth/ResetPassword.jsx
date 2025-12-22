@@ -13,7 +13,7 @@ import { EyeButton } from "@/components/buttons/EyeButton";
 import { useState } from "react";
 import { AppButton } from "@/components/buttons/AppButton";
 
-export const ResetPassword = () => {
+const ResetPassword = () => {
   usePageTitle("Reset Password");
   const navigate = useNavigate();
   const { token } = useParams();
@@ -150,3 +150,5 @@ export const ResetPassword = () => {
     </AuthLayout>
   );
 };
+
+export default ResetPassword;

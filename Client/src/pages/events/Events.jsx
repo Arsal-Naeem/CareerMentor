@@ -10,7 +10,7 @@ import EventImage from "@/assets/images/blog.png";
 import { SecondaryButton } from "@/components/buttons/SecondaryButton";
 import { useNavigate } from "react-router-dom";
 
-export const Events = () => {
+const Events = () => {
   usePageTitle("Events");
   const isLoading = false;
   return (
@@ -102,3 +102,5 @@ const Event = () => {
     </div>
   );
 };
+
+export default Events;

@@ -30,8 +30,14 @@ export const AuthProvider = ({ children }) => {
     logoutMutation.mutate();
   };
 
+  const isAdmin = user?.role === "admin";
+  const isUser = user?.role !== "admin";
+  const isVerified = user?.isVerified;
+
   return (
-    <AuthContext.Provider value={{ user, setUser, logout }}>
+    <AuthContext.Provider
+      value={{ user, setUser, logout, isAdmin, isUser, isVerified }}
+    >
       {children}
     </AuthContext.Provider>
   );

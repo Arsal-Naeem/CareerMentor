@@ -1,7 +1,9 @@
 import EventForm from "@/components/admin/events/EventForm";
+import usePageTitle from "@/hooks/usePageTitle";
 import AdminDashboardLayout from "@/layouts/AdmindashboardLayout";
 
 const AddEvent = () => {
+  usePageTitle("Add New Event");
   const handleCreate = (data) => {
     console.log("Form data", data);
     // TODO: api call here

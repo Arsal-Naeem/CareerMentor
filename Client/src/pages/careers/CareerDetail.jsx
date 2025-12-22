@@ -5,7 +5,7 @@ import { ImageHeader } from "./components/ImageHeader";
 import CareerBg from "@/assets/images/career-bg.png";
 import { CareerDetailSkeleton } from "@/components/skeletons/careers/CareerDetailsSkeleton";
 
-export const CareerDetail = () => {
+const CareerDetail = () => {
   usePageTitle("Career Details");
   const isLoading = false;
   return (
@@ -227,3 +227,5 @@ const CareerDetails = () => {
     </div>
   );
 };
+
+export default CareerDetail;

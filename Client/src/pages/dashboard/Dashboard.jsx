@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
 import usePageTitle from "@/hooks/usePageTitle";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import { useEffect, useState } from "react";
 
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 
-import { Flame, Award, Star } from "lucide-react";
-import { useDashboardData } from "@/apis/roadMaps/roadmap.services";
 import axios from "axios";
+import { Award, Flame, Star } from "lucide-react";
 
-export const Dashboard = () => {
+const Dashboard = () => {
   usePageTitle("Dashboard");
 
   // --- Static data ---
@@ -237,3 +236,5 @@ export const Dashboard = () => {
     </DashboardLayout>
   );
 };
+
+export default Dashboard;

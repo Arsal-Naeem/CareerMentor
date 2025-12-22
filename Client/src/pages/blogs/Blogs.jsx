@@ -4,7 +4,7 @@ import { blogData } from "@/constants";
 import { BlogCard } from "@/components/blogs/BlogCard";
 import usePageTitle from "@/hooks/usePageTitle";
 
-export const Blogs = () => {
+const Blogs = () => {
   usePageTitle("Blogs");
   return (
     <MainLayout>
@@ -19,3 +19,5 @@ export const Blogs = () => {
     </MainLayout>
   );
 };
+
+export default Blogs;

@@ -16,7 +16,7 @@ import { USER_DASHBOARD_ROUTES } from "@/constants/navigation";
 import { AppButton } from "@/components/buttons/AppButton";
 import BackButton from "@/components/buttons/BackButton";
 
-export const Otp = () => {
+const Otp = () => {
   usePageTitle("Verify Your Identity");
   const navigate = useNavigate();
 
@@ -148,3 +148,5 @@ export const Otp = () => {
     </AuthLayout>
   );
 };
+
+export default Otp;

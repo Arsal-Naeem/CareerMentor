@@ -11,7 +11,6 @@ const EventForm = ({
   submitLabel = "Save Event",
   loading = false,
 }) => {
-  // WIP: Validations aren't added yet
   const [formData, setFormData] = useState(
     initialValues
       ? initialValues

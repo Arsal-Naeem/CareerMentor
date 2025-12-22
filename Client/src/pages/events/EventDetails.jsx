@@ -4,7 +4,7 @@ import React from "react";
 import EventImage from "@/assets/images/blog.png";
 import usePageTitle from "@/hooks/usePageTitle";
 
-export const EventDetails = () => {
+const EventDetails = () => {
   usePageTitle("Event Details");
   // TODO : fix the styles later and also add skeleton
   return (
@@ -189,3 +189,5 @@ export const EventDetails = () => {
     </MainLayout>
   );
 };
+
+export default EventDetails;

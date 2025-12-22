@@ -5,7 +5,7 @@ import { blogData } from "@/constants";
 import { BlogCard } from "@/components/blogs/BlogCard";
 import { ImageHeader } from "@/components/ImageHeader";
 
-export const BlogDetail = () => {
+const BlogDetail = () => {
   //   const { id } = useParams();
   const navigate = useNavigate();
   const recommendedBlogs = blogData
@@ -41,3 +41,5 @@ export const BlogDetail = () => {
     </MainLayout>
   );
 };
+
+export default BlogDetail;

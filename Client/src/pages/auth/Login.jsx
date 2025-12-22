@@ -1,20 +1,18 @@
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import usePageTitle from "../../hooks/usePageTitle";
-import AuthLayout from "../../layouts/AuthLayout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Link, useNavigate } from "react-router-dom";
 import { useLogin } from "@/apis/auth/auth.service";
+import { AuthFooter } from "@/components/auth/AuthFooter";
+import { AppButton } from "@/components/buttons/AppButton";
+import { EyeButton } from "@/components/buttons/EyeButton";
 import { Message } from "@/components/Message";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { validations } from "@/validations/auth/validations";
 import { useEffect, useState } from "react";
-import { EyeButton } from "@/components/buttons/EyeButton";
-import { USER_DASHBOARD_ROUTES } from "@/constants/navigation";
-import { AppButton } from "@/components/buttons/AppButton";
-import { AuthFooter } from "@/components/auth/AuthFooter";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
+import AuthLayout from "../../layouts/AuthLayout";
 
-export const Login = () => {
+const Login = () => {
   usePageTitle("Login");
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -137,3 +135,5 @@ export const Login = () => {
     </AuthLayout>
   );
 };
+
+export default Login;

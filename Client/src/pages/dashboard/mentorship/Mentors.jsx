@@ -70,7 +70,7 @@ const mentors = [
   },
 ];
 
-export const Mentors = () => {
+const Mentors = () => {
   const [selectedMentor, setSelectedMentor] = React.useState(null);
 
   const handleSelectMentor = (mentor) => {

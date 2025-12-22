@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { ImageHeader } from "./components/ImageHeader";
 import { CareerCardSkeleton } from "@/components/skeletons/careers/CareerCardSkeleton";
 
-export const Careers = () => {
+const Careers = () => {
   usePageTitle("Careers");
   // careers from api
   const isLoading = false;
@@ -71,3 +71,5 @@ const CareerCard = ({ career }) => {
     </div>
   );
 };
+
+export default Careers;

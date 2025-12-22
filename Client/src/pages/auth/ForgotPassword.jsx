@@ -1,16 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { useForgotPassword } from "@/apis/auth/auth.service";
+import { AppButton } from "@/components/buttons/AppButton";
+import BackButton from "@/components/buttons/BackButton";
+import { Message } from "@/components/Message";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { validations } from "@/validations/auth/validations";
+import { useForm } from "react-hook-form";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import BackButton from "@/components/buttons/BackButton";
-import { useForgotPassword } from "@/apis/auth/auth.service";
-import { useForm } from "react-hook-form";
-import { Message } from "@/components/Message";
-import { validations } from "@/validations/auth/validations";
-import { AppButton } from "@/components/buttons/AppButton";
 
-export const ForgotPassword = () => {
+const ForgotPassword = () => {
   usePageTitle("Forgot Password");
 
   const {
@@ -93,3 +92,5 @@ export const ForgotPassword = () => {
     </AuthLayout>
   );
 };
+
+export default ForgotPassword;

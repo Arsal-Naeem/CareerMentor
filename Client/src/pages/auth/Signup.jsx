@@ -19,7 +19,7 @@ import { validations } from "@/validations/auth/validations";
 import { AppButton } from "@/components/buttons/AppButton";
 import { AuthFooter } from "@/components/auth/AuthFooter";
 
-export const Signup = () => {
+const Signup = () => {
   usePageTitle("Signup");
   const navigate = useNavigate();
 
@@ -258,3 +258,5 @@ export const Signup = () => {
     </AuthLayout>
   );
 };
+
+export default Signup;

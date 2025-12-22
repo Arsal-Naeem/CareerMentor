@@ -19,10 +19,10 @@ export const PublicRoute = ({ children }) => {
 
 // User-protected routes
 export const UserProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
+  const { user, isVerified } = useAuth();
 
   if (!user) return <Navigate to="/auth/login" replace />;
-  if (!(user?.isVerified ?? false))
+  if (!(isVerified ?? false))
     return <Navigate to="/auth/verify-identity" replace />;
   if (user.role === "admin") return <Navigate to="/admin/dashboard" replace />;
 
@@ -31,10 +31,10 @@ export const UserProtectedRoute = ({ children }) => {
 
 // Admin-only routes
 export const AdminProtectedRoute = ({ children }) => {
-  const { user } = useAuth();
+  const { user, isVerified } = useAuth();
 
   if (!user) return <Navigate to="/auth/login" replace />;
-  if (!user.isVerified) return <Navigate to="/auth/verify-identity" replace />;
+  if (!isVerified) return <Navigate to="/auth/verify-identity" replace />;
   if (user.role !== "admin") return <Navigate to="/user/dashboard" replace />;
 
   return children;

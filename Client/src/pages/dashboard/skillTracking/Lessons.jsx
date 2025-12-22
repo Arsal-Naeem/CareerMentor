@@ -33,13 +33,15 @@ const Lessons = () => {
   const [selectedQuiz, setSelectedQuiz] = useState(null);
 
   const { data, isLoading, isError } = useAllUserLessons(moduleId);
-  const { data: quizData, isLoading: isLoadingQuizzes } = useGetAllQuiz(moduleId);
+  const { data: quizData, isLoading: isLoadingQuizzes } =
+    useGetAllQuiz(moduleId);
   const { mutate: addLesson } = useAddUserLesson(moduleId);
 
   if (isLoading) return <DashboardLayout>Loading lessons...</DashboardLayout>;
   if (isError || !data?.success)
     return <DashboardLayout>Failed to load lessons.</DashboardLayout>;
-  if (isLoadingQuizzes) return <DashboardLayout>Loading quizzes...</DashboardLayout>;
+  if (isLoadingQuizzes)
+    return <DashboardLayout>Loading quizzes...</DashboardLayout>;
 
   //console.log("QUIZ DATA IN LESSONS PAGE:", quizData);
   const quizzes = Object.values(quizData).filter((q) => typeof q === "object");
@@ -57,8 +59,6 @@ const Lessons = () => {
     addLesson();
     setShowBuddyWelcome(false);
   };
-
-  console.log("WHOLE LESSON DATA:", data);
 
   return (
     <DashboardLayout>
