@@ -22,8 +22,8 @@ export default function DashboardLayout({ children }) {
 const DashboardHeader = () => {
   const { open, setOpen } = useGlobalContext();
   return (
-    <>
-      <div className="flex flex-row md:flex-col px-3 md:px-10 py-4 md:py-7 md:hidden">
+    <div className="md:hidden">
+      <div className="flex flex-row md:flex-col px-3 md:px-10 py-4 md:py-7">
         <div className="md:hidden">
           <Button
             variant="ghost"
@@ -36,6 +36,6 @@ const DashboardHeader = () => {
         </div>
       </div>
       <hr className="mt-2 px-3 md:mx-10 my-4 md:mt-3 md:mb-4 border-t border-gray-200" />
-    </>
+    </div>
   );
 };

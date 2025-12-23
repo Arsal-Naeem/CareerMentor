@@ -1,29 +1,22 @@
+import { useSignup } from "@/apis/auth/auth.service";
+import { Message } from "@/components/Message";
+import { AuthFooter } from "@/components/auth/AuthFooter";
+import { AppButton } from "@/components/buttons/AppButton";
+import { EyeButton } from "@/components/buttons/EyeButton";
+import { DatePicker } from "@/components/inputs/DatePicker";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { validations } from "@/validations/auth/validations";
 import { useEffect, useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Link, useNavigate } from "react-router-dom";
-import { useSignup } from "@/apis/auth/auth.service";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { Message } from "@/components/Message";
-import { EyeButton } from "@/components/buttons/EyeButton";
-import { validations } from "@/validations/auth/validations";
-import { AppButton } from "@/components/buttons/AppButton";
-import { AuthFooter } from "@/components/auth/AuthFooter";
 
 const Signup = () => {
   usePageTitle("Signup");
   const navigate = useNavigate();
 
-  const [open, setOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -34,7 +27,7 @@ const Signup = () => {
     watch,
     formState: { errors },
   } = useForm({
-    mode: "onTouched",
+    mode: "all",
   });
 
   const password = watch("password");
@@ -111,39 +104,18 @@ const Signup = () => {
               <Controller
                 name="dateOfBirth"
                 control={control}
-                defaultValue={"12/04/2003"}
+                defaultValue="12/04/2003"
                 rules={{ required: "Date of Birth is required" }}
-                render={({ field }) => (
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
-                      <Input
-                        onClick={() => setOpen(true)}
-                        onKeyDown={(e) => e.preventDefault()}
-                        onInput={(e) => e.preventDefault()}
-                        value={
-                          field.value
-                            ? new Date(field.value).toLocaleDateString("en-US")
-                            : ""
-                        }
-                        placeholder="12/04/2003"
-                        className={`cursor-pointer text-left w-full ${
-                          errors.dateOfBirth ? "border-red-500" : ""
-                        }`}
-                      />
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        captionLayout="dropdown"
-                        selected={field.value}
-                        onSelect={(date) => {
-                          field.onChange(date);
-                          field.onBlur();
-                          setOpen(false);
-                        }}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                render={({ field, fieldState }) => (
+                  <DatePicker
+                    value={field.value}
+                    onChange={(date) => {
+                      field.onChange(date);
+                      field.onBlur();
+                    }}
+                    error={!!fieldState.error}
+                    placeholder="12/04/2003"
+                  />
                 )}
               />
 
