@@ -1,28 +1,28 @@
 import { useLogin } from "@/apis/auth/auth.service";
 import { AuthFooter } from "@/components/auth/AuthFooter";
 import { AppButton } from "@/components/buttons/AppButton";
-import { EyeButton } from "@/components/buttons/EyeButton";
+import { InputField } from "@/components/InputField/InputField";
 import { Message } from "@/components/Message";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { validations } from "@/validations/auth/validations";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
+import { LoginFormSchema } from "@/validations";
 
 const Login = () => {
   usePageTitle("Login");
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
   const { mutate: login, isPending, isError, error, isSuccess } = useLogin();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({ mode: "onTouched" });
+  const { control, handleSubmit } = useForm({
+    mode: "all",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: LoginFormSchema,
+  });
 
   const onSubmit = (data) => {
     login(data);
@@ -43,51 +43,25 @@ const Login = () => {
       <div className="flex flex-col justify-between md:h-full">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-2 text-custom-black-dark"
+          className="flex flex-col gap-4 text-custom-black-dark"
         >
-          {/* Email */}
-          <div className="col-span-2 flex flex-col gap-2">
-            <Label htmlFor="email" className="text-sm font-light">
-              Email Address
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="johndoe@gmail.com"
-              className="rounded-md"
-              {...register("email", validations.email)}
-            />
-            <div className="min-h-[1.25rem] md:min-h-[35px]">
-              <Message message={errors.email?.message} />
-            </div>
-          </div>
+          <InputField
+            name="email"
+            label="Email"
+            htmlFor="email"
+            placeholder="johndoe@gmail.com"
+            control={control}
+          />
 
-          {/* Password */}
-          <div className="col-span-2 flex flex-col gap-2">
-            <div className="grid gap-2 w-full">
-              <Label htmlFor="password" className="text-sm font-light">
-                Password
-              </Label>
-              <div className="relative">
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  className="rounded-md"
-                  {...register("password", validations.password)}
-                />
-                <EyeButton
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                />
-              </div>
-              <div className="min-h-[1.25rem] md:min-h-[35px]">
-                <Message message={errors.password?.message} />
-              </div>
-            </div>
-          </div>
+          <InputField
+            name="password"
+            htmlFor="password"
+            label="Password"
+            type="password"
+            control={control}
+            placeholder="Enter your password"
+          />
 
-          {/* success message */}
           {isSuccess && (
             <div className="col-span-2">
               <Message
@@ -97,7 +71,6 @@ const Login = () => {
             </div>
           )}
 
-          {/* Error Message */}
           {isError && (
             <div className="col-span-2">
               <Message

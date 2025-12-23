@@ -1,36 +1,35 @@
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import usePageTitle from "../../hooks/usePageTitle";
-import AuthLayout from "../../layouts/AuthLayout";
+import { useVerifyOtp } from "@/apis/auth/auth.service";
+import { AppButton } from "@/components/buttons/AppButton";
+import BackButton from "@/components/buttons/BackButton";
+import { Message } from "@/components/Message";
 import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate } from "react-router-dom";
-import { useVerifyOtp } from "@/apis/auth/auth.service";
 import { useEffect } from "react";
-import { Message } from "@/components/Message";
-import { USER_DASHBOARD_ROUTES } from "@/constants/navigation";
-import { AppButton } from "@/components/buttons/AppButton";
-import BackButton from "@/components/buttons/BackButton";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import usePageTitle from "../../hooks/usePageTitle";
+import AuthLayout from "../../layouts/AuthLayout";
+import { OtpSchema } from "@/validations";
 
 const Otp = () => {
   usePageTitle("Verify Your Identity");
   const navigate = useNavigate();
 
   const {
-    register,
     setValue,
     handleSubmit,
     formState: { errors },
-    trigger,
     watch,
   } = useForm({
+    mode: "all",
     defaultValues: {
       otp: "",
     },
+    resolver: OtpSchema,
   });
 
   const otp = watch("otp");
@@ -68,13 +67,11 @@ const Otp = () => {
         >
           <div className="col-span-2 flex flex-col gap-2">
             <Label className="text-sm font-light">OTP</Label>
-
             <InputOTP
               maxLength={6}
               value={otp}
               onChange={(val) => {
-                setValue("otp", val);
-                trigger("otp");
+                setValue("otp", val, { shouldValidate: true });
               }}
               className="flex gap-4 w-full"
             >
@@ -88,21 +85,6 @@ const Otp = () => {
                 ))}
               </InputOTPGroup>
             </InputOTP>
-
-            <input
-              type="hidden"
-              {...register("otp", {
-                required: "OTP is required",
-                minLength: {
-                  value: 6,
-                  message: "OTP must be 6 digits",
-                },
-                maxLength: {
-                  value: 6,
-                  message: "OTP must be 6 digits",
-                },
-              })}
-            />
 
             {isSuccess && (
               <Message

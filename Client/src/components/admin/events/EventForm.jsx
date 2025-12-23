@@ -1,4 +1,5 @@
 import Editor from "@/components/editor/examples/full/editor";
+import { DatePicker } from "@/components/inputs/DatePicker";
 import { TagInput } from "@/components/inputs/TagsInput";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -83,11 +84,10 @@ const EventForm = ({
           <div className="grid sm:grid-cols-2 gap-6">
             <div>
               <Label>Date</Label>
-              <Input
-                type="date"
-                name="date"
+              <DatePicker
                 value={formData.date}
-                onChange={handleChange}
+                onChange={(date) => setFormData((prev) => ({ ...prev, date }))}
+                placeholder="12/04/2003"
               />
             </div>
 

@@ -1,5 +1,6 @@
 import { PublicRoute } from "@/components/protectedRoute/protectedRoutes";
 import { AUTH_ROUTES } from "@/constants/navigation";
+import { Outlet } from "react-router-dom";
 import {
   ForgotPassword,
   Login,
@@ -8,7 +9,6 @@ import {
   ResetPassword,
   Signup,
 } from "./import/AuthRoutes";
-import { Navigate, Outlet } from "react-router-dom";
 
 export const authRouter = [
   {

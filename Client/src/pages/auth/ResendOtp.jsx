@@ -1,16 +1,14 @@
+import { useResendVerificationEmail } from "@/apis/auth/auth.service";
+import { AppButton } from "@/components/buttons/AppButton";
+import BackButton from "@/components/buttons/BackButton";
+import { InputField } from "@/components/InputField/InputField";
+import { Message } from "@/components/Message";
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import BackButton from "@/components/buttons/BackButton";
-import { useResendVerificationEmail } from "@/apis/auth/auth.service";
-import { useForm } from "react-hook-form";
-import { Message } from "@/components/Message";
-import { validations } from "@/validations/auth/validations";
-import { useNavigate } from "react-router-dom";
-import { AppButton } from "@/components/buttons/AppButton";
+import { ResendOtpFormSchema } from "@/validations";
 
 const ResendOtp = () => {
   usePageTitle("Resend Otp");
@@ -26,11 +24,12 @@ const ResendOtp = () => {
     error,
   } = useResendVerificationEmail();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      email: "",
+    },
+    resolver: ResendOtpFormSchema,
+  });
 
   const onSubmit = (data) => {
     const email = data.email;
@@ -41,7 +40,7 @@ const ResendOtp = () => {
       onSuccess: () => {
         console.log("OTP sent successfully");
         navigate("/auth/verify-identity");
-        setCooldown(30); // Set cooldown to 30 seconds
+        setCooldown(30);
       },
       onError: (err) => {
         console.error("Error sending OTP:", err);
@@ -65,24 +64,16 @@ const ResendOtp = () => {
     >
       <div className="flex flex-col justify-between md:h-full">
         <form
-          className="grid grid-cols-2 md:gap-x-5 text-custom-black-dark"
+          className="grid grid-cols-1 gap-4 text-custom-black-dark"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="col-span-2 flex flex-col gap-2">
-            <Label htmlFor="email" className="text-sm font-light">
-              Email Address
-            </Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="johndoe@gmail.com"
-              className="rounded-md"
-              {...register("email", validations.email)}
-            />
-            <div className="min-h-[1.25rem] md:min-h-[35px]">
-              <Message message={errors.email?.message} />
-            </div>
-          </div>
+          <InputField
+            name="email"
+            htmlFor="email"
+            label="Email Address"
+            placeholder="johndoe@gmail.com"
+            control={control}
+          />
 
           {isSuccess && (
             <Message

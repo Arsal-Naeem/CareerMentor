@@ -35,3 +35,7 @@ export const getInitials = (firstName = "", lastName = "") => {
   const lastInitial = lastName ? lastName.charAt(0).toUpperCase() : "";
   return firstInitial + lastInitial;
 };
+
+export const capitalizeFirstChar = (word = "") => {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+};

@@ -4,8 +4,9 @@ import AdminDashboardLayout from "@/layouts/AdmindashboardLayout";
 
 const AddEvent = () => {
   usePageTitle("Add New Event");
+
   const handleCreate = (data) => {
-    console.log("Form data", data);
+    console.log("Add Event Form data", data);
     // TODO: api call here
   };
 

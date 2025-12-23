@@ -1,32 +1,19 @@
-import { Button } from "@/components/ui/button";
+import { useVerifyToken } from "@/apis/auth/auth.service";
+import { AppButton } from "@/components/buttons/AppButton";
+import BackButton from "@/components/buttons/BackButton";
+import { InputField } from "@/components/InputField/InputField";
+import { Message } from "@/components/Message";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import BackButton from "@/components/buttons/BackButton";
-import { useNavigate, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { validations } from "@/validations/auth/validations";
-import { Message } from "@/components/Message";
-import { useVerifyToken } from "@/apis/auth/auth.service";
-import { EyeButton } from "@/components/buttons/EyeButton";
-import { useState } from "react";
-import { AppButton } from "@/components/buttons/AppButton";
 
 const ResetPassword = () => {
   usePageTitle("Reset Password");
   const navigate = useNavigate();
   const { token } = useParams();
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { control, handleSubmit } = useForm();
 
   const {
     mutate: verifyToken,
@@ -35,8 +22,6 @@ const ResetPassword = () => {
     isError,
     error,
   } = useVerifyToken();
-
-  const password = watch("password");
 
   const onSubmit = (data) => {
     verifyToken(
@@ -62,59 +47,26 @@ const ResetPassword = () => {
     >
       <div className="flex flex-col justify-between md:h-full">
         <form
-          className="grid grid-cols-2 gap-y-5 md:gap-5 text-custom-black-dark"
+          className="flex flex-col gap-4 text-custom-black-dark"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <div className="col-span-2 flex flex-col gap-2">
-            <Label htmlFor="password" className="text-sm font-light">
-              New Password
-            </Label>
-            <div className="relative">
-              <Input
-                id="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                className="rounded-md"
-                {...register("password", validations.password)}
-              />
-              <EyeButton
-                showPassword={showPassword}
-                setShowPassword={setShowPassword}
-              />
-            </div>
-            {errors.password && (
-              <div className="min-h-[1.25rem] md:min-h-[35px]">
-                <Message message={errors.password.message} />
-              </div>
-            )}
-          </div>
-          <div className="col-span-2 flex flex-col gap-2">
-            <Label htmlFor="confirmPassword" className="text-sm font-light">
-              Confirm New Password
-            </Label>
-            <div className="relative">
-              <Input
-                id="confirmPassword"
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                className="rounded-md"
-                {...register("confirmPassword", {
-                  ...validations.password,
-                  validate: (value) =>
-                    value === password || "Passwords do not match",
-                })}
-              />
-              <EyeButton
-                showPassword={showConfirmPassword}
-                setShowPassword={setShowConfirmPassword}
-              />
-            </div>
-            {errors.confirmPassword && (
-              <div className="min-h-[1.25rem] md:min-h-[35px]">
-                <Message message={errors.confirmPassword.message} />
-              </div>
-            )}
-          </div>
+          <InputField
+            name="password"
+            htmlFor="password"
+            type="password"
+            placeholder="Enter your new password"
+            control={control}
+            className="col-span-1"
+          />
+
+          <InputField
+            name="confirmPassword"
+            htmlFor="confirmPassword"
+            type="password"
+            placeholder="Confirm your new password"
+            control={control}
+          />
+
           {isSuccess && (
             <div className="col-span-2">
               <Message
@@ -129,7 +81,8 @@ const ResetPassword = () => {
             <div className="col-span-2">
               <Message
                 message={`${
-                  error?.response?.data?.message || "Login failed. Try again."
+                  error?.response?.data?.message ||
+                  "Password  reset failed. Try again."
                 }`}
               />
             </div>
