@@ -51,6 +51,7 @@ const Login = () => {
             htmlFor="email"
             placeholder="johndoe@gmail.com"
             control={control}
+            showAsterisk
           />
 
           <InputField
@@ -60,6 +61,7 @@ const Login = () => {
             type="password"
             control={control}
             placeholder="Enter your password"
+            showAsterisk
           />
 
           {isSuccess && (

@@ -66,7 +66,9 @@ const Otp = () => {
           className="grid grid-cols-2 gap-5 text-custom-black-dark"
         >
           <div className="col-span-2 flex flex-col gap-2">
-            <Label className="text-sm font-light">OTP</Label>
+            <Label className="text-sm font-light">
+              OTP <span className="text-red-500">&nbsp;*</span>
+            </Label>
             <InputOTP
               maxLength={6}
               value={otp}

@@ -19,7 +19,7 @@ const EditBlog = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (data) => {
-    // console.log("Edit blog form data", data);
+    console.log("Edit blog form data", data);
   };
 
   return (

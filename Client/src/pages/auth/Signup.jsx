@@ -62,6 +62,7 @@ const Signup = () => {
             placeholder="John"
             control={control}
             label="First Name"
+            showAsterisk
           />
           <InputField
             name="lastName"
@@ -69,6 +70,7 @@ const Signup = () => {
             placeholder="Doe"
             control={control}
             label="Last Name"
+            showAsterisk
           />
 
           <InputField
@@ -78,6 +80,7 @@ const Signup = () => {
             component={DatePicker}
             control={control}
             placeholder="12/03/2005"
+            showAsterisk
           />
 
           <InputField
@@ -86,6 +89,7 @@ const Signup = () => {
             htmlFor="email"
             control={control}
             placeholder="johndoe@gmail.com"
+            showAsterisk
           />
 
           <InputField
@@ -95,6 +99,7 @@ const Signup = () => {
             type="password"
             control={control}
             placeholder="Enter your password"
+            showAsterisk
           />
 
           <InputField
@@ -104,6 +109,7 @@ const Signup = () => {
             type="password"
             control={control}
             placeholder="Confirm your password"
+            showAsterisk
           />
 
           {isSuccess && (

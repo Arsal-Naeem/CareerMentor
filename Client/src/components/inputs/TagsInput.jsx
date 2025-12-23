@@ -3,14 +3,16 @@ import { useState } from "react";
 import { Badge } from "../ui/badge";
 import { Input } from "../ui/input";
 import { X } from "lucide-react";
+import { InputWrapper } from "../InputWrapper/InputWrapper";
 
 export function TagInput({
   value = [],
   onChange,
-  name,
   placeholder = "",
-  label,
   disabled,
+  name,
+  label,
+  error,
   ...rest
 }) {
   const [inputValue, setInputValue] = useState("");
@@ -37,16 +39,18 @@ export function TagInput({
 
   return (
     <div className="space-y-4">
-      <Input
-        placeholder={placeholder}
-        value={inputValue}
-        label={label}
-        name={name}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleKeyDown}
-        disabled={disabled}
-        {...rest}
-      />
+      <InputWrapper name={name} label={label} error={error}>
+        <Input
+          placeholder={placeholder}
+          value={inputValue}
+          label={label}
+          name={name}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          {...rest}
+        />
+      </InputWrapper>
 
       <ShowTags
         containerClassName="flex-wrap"

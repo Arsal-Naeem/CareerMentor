@@ -23,7 +23,12 @@ export const DatePicker = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <InputWrapper name={name} label={label} error={error}>
+    <InputWrapper
+      showAsterisk={rest.showAsterisk}
+      name={name}
+      label={label}
+      error={error}
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Input

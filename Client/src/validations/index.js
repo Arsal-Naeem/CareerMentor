@@ -34,3 +34,46 @@ export const ResendOtpFormSchema = yupResolver(
     email: EmailSchema,
   })
 );
+
+export const EventFormSchema = yupResolver(
+  yup.object({
+    name: yup.string().trim().required("Event name is required"),
+    description: yup.mixed().nullable().required("Description is required"),
+    date: yup.date().nullable().required("Event date is required"),
+    venue: yup.string().trim().required("Venue is required"),
+    startTime: yup.string().required("Start time is required"),
+    endTime: yup
+      .string()
+      .required("End time is required")
+      .test(
+        "time-comparison",
+        "End time must be greater than start time",
+        function (endTime) {
+          const { startTime } = this.parent;
+
+          if (!startTime || !endTime) return true;
+
+          if (startTime === endTime) {
+            return this.createError({
+              message: "Start time and end time cannot be the same",
+            });
+          }
+
+          if (endTime < startTime) {
+            return this.createError({
+              message: "End time must be later than start time",
+            });
+          }
+
+          return true;
+        }
+      ),
+    registrationLink: yup
+      .string()
+      .required("Registration link is required")
+      .url("Enter a valid URL")
+      .nullable(),
+    tags: yup.array().of(yup.string()).optional(),
+    status: yup.string().oneOf(["pending", "approved", "rejected"]).required(),
+  })
+);

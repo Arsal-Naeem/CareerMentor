@@ -143,7 +143,7 @@ export const AddEditBlogForm = ({ initialData, onSubmit }) => {
           Tags
         </label>
         <TagInput
-          label="Tags"
+          label=""
           name="tags"
           placeholder="Press enter to add a tag"
           value={tags}

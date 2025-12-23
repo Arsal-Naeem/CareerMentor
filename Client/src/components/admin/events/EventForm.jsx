@@ -1,10 +1,10 @@
 import Editor from "@/components/editor/examples/full/editor";
+import { InputField } from "@/components/InputField/InputField";
 import { DatePicker } from "@/components/inputs/DatePicker";
 import { TagInput } from "@/components/inputs/TagsInput";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { EventFormSchema } from "@/validations";
+import { useForm } from "react-hook-form";
 
 const EventForm = ({
   initialValues,
@@ -12,42 +12,33 @@ const EventForm = ({
   submitLabel = "Save Event",
   loading = false,
 }) => {
-  const [formData, setFormData] = useState(
-    initialValues
-      ? initialValues
-      : {
-          name: "",
-          description: null,
-          date: "",
-          time: "",
-          venue: "",
-          registrationLink: "",
-          status: "pending",
-          tags: [],
-        }
-  );
-  const [tags, setTags] = useState(initialValues?.tags ?? []);
+  const { control, handleSubmit } = useForm({
+    defaultValues: initialValues || {
+      name: "",
+      description: initialValues?.description || null,
+      date: null,
+      venue: "",
+      startTime: "",
+      endTime: "",
+      registrationLink: "",
+      tags: [],
+      status: "pending",
+    },
+    resolver: EventFormSchema,
+  });
 
-  const [descriptionContent, setDescriptionContent] = useState(
-    initialValues?.description ? initialValues.description : null
-  );
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((p) => ({ ...p, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmitForm = (data) => {
     onSubmit({
-      ...formData,
-      tags,
-      description: JSON.stringify(descriptionContent),
+      ...data,
+      description: JSON.stringify(data.description),
     });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-10 grow">
+    <form
+      onSubmit={handleSubmit(onSubmitForm)}
+      className="flex flex-col gap-10 grow"
+    >
       <div className="space-y-8">
         {/* Event Info */}
         <section className="space-y-4">
@@ -56,21 +47,22 @@ const EventForm = ({
           </h2>
 
           <div className="space-y-3 col-span-1 lg:col-span-2">
-            <Label>Event Name</Label>
-            <Input
+            <InputField
               name="name"
-              value={formData.name}
-              onChange={handleChange}
+              label="Event Name"
               placeholder="e.g. AI Career Fair 2025"
-              className="lg:max-w-md"
+              control={control}
+              showAsterisk
             />
           </div>
 
           <div className="space-y-3 col-span-1 lg:col-span-2">
-            <Label>Description</Label>
-            <Editor
-              initialContent={descriptionContent}
-              onChange={(content) => setDescriptionContent(content)}
+            <InputField
+              name="description"
+              label="Description"
+              component={Editor}
+              control={control}
+              showAsterisk
             />
           </div>
         </section>
@@ -82,45 +74,38 @@ const EventForm = ({
           </h2>
 
           <div className="grid sm:grid-cols-2 gap-6">
-            <div>
-              <Label>Date</Label>
-              <DatePicker
-                value={formData.date}
-                onChange={(date) => setFormData((prev) => ({ ...prev, date }))}
-                placeholder="12/04/2003"
-              />
-            </div>
+            <InputField
+              name="date"
+              label="Date"
+              component={DatePicker}
+              control={control}
+              placeholder="12/04/2003"
+              showAsterisk
+            />
 
-            <div>
-              <Label>Venue</Label>
-              <Input
-                name="venue"
-                value={formData.venue}
-                onChange={handleChange}
-                placeholder="Venue or Online"
-              />
-            </div>
+            <InputField
+              name="venue"
+              label="Venue"
+              placeholder="Venue or Online"
+              control={control}
+              showAsterisk
+            />
 
-            <div>
-              <Label>Start Time</Label>
-              <Input
-                type="time"
-                name="startTime"
-                value={formData.startTime}
-                onChange={handleChange}
-                className="w-full"
-              />
-            </div>
+            <InputField
+              name="startTime"
+              label="Start Time"
+              type="time"
+              control={control}
+              showAsterisk
+            />
 
-            <div>
-              <Label>End Time</Label>
-              <Input
-                type="time"
-                name="endTime"
-                value={formData.endTime}
-                onChange={handleChange}
-              />
-            </div>
+            <InputField
+              name="endTime"
+              label="End Time"
+              type="time"
+              control={control}
+              showAsterisk
+            />
           </div>
         </section>
 
@@ -131,32 +116,32 @@ const EventForm = ({
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div className="space-y-4">
-              <Label>Tags</Label>
-              <TagInput
-                name="tags"
-                placeholder="Enter tags..."
-                value={tags}
-                onChange={setTags}
-              />
-            </div>
-            <div className="space-y-4">
-              <Label>Registration Link</Label>
-              <Input
-                name="registrationLink"
-                value={formData.registrationLink}
-                onChange={handleChange}
-                placeholder="https://..."
-                type="url"
-              />
-            </div>
+            <InputField
+              name="registrationLink"
+              label="Registration Link"
+              placeholder="https://..."
+              type="url"
+              control={control}
+              showAsterisk
+            />
+
+            <InputField
+              name="tags"
+              label="Tags"
+              component={TagInput}
+              control={control}
+              placeholder="Enter tags..."
+            />
           </div>
         </section>
       </div>
 
       {/* Actions */}
       <div className="w-full md:w-fit md:self-end">
-        <Button className="w-full bg-custom-text-orange" disabled={loading}>
+        <Button
+          className="w-full bg-custom-text-orange hover:bg-custom-orange"
+          disabled={loading}
+        >
           {submitLabel}
         </Button>
       </div>

@@ -11,6 +11,7 @@ export const InputWrapper = ({
   error,
   labelClassName,
   inputWrapperClassName,
+  showAsterisk,
 }) => {
   return (
     <div className={clsx("flex flex-col gap-2", inputWrapperClassName)}>
@@ -18,7 +19,8 @@ export const InputWrapper = ({
         className={clsx("text-sm font-light", labelClassName)}
         htmlFor={name}
       >
-        {label ? label : capitalizeFirstChar(name)}
+        {label ? label : ""}
+        {showAsterisk && <span className="text-red-500">&nbsp;*</span>}
       </Label>
       {children}
       {error && <ShowError message={error} />}

@@ -13,6 +13,7 @@ export const BasicTextInput = ({
   error,
   disabled,
   label,
+  showAsterisk,
   isCommaSeparated = false,
   ...rest
 }) => {
@@ -27,7 +28,12 @@ export const BasicTextInput = ({
   };
 
   return (
-    <InputWrapper name={name} label={label} error={error}>
+    <InputWrapper
+      name={name}
+      label={label}
+      error={error}
+      showAsterisk={showAsterisk}
+    >
       <div className="relative">
         <Component
           id={name}

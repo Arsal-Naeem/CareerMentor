@@ -10,6 +10,7 @@ export const InputField = ({
   control,
   disabled = false,
   component: Component = BasicTextInput,
+  showAsterisk = false,
   // on change, value etc
   ...rest
 }) => {
@@ -32,6 +33,9 @@ export const InputField = ({
         label={label}
         error={error?.message ?? ""}
         isError={Boolean(error?.message) ?? false}
+        initialContent={field.value}
+        showAsterisk={showAsterisk}
+        onChange={field.onChange}
         {...field}
         // also handles the extra props passed to the rendered component
         {...rest}

@@ -52,6 +52,7 @@ const ForgotPassword = () => {
             label="Email Address"
             control={control}
             placeholder="johndoe@gmail.com"
+            showAsterisk
           />
 
           {isSuccess && (

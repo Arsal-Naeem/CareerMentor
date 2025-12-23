@@ -73,6 +73,7 @@ const ResendOtp = () => {
             label="Email Address"
             placeholder="johndoe@gmail.com"
             control={control}
+            showAsterisk
           />
 
           {isSuccess && (

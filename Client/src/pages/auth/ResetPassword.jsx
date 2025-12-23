@@ -57,6 +57,8 @@ const ResetPassword = () => {
             placeholder="Enter your new password"
             control={control}
             className="col-span-1"
+            label="Password"
+            showAsterisk
           />
 
           <InputField
@@ -65,6 +67,8 @@ const ResetPassword = () => {
             type="password"
             placeholder="Confirm your new password"
             control={control}
+            label="Confirm Password"
+            showAsterisk
           />
 
           {isSuccess && (
