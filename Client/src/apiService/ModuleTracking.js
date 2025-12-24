@@ -1,5 +1,6 @@
 import { API_ROUTES } from "@/constants/apiUrls";
 import { API_MODES } from "@/constants/enums";
+import axiosReq from "@/services/axiosHelper";
 import { useQuery } from "@tanstack/react-query";
 
 export const GetUserEnrolledModule = (domainId, page = 1, perPage = 6) => {

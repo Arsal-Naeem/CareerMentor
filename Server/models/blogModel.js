@@ -2,14 +2,14 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../config/connectDB.js";
 
 const Blogs = sequelize.define("Blogs", {
-title: {
+  title: {
     type: DataTypes.STRING,
     allowNull: false,
   },
   coverImage: {
-  type: DataTypes.STRING,
-  allowNull: true,
-},
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   shortDesc: {
     type: DataTypes.STRING(300),
     allowNull: false,
@@ -30,10 +30,10 @@ title: {
     type: DataTypes.ENUM("pending", "approved", "rejected"),
     defaultValue: "pending",
   },
-   timeToRead: {
+  timeToRead: {
     type: DataTypes.INTEGER, // in minutes
     allowNull: true,
   },
-})
+});
 
 export default Blogs;

@@ -1,6 +1,7 @@
 import { API_ROUTES } from "@/constants/apiUrls";
 import { API_MODES } from "@/constants/enums";
 import { useAuth } from "@/context/AuthContext";
+import axiosReq from "@/services/axiosHelper";
 import { saveItemToStorage } from "@/utils/helpers/storage/localStorage";
 import { useMutation } from "@tanstack/react-query";
 

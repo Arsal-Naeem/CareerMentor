@@ -1,5 +1,6 @@
 import { ADMIN_API_ROUTES, API_ROUTES } from "@/constants/apiUrls";
 import { API_MODES } from "@/constants/enums";
+import axiosReq from "@/services/axiosHelper";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
