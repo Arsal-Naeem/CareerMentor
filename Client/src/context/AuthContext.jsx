@@ -1,10 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useLogout } from "@/apis/auth/auth.service";
 import {
   getItemFromStorage,
   removeItemFromStorage,
   saveItemToStorage,
 } from "@/utils/helpers/storage/localStorage";
+import { LogoutMutation } from "@/apiService/Auth";
 
 const AuthContext = createContext();
 
@@ -17,9 +17,8 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const logoutMutation = useLogout({
+  const logoutMutation = LogoutMutation({
     onSuccess: () => {
-      console.log("user logged out successfully");
       removeItemFromStorage("user");
       setUser(null);
       window.location.replace("/auth/login");

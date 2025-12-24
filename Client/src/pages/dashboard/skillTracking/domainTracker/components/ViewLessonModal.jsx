@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import {
+  GetSingleLessonDetails,
+  UpdateUserLessonStatus,
+} from "@/apiService/LessonTracking";
+import thumbsUp from "@/assets/mascot/thumbsUp.webp";
 import {
   Dialog,
   DialogContent,
@@ -7,12 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, X } from "lucide-react";
-import {
-  useGetSingleLessonDetails,
-  useUpdateStatusLesson,
-} from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
-
-import thumbsUp from "@/assets/mascot/thumbsUp.webp";
+import { useEffect, useState } from "react";
 
 const ViewLessonModal = ({ open, onClose, lesson }) => {
   const lessonId = lesson?.id;
@@ -21,12 +20,12 @@ const ViewLessonModal = ({ open, onClose, lesson }) => {
   const [unlockMessage, setUnlockMessage] = useState("");
   const [showMascotNotification, setShowMascotNotification] = useState(false);
 
-  const { data, isLoading, isError, refetch } = useGetSingleLessonDetails(
+  const { data, isLoading, isError, refetch } = GetSingleLessonDetails(
     lessonId,
     { enabled: !!lessonId }
   );
 
-  const { mutateAsync: updateStatus } = useUpdateStatusLesson();
+  const { mutateAsync: updateStatus } = UpdateUserLessonStatus();
 
   useEffect(() => {
     if (data?.userProgress?.status) {

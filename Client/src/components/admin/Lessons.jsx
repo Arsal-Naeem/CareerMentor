@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { Star, BookOpen, Plus, ArrowLeft, Eye, Trash } from "lucide-react";
 import {
-  useAllModuleLessonAdmin,
-  useDeleteLessonAdmin,
-} from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
+  DeleteAdminLesson,
+  GetAllAdminLessonModules,
+} from "@/apiService/LessonTracking";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { ArrowLeft, BookOpen, Eye, Plus, Star, Trash } from "lucide-react";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AddLessonModal from "./AddLessonModal";
 import ViewLessonModal from "./ViewLessonModal";
 
@@ -16,13 +16,12 @@ const Lesson = () => {
   const { moduleId } = useParams();
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } =
-    useAllModuleLessonAdmin(moduleId);
-  const deleteLessonMutation = useDeleteLessonAdmin(); 
+    GetAllAdminLessonModules(moduleId);
+  const deleteLessonMutation = DeleteAdminLesson();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
-
 
   if (isLoading)
     return (
@@ -125,7 +124,7 @@ const Lesson = () => {
                 key={lesson.id}
                 className="rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition"
               >
-              {console.log("Rendering Lesson ID:", lesson.sequence)}
+                {console.log("Rendering Lesson ID:", lesson.sequence)}
                 <CardContent className="p-5 flex flex-col h-full justify-between">
                   <div>
                     <h3 className="text-sm font-semibold text-gray-900 mb-2">

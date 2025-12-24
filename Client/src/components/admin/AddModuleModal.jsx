@@ -1,20 +1,31 @@
-import React from "react";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Card, CardContent } from "@/components/ui/card";
+import { GetAdminAllModulesFromDomain } from "@/apiService/SkillTracking";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import { Controller, useForm } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
-import { useAdminAllModulesFromDomain } from "@/apis/skillTracking/skillTracking.services";
+import { Controller, useForm } from "react-hook-form";
 
 const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
-
   //FIX: PREREQUESTMODULEID GOING NULL EVERYTIME AND TYPEID ALSO
-  const { data: modulesData } = useAdminAllModulesFromDomain(domainId);
+  const { data: modulesData } = GetAdminAllModulesFromDomain(domainId);
 
-  const { register, handleSubmit, control, reset, formState: { isSubmitting } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { isSubmitting },
+  } = useForm({
     defaultValues: {
       title: "",
       description: "",
@@ -29,11 +40,13 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
 
   const handleFormSubmit = async (data) => {
     const payload = {
-    ...data,
-    typeId: Number(data.typeId),
-    prerequisiteModuleId: data.prerequisiteModuleId ? Number(data.prerequisiteModuleId) : null,
-  };
-  await onSubmit(payload);
+      ...data,
+      typeId: Number(data.typeId),
+      prerequisiteModuleId: data.prerequisiteModuleId
+        ? Number(data.prerequisiteModuleId)
+        : null,
+    };
+    await onSubmit(payload);
     reset();
     setOpen(false);
   };
@@ -59,7 +72,9 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           {/* Title */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Module Title</label>
+            <label className="text-sm font-medium text-gray-700">
+              Module Title
+            </label>
             <div className="flex items-center gap-2">
               <Input
                 placeholder="Enter module title"
@@ -74,7 +89,9 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
 
           {/* Description */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Description</label>
+            <label className="text-sm font-medium text-gray-700">
+              Description
+            </label>
             <Textarea
               placeholder="Enter module description"
               {...register("description", { required: true })}
@@ -84,12 +101,17 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
           {/* Badge */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-medium text-gray-700">Badge</label>
-            <Input placeholder="Enter badge identifier" {...register("badge")} />
+            <Input
+              placeholder="Enter badge identifier"
+              {...register("badge")}
+            />
           </div>
 
           {/* Total XP */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Total XP</label>
+            <label className="text-sm font-medium text-gray-700">
+              Total XP
+            </label>
             <Input
               type="number"
               placeholder="Enter total XP"
@@ -99,7 +121,9 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
 
           {/* Sequence */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Sequence</label>
+            <label className="text-sm font-medium text-gray-700">
+              Sequence
+            </label>
             <Input
               type="number"
               placeholder="Enter sequence"
@@ -109,7 +133,9 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
 
           {/* Module Type */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Module Type</label>
+            <label className="text-sm font-medium text-gray-700">
+              Module Type
+            </label>
             <Controller
               name="typeId"
               control={control}
@@ -128,7 +154,9 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
 
           {/* Prerequisite Module */}
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Prerequisite Module</label>
+            <label className="text-sm font-medium text-gray-700">
+              Prerequisite Module
+            </label>
             <Controller
               name="prerequisiteModuleId"
               control={control}
@@ -154,7 +182,12 @@ const AddModuleModal = ({ open, setOpen, onSubmit, domainId }) => {
             <Controller
               name="isFeatured"
               control={control}
-              render={({ field }) => <Switch checked={field.value} onCheckedChange={field.onChange} />}
+              render={({ field }) => (
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              )}
             />
           </div>
 

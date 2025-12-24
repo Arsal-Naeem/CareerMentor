@@ -1,21 +1,20 @@
-import React from "react";
+import { AddNewAdminLesson } from "@/apiService/LessonTracking";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useForm, useFieldArray } from "react-hook-form";
+import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2 } from "lucide-react";
-import { useAddNewLessonAdmin } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
+import { useFieldArray, useForm } from "react-hook-form";
 
 const AddLessonTabs = ({ open, onClose, moduleId }) => {
-  const { mutateAsync: addLesson, isLoading } = useAddNewLessonAdmin(moduleId);
+  const { mutateAsync: addLesson, isLoading } = AddNewAdminLesson(moduleId);
 
   const {
     control,

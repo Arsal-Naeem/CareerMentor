@@ -1,14 +1,14 @@
+import { GetRoadmaps } from "@/apiService/Roadmaps";
+import { EnrollInCareerDomain } from "@/apiService/SkillTracking";
 import { BreadCrumb } from "@/components/careerAssessment/BreadCrumb";
+import ModuleCard from "@/components/roadmap/ModuleCard";
+import { Button } from "@/components/ui/button";
 import { useGlobalContext } from "@/context/GlobalContext";
 import usePageTitle from "@/hooks/usePageTitle";
-import { useRoadmaps } from "@/apis/roadMaps/roadmap.services";
-import DashboardLayout from "@/layouts/DashboardLayout";
-import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useEnrollInCareerDomain } from "@/apis/skillTracking/skillTracking.services";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import ModuleCard from "@/components/roadmap/ModuleCard";
+import DashboardLayout from "@/layouts/DashboardLayout";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const ViewRoadMap = () => {
   const { id } = useParams();
@@ -17,10 +17,8 @@ const ViewRoadMap = () => {
   const [expandedModuleId, setExpandedModuleId] = useState(null);
   const { isSmallScreen } = useScreenSize();
 
-  const { data: roadmapData, isLoading } = useRoadmaps(id);
-  console.log("Roadmap Data:", roadmapData);
-  const { mutate: enrollDomain, isPending: enrolling } =
-    useEnrollInCareerDomain();
+  const { data: roadmapData, isLoading } = GetRoadmaps(id);
+  const { mutate: enrollDomain, isPending: enrolling } = EnrollInCareerDomain();
 
   useEffect(() => {
     setBreadcrumbText(`Roadmaps/${roadmapData?.domain?.title}`);

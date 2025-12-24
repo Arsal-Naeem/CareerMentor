@@ -1,4 +1,3 @@
-import { useForgotPassword } from "@/apis/auth/auth.service";
 import { AppButton } from "@/components/buttons/AppButton";
 import BackButton from "@/components/buttons/BackButton";
 import { InputField } from "@/components/InputField/InputField";
@@ -7,6 +6,7 @@ import { ResendOtpFormSchema } from "@/validations";
 import { useForm } from "react-hook-form";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
+import { ForgotPasswordMutation } from "@/apiService/Auth";
 
 const ForgotPassword = () => {
   usePageTitle("Forgot Password");
@@ -17,7 +17,7 @@ const ForgotPassword = () => {
     isSuccess,
     isError,
     error,
-  } = useForgotPassword();
+  } = ForgotPasswordMutation();
 
   const { control, handleSubmit } = useForm({
     defaultValues: {

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { StartQuiz } from "@/apiService/QuizTracking";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useStartQuiz } from "@/apis/skillTracking/quizTracking/quizetracking.api";
 import { Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const QuizModal = ({ open, onClose, quiz }) => {
   const [questions, setQuestions] = useState([]);
@@ -16,7 +16,7 @@ const QuizModal = ({ open, onClose, quiz }) => {
   const [userAnswers, setUserAnswers] = useState([]);
   const [preparing, setPreparing] = useState(true);
 
-  const { data, isLoading } = useStartQuiz(quiz?.id, {
+  const { data, isLoading } = StartQuiz(quiz?.id, {
     enabled: !!quiz,
   });
 
@@ -74,82 +74,84 @@ const QuizModal = ({ open, onClose, quiz }) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent
-  className="max-w-lg max-h-[80vh] flex flex-col"
->
-  <DialogHeader>
-    <DialogTitle className="text-xl font-semibold text-gray-900">
-      {quiz.quizTitle}
-    </DialogTitle>
-  </DialogHeader>
+      <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-semibold text-gray-900">
+            {quiz.quizTitle}
+          </DialogTitle>
+        </DialogHeader>
 
-  <Separator className="my-3" />
+        <Separator className="my-3" />
 
-  {currentQuestion && (
-    <div className="space-y-6 overflow-y-auto flex-1 pr-2">
-      {/* Question Progress Bar */}
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-700">
-          Question {currentIndex + 1}/{questions.length}
-        </span>
-        <span className="text-sm font-medium text-gray-700">
-          {Math.round(progressPercent)}%
-        </span>
-      </div>
-      <div className="w-full bg-[#FFD272] rounded-full h-3 overflow-hidden">
-        <div
-          className="h-3 transition-all duration-300"
-          style={{ width: `${progressPercent}%`, backgroundColor: "#59A4C0" }}
-        />
-      </div>
+        {currentQuestion && (
+          <div className="space-y-6 overflow-y-auto flex-1 pr-2">
+            {/* Question Progress Bar */}
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium text-gray-700">
+                Question {currentIndex + 1}/{questions.length}
+              </span>
+              <span className="text-sm font-medium text-gray-700">
+                {Math.round(progressPercent)}%
+              </span>
+            </div>
+            <div className="w-full bg-[#FFD272] rounded-full h-3 overflow-hidden">
+              <div
+                className="h-3 transition-all duration-300"
+                style={{
+                  width: `${progressPercent}%`,
+                  backgroundColor: "#59A4C0",
+                }}
+              />
+            </div>
 
-      {/* Question */}
-      <p className="text-gray-800 font-medium mt-4 break-words whitespace-pre-wrap">
-        {currentQuestion.text}
-      </p>
+            {/* Question */}
+            <p className="text-gray-800 font-medium mt-4 break-words whitespace-pre-wrap">
+              {currentQuestion.text}
+            </p>
 
-      {/* Options */}
-      <div className="grid gap-3">
-        {currentQuestion.options.map((opt, idx) => (
-          <Button
-            key={idx}
-            variant={userAnswers[currentIndex] === opt ? "default" : "outline"}
-            className="w-full text-left break-words whitespace-pre-wrap"
-            onClick={() => handleSelectAnswer(opt)}
-          >
-            {opt}
-          </Button>
-        ))}
-      </div>
+            {/* Options */}
+            <div className="grid gap-3">
+              {currentQuestion.options.map((opt, idx) => (
+                <Button
+                  key={idx}
+                  variant={
+                    userAnswers[currentIndex] === opt ? "default" : "outline"
+                  }
+                  className="w-full text-left break-words whitespace-pre-wrap"
+                  onClick={() => handleSelectAnswer(opt)}
+                >
+                  {opt}
+                </Button>
+              ))}
+            </div>
 
-      {/* Navigation */}
-      <div className="flex justify-between gap-2 mt-4">
-        {currentIndex > 0 && (
-          <Button
-            variant="outline"
-            className="flex-1"
-            onClick={() => setCurrentIndex(currentIndex - 1)}
-          >
-            Previous
-          </Button>
+            {/* Navigation */}
+            <div className="flex justify-between gap-2 mt-4">
+              {currentIndex > 0 && (
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setCurrentIndex(currentIndex - 1)}
+                >
+                  Previous
+                </Button>
+              )}
+              <Button className="flex-1" onClick={handleNext}>
+                {currentIndex === questions.length - 1 ? "Finish Quiz" : "Next"}
+              </Button>
+            </div>
+
+            {/* Close Button */}
+            <Button
+              variant="ghost"
+              className="w-full mt-2 text-gray-700"
+              onClick={onClose}
+            >
+              Close Quiz
+            </Button>
+          </div>
         )}
-        <Button className="flex-1" onClick={handleNext}>
-          {currentIndex === questions.length - 1 ? "Finish Quiz" : "Next"}
-        </Button>
-      </div>
-
-      {/* Close Button */}
-      <Button
-        variant="ghost"
-        className="w-full mt-2 text-gray-700"
-        onClick={onClose}
-      >
-        Close Quiz
-      </Button>
-    </div>
-  )}
-</DialogContent>
-
+      </DialogContent>
     </Dialog>
   );
 };

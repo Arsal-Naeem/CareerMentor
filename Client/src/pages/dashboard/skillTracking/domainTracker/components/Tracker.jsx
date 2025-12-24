@@ -1,7 +1,4 @@
-import {
-  GetAllModulesFromDomain,
-  GetUserEnrolledModule,
-} from "@/apis/skillTracking/moduleTracking/moduleTracking.services";
+import { GetUserEnrolledModule } from "@/apiService/ModuleTracking";
 import { OutlinedActionButton } from "@/components/buttons/OutlinedActionButton";
 import { ActionDropdown } from "@/components/dropdowns/ActionDropdown";
 import CertificationModal from "@/components/modals/CertificationModal";
@@ -10,15 +7,11 @@ import { OrangeProgressBar } from "@/components/OrangeProgressBar";
 import TrackerSkeletons from "@/components/skeletons/skillTracking/tracker/TrackerSkeletons";
 import { BuddyConversation } from "@/components/skillTracking/buddy/BuddyConversation";
 import Modules from "@/components/skillTracking/Modules";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Skeleton } from "@/components/ui/skeleton";
 import { domainSkillDropdownItems } from "@/constants";
-import { useScreenSize } from "@/hooks/useScreenSize";
 import { Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";

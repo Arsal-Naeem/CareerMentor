@@ -1,12 +1,10 @@
-import { use, useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useParams } from "react-router-dom";
-import { GetUserEnrolledModule } from "@/apis/skillTracking/moduleTracking/moduleTracking.services";
 import { SecondaryButton } from "@/components/buttons/SecondaryButton";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 import { format } from "date-fns";
 import {
@@ -17,6 +15,7 @@ import {
   Star,
 } from "lucide-react";
 import ModulesSkeletons from "../skeletons/skillTracking/modules/ModulesSkeletons";
+import { GetUserEnrolledModule } from "@/apiService/ModuleTracking";
 
 const formatDate = (iso) => (iso ? format(new Date(iso), "MMM d, yyyy") : "—");
 

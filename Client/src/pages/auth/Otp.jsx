@@ -1,4 +1,3 @@
-import { useVerifyOtp } from "@/apis/auth/auth.service";
 import { AppButton } from "@/components/buttons/AppButton";
 import BackButton from "@/components/buttons/BackButton";
 import { Message } from "@/components/Message";
@@ -14,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
 import { OtpSchema } from "@/validations";
+import { VerifyOtpMutation } from "@/apiService/Auth";
 
 const Otp = () => {
   usePageTitle("Verify Your Identity");
@@ -40,7 +40,7 @@ const Otp = () => {
     isError,
     error,
     isSuccess,
-  } = useVerifyOtp();
+  } = VerifyOtpMutation();
 
   const onSubmit = (data) => {
     if (data.otp.length === 6) {

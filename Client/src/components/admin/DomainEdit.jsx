@@ -1,25 +1,25 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import { useSingleCareerDomain } from "@/apis/skillTracking/skillTracking.services";
+import { GetSingleCareerDomain } from "@/apiService/SkillTracking";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Edit, ImageIcon, CalendarDays } from "lucide-react";
 import { format } from "date-fns";
+import { CalendarDays, Edit, ImageIcon } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { SecondaryButton } from "../buttons/SecondaryButton";
 
 const DomainEdit = () => {
   const { domainId } = useParams();
-  const { data, isLoading } = useSingleCareerDomain(domainId);
+  const { data, isLoading } = GetSingleCareerDomain(domainId);
 
-  const formatDate = (iso) => (iso ? format(new Date(iso), "MMM d, yyyy") : "—");
+  const formatDate = (iso) =>
+    iso ? format(new Date(iso), "MMM d, yyyy") : "—";
 
   if (isLoading) {
     return (

@@ -1,12 +1,11 @@
+import { GetRoadmaps } from "@/apiService/Roadmaps";
 import { BreadCrumb } from "@/components/careerAssessment/BreadCrumb";
 import { useGlobalContext } from "@/context/GlobalContext";
 import usePageTitle from "@/hooks/usePageTitle";
 import { useScreenSize } from "@/hooks/useScreenSize";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import { useAllCareerDomains } from "@/apis/skillTracking/skillTracking.services";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRoadmaps } from "@/apis/roadMaps/roadmap.services";
 
 const Roadmap = () => {
   usePageTitle("Roadmaps");
@@ -18,7 +17,7 @@ const Roadmap = () => {
     setBreadcrumbText("Roadmaps");
   }, []);
 
-  const { data, isLoading: domainsLoading } = useRoadmaps();
+  const { data, isLoading: domainsLoading } = GetRoadmaps();
 
   console.log("Career Domains Data:", data);
 

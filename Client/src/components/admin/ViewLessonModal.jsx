@@ -1,20 +1,19 @@
-import React, { useEffect } from "react";
+import { GetSingleAdminLesson } from "@/apiService/LessonTracking";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useGetSingleLessonAdmin } from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { Separator } from "../ui/separator";
 
 const ViewLessonModal = ({ open, onClose, lesson }) => {
   const lessonId = lesson?.id;
-  const { data, isLoading, isError, refetch } = useGetSingleLessonAdmin(
-    lessonId,
-    { enabled: !!lessonId }
-  );
+  const { data, isLoading, isError, refetch } = GetSingleAdminLesson(lessonId, {
+    enabled: !!lessonId,
+  });
 
   useEffect(() => {
     if (lessonId) refetch();
@@ -121,9 +120,7 @@ const ViewLessonModal = ({ open, onClose, lesson }) => {
 
                       {/* Description */}
                       {ex.description && (
-                        <p className="text-gray-800 mb-2">
-                          {ex.description}
-                        </p>
+                        <p className="text-gray-800 mb-2">{ex.description}</p>
                       )}
 
                       {/* Optional descriptionPoints */}
@@ -132,9 +129,7 @@ const ViewLessonModal = ({ open, onClose, lesson }) => {
                           <ul className="text-gray-700 list-disc list-inside mb-2 ml-4 space-y-1">
                             {ex.descriptionPoints.map((dp, i) => (
                               <li key={i}>
-                                {dp.label && (
-                                  <strong>{dp.label}: </strong>
-                                )}
+                                {dp.label && <strong>{dp.label}: </strong>}
                                 {dp.description}
                               </li>
                             ))}

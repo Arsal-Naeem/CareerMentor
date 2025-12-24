@@ -1,4 +1,3 @@
-import { useVerifyToken } from "@/apis/auth/auth.service";
 import { AppButton } from "@/components/buttons/AppButton";
 import BackButton from "@/components/buttons/BackButton";
 import { InputField } from "@/components/InputField/InputField";
@@ -7,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
+import { VerifyTokenMutation } from "@/apiService/Auth";
 
 const ResetPassword = () => {
   usePageTitle("Reset Password");
@@ -21,7 +21,7 @@ const ResetPassword = () => {
     isSuccess,
     isError,
     error,
-  } = useVerifyToken();
+  } = VerifyTokenMutation();
 
   const onSubmit = (data) => {
     verifyToken(

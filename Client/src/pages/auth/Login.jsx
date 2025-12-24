@@ -1,4 +1,3 @@
-import { useLogin } from "@/apis/auth/auth.service";
 import { AuthFooter } from "@/components/auth/AuthFooter";
 import { AppButton } from "@/components/buttons/AppButton";
 import { InputField } from "@/components/InputField/InputField";
@@ -9,11 +8,18 @@ import { Link, useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
 import { LoginFormSchema } from "@/validations";
+import { LoginMutation } from "@/apiService/Auth";
 
 const Login = () => {
   usePageTitle("Login");
   const navigate = useNavigate();
-  const { mutate: login, isPending, isError, error, isSuccess } = useLogin();
+  const {
+    mutate: login,
+    isPending,
+    isError,
+    error,
+    isSuccess,
+  } = LoginMutation();
 
   const { control, handleSubmit } = useForm({
     mode: "all",

@@ -1,34 +1,33 @@
-import { BreadCrumb } from "@/components/careerAssessment/BreadCrumb";
-import { useGlobalContext } from "@/context/GlobalContext";
-import usePageTitle from "@/hooks/usePageTitle";
-import DashboardLayout from "@/layouts/DashboardLayout";
-import { Heading } from "./components/Heading";
+import {
+  GetAllCareerDomains,
+  GetUserEnrolledDomains,
+} from "@/apiService/SkillTracking";
 import { OutlinedActionButton } from "@/components/buttons/OutlinedActionButton";
-import { BookOpenCheck, Check, Ellipsis, Plus, Trash2 } from "lucide-react";
 import { SecondaryButton } from "@/components/buttons/SecondaryButton";
+import { BreadCrumb } from "@/components/careerAssessment/BreadCrumb";
+import { ActionDropdown } from "@/components/dropdowns/ActionDropdown";
+import { SelectionDropdown } from "@/components/dropdowns/SelectionDropdown";
+import { OrangeProgressBar } from "@/components/OrangeProgressBar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   careerDomainDropdownItem,
   individualSkills,
   skillDropDownItems,
 } from "@/constants";
-import { OrangeProgressBar } from "@/components/OrangeProgressBar";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuContent,
-} from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
+import { useGlobalContext } from "@/context/GlobalContext";
+import usePageTitle from "@/hooks/usePageTitle";
 import { useScreenSize } from "@/hooks/useScreenSize";
-import { SelectionDropdown } from "@/components/dropdowns/SelectionDropdown";
-import { ActionDropdown } from "@/components/dropdowns/ActionDropdown";
-import {
-  useEnrollInCareerDomain,
-  useAllCareerDomains,
-  useUserEnrolledDomains,
-} from "@/apis/skillTracking/skillTracking.services";
+import DashboardLayout from "@/layouts/DashboardLayout";
+import { BookOpenCheck, Check, Ellipsis, Plus, Trash2 } from "lucide-react";
 import { useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useNavigate } from "react-router-dom";
+import { Heading } from "./components/Heading";
 
 const SkillTracking = () => {
   usePageTitle("Skills Tracking");
@@ -39,9 +38,9 @@ const SkillTracking = () => {
     setBreadcrumbText("Skill Tracker");
   }, []);
 
-  const { data } = useAllCareerDomains();
-  //console.log("All career domains data:", data);
-  const { mutate: enrollDomain } = useEnrollInCareerDomain();
+  const { data } = GetAllCareerDomains();
+
+  const { mutate: enrollDomain } = GetUserEnrolledDomains();
 
   const handleDomainSelect = (domainId) => {
     enrollDomain(domainId);
@@ -97,7 +96,7 @@ export default SkillTracking;
 
 const Domains = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useUserEnrolledDomains();
+  const { data, isLoading } = GetUserEnrolledDomains();
   const enrolledDomains = data?.careerDomains || [];
 
   const handleActions = (action, id) => {

@@ -1,4 +1,3 @@
-import { useResendVerificationEmail } from "@/apis/auth/auth.service";
 import { AppButton } from "@/components/buttons/AppButton";
 import BackButton from "@/components/buttons/BackButton";
 import { InputField } from "@/components/InputField/InputField";
@@ -9,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
 import { ResendOtpFormSchema } from "@/validations";
+import { ResendVerificationEmailMutation } from "@/apiService/Auth";
 
 const ResendOtp = () => {
   usePageTitle("Resend Otp");
@@ -22,7 +22,7 @@ const ResendOtp = () => {
     isSuccess,
     isError,
     error,
-  } = useResendVerificationEmail();
+  } = ResendVerificationEmailMutation();
 
   const { control, handleSubmit } = useForm({
     defaultValues: {

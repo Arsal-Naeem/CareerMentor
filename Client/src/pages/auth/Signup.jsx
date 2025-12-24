@@ -1,4 +1,3 @@
-import { useSignup } from "@/apis/auth/auth.service";
 import { InputField } from "@/components/InputField/InputField";
 import { Message } from "@/components/Message";
 import { AuthFooter } from "@/components/auth/AuthFooter";
@@ -10,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
+import { SignupMutation } from "@/apiService/Auth";
 
 const Signup = () => {
   usePageTitle("Signup");
@@ -28,7 +28,13 @@ const Signup = () => {
     resolver: SignupFormSchema,
   });
 
-  const { mutate: signup, isPending, isError, error, isSuccess } = useSignup();
+  const {
+    mutate: signup,
+    isPending,
+    isError,
+    error,
+    isSuccess,
+  } = SignupMutation();
 
   const onSubmit = (data) => {
     const { firstName, lastName, dateOfBirth, email, password } = data;

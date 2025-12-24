@@ -1,27 +1,24 @@
-import React, { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { Card, CardContent } from "@/components/ui/card";
+import { AddUserLesson, GetAllUserLessons } from "@/apiService/LessonTracking";
+import { GetAllQuizes } from "@/apiService/QuizTracking";
+import peekImg from "@/assets/mascot/peaking.webp";
+import tabletImg from "@/assets/mascot/tablet.webp";
+import { CustomLessonProgressBar } from "@/components/CustomLessonProgressBar";
+import BuddyLessons from "@/components/skillTracking/buddy/BuddyLessons";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Star, BookOpen, ArrowLeft, Eye, Lock } from "lucide-react";
 import DashboardLayout from "@/layouts/DashboardLayout";
-import {
-  useAddUserLesson,
-  useAllUserLessons,
-} from "@/apis/skillTracking/lessonTracking/lessonTracking.services";
-import ViewLessonModal from "./domainTracker/components/ViewLessonModal";
-import peekImg from "@/assets/mascot/peaking.webp";
-import tabletImg from "@/assets/mascot/tablet.webp";
-import { CustomLessonProgressBar } from "@/components/CustomLessonProgressBar";
-import BuddyLessons from "@/components/skillTracking/buddy/BuddyLessons";
-import { useGetAllQuiz } from "@/apis/skillTracking/quizTracking/quizetracking.api";
+import { ArrowLeft, BookOpen, Eye, Lock, Star } from "lucide-react";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import QuizModal from "./domainTracker/components/QuizModal";
+import ViewLessonModal from "./domainTracker/components/ViewLessonModal";
 
 const Lessons = () => {
   const { moduleId } = useParams();
@@ -32,10 +29,10 @@ const Lessons = () => {
   const [isQuizModalOpen, setIsQuizModalOpen] = useState(false);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
 
-  const { data, isLoading, isError } = useAllUserLessons(moduleId);
+  const { data, isLoading, isError } = GetAllUserLessons(moduleId);
   const { data: quizData, isLoading: isLoadingQuizzes } =
-    useGetAllQuiz(moduleId);
-  const { mutate: addLesson } = useAddUserLesson(moduleId);
+    GetAllQuizes(moduleId);
+  const { mutate: addLesson } = AddUserLesson(moduleId);
 
   if (isLoading) return <DashboardLayout>Loading lessons...</DashboardLayout>;
   if (isError || !data?.success)

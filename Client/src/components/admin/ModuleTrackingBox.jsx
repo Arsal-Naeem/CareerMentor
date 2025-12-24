@@ -1,18 +1,18 @@
+import {
+  CreateAdminModule,
+  DeleteAdminModule,
+  GetAdminAllModulesFromDomain,
+} from "@/apiService/SkillTracking";
+import { SecondaryButton } from "@/components/buttons/SecondaryButton";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
+import { CalendarDays, Star } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  useAdminAllModulesFromDomain,
-  useCreateModule,
-  useDeleteModule,
-} from "@/apis/skillTracking/skillTracking.services";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
-import { CalendarDays, Star, Plus } from "lucide-react";
-import { SecondaryButton } from "@/components/buttons/SecondaryButton";
 import AddModuleModal from "./AddModuleModal";
 
 const formatDate = (iso) => (iso ? format(new Date(iso), "MMM d, yyyy") : "—");
@@ -26,13 +26,13 @@ const ModuleTrackingBox = () => {
   const limit = 5;
   const [open, setOpen] = useState(false);
 
-  const { data, isLoading, isError, isFetching } = useAdminAllModulesFromDomain(
+  const { data, isLoading, isError, isFetching } = GetAdminAllModulesFromDomain(
     domainId,
     page,
     limit
   );
-  const createModuleMutation = useCreateModule(domainId);
-  const deleteModuleMutation = useDeleteModule(domainId);
+  const createModuleMutation = CreateAdminModule(domainId);
+  const deleteModuleMutation = DeleteAdminModule(domainId);
 
   React.useEffect(() => {
     if (data?.modules?.length) {
