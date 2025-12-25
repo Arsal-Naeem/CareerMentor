@@ -24,6 +24,7 @@ const Modules = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isError } = GetUserEnrolledModule(domainId, page);
+
   const userModules = data?.userModules || {};
   const modules = userModules?.modules || [];
   const totalPages = userModules?.totalPages || 1;

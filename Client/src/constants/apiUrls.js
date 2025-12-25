@@ -53,7 +53,7 @@ export const API_ROUTES = {
 
     ADD_USER_LESSON: (moduleId) => `/lessons/enroll-lesson/${moduleId}`,
 
-    UPDATE_LESSON_STATUS: (lessonId)=>`/lessons/update-progress/${lessonId}`,
+    UPDATE_LESSON_STATUS: (lessonId) => `/lessons/update-progress/${lessonId}`,
   },
   QUIZZES: {
     UNLOCK_QUIZ: (moduleId) => `${quizController}start-quiz/${moduleId}`,
@@ -61,7 +61,7 @@ export const API_ROUTES = {
     START_QUIZ: (quizId) => `${quizController}quiz-questions/${quizId}`,
   },
   ROADMAPS: {
-    GET_ROADMAPS: `${roadmapController}/all`,
+    GET_ROADMAPS: `${roadmapController}all`,
     GET_DASHBOARD_DATA: `${roadmapController}/dashboard`,
   },
   MODULES: {

@@ -1,4 +1,5 @@
 import {
+  EnrollInCareerDomain,
   GetAllCareerDomains,
   GetUserEnrolledDomains,
 } from "@/apiService/SkillTracking";
@@ -40,7 +41,7 @@ const SkillTracking = () => {
 
   const { data } = GetAllCareerDomains();
 
-  const { mutate: enrollDomain } = GetUserEnrolledDomains();
+  const { mutate: enrollDomain } = EnrollInCareerDomain();
 
   const handleDomainSelect = (domainId) => {
     enrollDomain(domainId);

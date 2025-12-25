@@ -12,3 +12,11 @@ export const tabs = [
     icon: <LockKeyhole />,
   },
 ];
+
+export const profileDetailsKeys = [
+  "firstName",
+  "lastName",
+  "dateOfBirth",
+  "email",
+  "role",
+];

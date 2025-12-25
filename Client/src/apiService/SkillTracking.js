@@ -72,7 +72,7 @@ export const EnrollInCareerDomain = () => {
 export const GetSingleCareerDomain = (domainId) => {
   return useQuery({
     queryKey: ["singlecareerDomain", domainId],
-    queryFn: async (domainId) => {
+    queryFn: async () => {
       const url =
         ADMIN_API_ROUTES.SKILLTRACKING.GET_SINGLE_CAREER_DOMAIN(domainId);
       const res = await axiosReq(API_MODES.GET, url);

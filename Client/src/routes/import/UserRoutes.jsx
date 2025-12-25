@@ -7,6 +7,12 @@ const CareerAssessment = lazy(() =>
 const SkillTracker = lazy(() =>
   import("@/pages/dashboard/skillTracking/SkillTracking")
 );
+const LessonTracker = lazy(() =>
+  import("@/pages/dashboard/skillTracking/Lessons")
+);
+const ViewDomain = lazy(() =>
+  import("@/pages/dashboard/skillTracking/domainTracker/DomainTracker")
+);
 const MentorShip = lazy(() => import("@/pages/dashboard/mentorship/Mentors"));
 const Roadmap = lazy(() => import("@/pages/dashboard/roadmaps/Roadmap"));
 const ViewRoadmap = lazy(() =>
@@ -24,7 +30,9 @@ export {
   UserDashboard,
   CareerAssessment,
   SkillTracker,
+  ViewDomain,
   MentorShip,
+  LessonTracker,
   Roadmap,
   ViewRoadmap,
   Settings,

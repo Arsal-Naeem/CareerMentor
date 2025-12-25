@@ -1,5 +1,10 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getInitials } from "@/utils/helpers";
+import {
+  capitalizeFirstChar,
+  getInitials,
+  normalizeString,
+  replaceNullWithPlaceholder,
+} from "@/utils/helpers";
 import { ChangePasswordSchema, EditProfileSchema } from "@/validations";
 import { Edit } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -9,7 +14,7 @@ import { SecondaryButton } from "../buttons/SecondaryButton";
 import { InputField } from "../InputField/InputField";
 import { DatePicker } from "../inputs/DatePicker";
 import { Button } from "../ui/button";
-import { tabs } from "./constants";
+import { profileDetailsKeys, tabs } from "./constants";
 
 export const SettingsHeader = () => {
   return (
@@ -22,7 +27,7 @@ export const SettingsHeader = () => {
   );
 };
 
-export const SettingsTabs = ({ user, isAdmin, isUser }) => {
+export const SettingsTabs = ({ user }) => {
   return (
     <Tabs defaultValue="profile" className="bg-transparent">
       <TabsList className="inline-flex h-9 items-center text-muted-foreground w-full justify-start rounded-none border-b bg-gray-50 p-0">
@@ -38,7 +43,7 @@ export const SettingsTabs = ({ user, isAdmin, isUser }) => {
         ))}
       </TabsList>
       <TabsContent value="profile" className="mt-7">
-        <Profile user={user} isAdmin={isAdmin} isUser={isUser} />
+        <Profile user={user} />
       </TabsContent>
       <TabsContent value="change-password" className="mt-7">
         <ChangePassword />
@@ -47,7 +52,7 @@ export const SettingsTabs = ({ user, isAdmin, isUser }) => {
   );
 };
 
-const Profile = ({ user, isAdmin, isUser }) => {
+const Profile = ({ user }) => {
   const [isEditProfileVisible, setIsEditProfileVisible] = useState(false);
 
   const handleToggleEditProfile = () => {
@@ -81,61 +86,47 @@ const Profile = ({ user, isAdmin, isUser }) => {
         </Button>
       </div>
       {isEditProfileVisible ? (
-        <EditProfile
-          user={user}
-          isAdmin={isAdmin}
-          isUser={isUser}
-          onCancel={handleToggleEditProfile}
-        />
+        <EditProfile user={user} onCancel={handleToggleEditProfile} />
       ) : (
-        <ProfileDetails user={user} isAdmin={isAdmin} isUser={isUser} />
+        <ProfileDetails user={user} />
       )}
     </div>
   );
 };
 
-const ProfileDetails = ({ user, isAdmin, isUser }) => {
+const ProfileDetails = ({ user }) => {
   return (
     <div className="bg-white border border-custom-gray rounded-md p-6 grid grid-cols-2 lg:grid-cols-3 gap-4">
-      {/* {Object.entries(user).map(([key, value]) => (
-        <div className="space-y-2 text-custom-black">
-          <p className="font-semibold text-base">{normalizeString(key)}</p>
-          <p className="font-light text-sm">
-            {replaceNullWithPlaceholder(value)}
-          </p>
-        </div>
-      ))} */}
-      <div className="space-y-2 text-custom-black">
-        <p className="font-semibold text-base">First Name</p>
-        <p className="font-light text-sm">{user?.firstName ?? "Rumaisa"}</p>
-      </div>
-      <div className="space-y-2 text-custom-black">
-        <p className="font-semibold text-base">Last Name</p>
-        <p className="font-light text-sm">{user?.lastName ?? "Naveed"}</p>
-      </div>
-      <div className="space-y-2 text-custom-black">
-        <p className="font-semibold text-base">Date of Birth</p>
-        <p className="font-light text-sm">
-          {user?.dateOfBirth ?? "24/05/2003"}
-        </p>
-      </div>
-      <div className="space-y-2 text-custom-black">
-        <p className="font-semibold text-base">Email</p>
-        <p className="font-light text-sm">
-          {user?.email ?? "rumaisa@gmail.com"}
-        </p>
-      </div>
-      <div className="space-y-2 text-custom-black">
-        <p className="font-semibold text-base">System Role</p>
-        <p className="font-light text-sm">
-          {isAdmin ? "Admin" : isUser ? "User" : "User"}
-        </p>
-      </div>
+      {profileDetailsKeys.map((key) => {
+        let value = user?.[key];
+        let displayValue = replaceNullWithPlaceholder(value);
+
+        if (key === "dateOfBirth") {
+          displayValue = value
+            ? new Date(value).toLocaleDateString("en-US", {
+                day: "2-digit",
+                month: "long",
+                year: "numeric",
+              })
+            : "N/A";
+        }
+
+        if (key === "role") {
+          displayValue = value ? capitalizeFirstChar(value) : "N/A";
+        }
+
+        return (
+          <div key={key} className="space-y-2 text-custom-black">
+            <p className="font-semibold text-base">{normalizeString(key)}</p>
+            <p className="font-light text-sm">{displayValue}</p>
+          </div>
+        );
+      })}
     </div>
   );
 };
 
-const EditProfile = ({ user, isAdmin, isUser, onCancel }) => {
+const EditProfile = ({ user, onCancel }) => {
   const { control, reset, handleSubmit } = useForm({
     defaultValues: {
       firstName: "",
@@ -155,7 +146,7 @@ const EditProfile = ({ user, isAdmin, isUser, onCancel }) => {
         lastName: user?.lastName || "N/A",
         dateOfBirth: user?.dateOfBirth || "N/A",
         email: user?.email || "N/A",
-        systemRole: isAdmin ? "Admin" : isUser ? "User" : "User",
+        role: capitalizeFirstChar(user?.role) || "N/A",
       });
     }
   }, [user, reset]);
@@ -201,6 +192,7 @@ const EditProfile = ({ user, isAdmin, isUser, onCancel }) => {
         control={control}
         labelClassName="!font-medium"
         component={DatePicker}
+        disabled
       />
 
       <InputField
@@ -211,16 +203,18 @@ const EditProfile = ({ user, isAdmin, isUser, onCancel }) => {
         type="email"
         control={control}
         labelClassName="!font-medium"
+        disabled
       />
 
       <InputField
-        name="systemRole"
-        htmlFor="systemRole"
+        name="role"
+        htmlFor="role"
         placeholder="System Role"
         label="System Role"
         type="text"
         control={control}
         labelClassName="!font-medium"
+        disabled
       />
 
       <div className="md:col-span-2 flex justify-end gap-2 mt-4">

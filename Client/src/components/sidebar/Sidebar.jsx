@@ -59,7 +59,7 @@ export default function Sidebar({ items, variant = "sidebar" }) {
                 </p>
               </div>
               <div>
-                <p className="font-bold truncate text-sm">
+                <p className="font-bold w-32 truncate text-sm">
                   {user?.firstName && user?.lastName
                     ? truncateText(`${user.firstName} ${user.lastName}`, 15)
                     : "N/A"}

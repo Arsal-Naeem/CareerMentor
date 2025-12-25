@@ -4,45 +4,45 @@ import axiosReq from "@/services/axiosHelper";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-export const useModuleLessons = (moduleId) =>
-  useQuery({
-    queryKey: ["moduleLessons", moduleId],
-    queryFn: async (moduleId) => {
-      const url = API_ROUTES.LESSONS.GET_MODULE_LESSONS(moduleId);
-      const res = await axiosReq(API_MODES.GET, url);
-      return res.data;
-    },
-    enabled: !!moduleId,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 5,
-  });
+// export const GetModuleLessons = (moduleId) =>
+//   useQuery({
+//     queryKey: ["moduleLessons", moduleId],
+//     queryFn: async (moduleId) => {
+//       const url = API_ROUTES.LESSONS.GET_MODULE_LESSONS(moduleId);
+//       const res = await axiosReq(API_MODES.GET, url);
+//       return res.data;
+//     },
+//     enabled: !!moduleId,
+//     refetchOnWindowFocus: false,
+//     staleTime: 1000 * 60 * 5,
+//   });
 
-export const useLessonQuizzes = (lessonId, enabled) =>
-  useQuery({
-    queryKey: ["lessonQuizzes", lessonId],
-    queryFn: async (lessonId) => {
-      const url = API_ROUTES.LESSONS.GET_LESSON_QUIZZES(lessonId);
-      const res = await axiosReq(API_MODES.GET, url);
-      return res.data;
-    },
-    enabled: enabled && !!lessonId,
-    refetchOnWindowFocus: false,
-  });
+// export const GetLessonQuizes = (lessonId, enabled) =>
+//   useQuery({
+//     queryKey: ["lessonQuizzes", lessonId],
+//     queryFn: async (lessonId) => {
+//       const url = API_ROUTES.LESSONS.GET_LESSON_QUIZZES(lessonId);
+//       const res = await axiosReq(API_MODES.GET, url);
+//       return res.data;
+//     },
+//     enabled: enabled && !!lessonId,
+//     refetchOnWindowFocus: false,
+//   });
 
-export const useSubmitQuiz = () =>
-  useMutation({
-    mutationFn: async (payload) => {
-      const url = API_ROUTES.LESSONS.SUBMIT_QUIZ_ANSWER;
-      const res = await axiosReq(API_MODES.POST, url, payload);
-      return res.data;
-    },
-  });
+// export const SubmitQuiz = () =>
+//   useMutation({
+//     mutationFn: async (payload) => {
+//       const url = API_ROUTES.LESSONS.SUBMIT_QUIZ_ANSWER;
+//       const res = await axiosReq(API_MODES.POST, url, payload);
+//       return res.data;
+//     },
+//   });
 
 //--------------User-------------
 export const GetAllUserLessons = (moduleId) => {
   return useQuery({
     queryKey: ["allUserLessons", moduleId],
-    queryFn: async (moduleId) => {
+    queryFn: async () => {
       const url = API_ROUTES.LESSONS.GET_ALL_USER_LESSONS(moduleId);
       const res = await axiosReq(API_MODES.GET, url);
       return res.data;
@@ -72,7 +72,7 @@ export const AddUserLesson = (moduleId) => {
 export const GetSingleLessonDetails = (lessonId) => {
   return useQuery({
     queryKey: ["singleLessonDetails", lessonId],
-    queryFn: async (lessonId) => {
+    queryFn: async () => {
       const url = API_ROUTES.LESSONS.GET_SINGLE_USER_LESSON(lessonId);
       const res = await axiosReq(API_MODES.GET, url);
       return res.data;
@@ -105,7 +105,7 @@ export const UpdateUserLessonStatus = () => {
 export const GetAllAdminLessonModules = (moduleId) => {
   return useQuery({
     queryKey: ["allModuleLessons", moduleId],
-    queryFn: async (moduleId) => {
+    queryFn: async () => {
       const url =
         ADMIN_API_ROUTES.LESSON_TRACKING.GET_ALL_MODULE_LESSONS_AND_MODULE(
           moduleId
@@ -157,7 +157,7 @@ export const AddNewAdminLesson = (moduleId) => {
 export const GetSingleAdminLesson = (lessonId) => {
   return useQuery({
     queryKey: ["singleLesson", lessonId],
-    queryFn: async (lessonId) => {
+    queryFn: async () => {
       const url = ADMIN_API_ROUTES.LESSON_TRACKING.GET_SINGLE_LESSON(lessonId);
       const res = await axiosReq(API_MODES.GET, url);
       return res.data;

@@ -4,12 +4,14 @@ import { Outlet } from "react-router-dom";
 import {
   Achievements,
   CareerAssessment,
+  LessonTracker,
   MentorShip,
   Roadmap,
   Settings,
   SkillAssessment,
   SkillTracker,
   UserDashboard,
+  ViewDomain,
   ViewRoadmap,
 } from "./import/UserRoutes";
 
@@ -33,6 +35,14 @@ export const userRouter = [
       {
         path: USER_DASHBOARD_ROUTES.SKILL_TRACKER,
         element: <SkillTracker />,
+      },
+      {
+        path: USER_DASHBOARD_ROUTES.VIEW_DOMAIN,
+        element: <ViewDomain />,
+      },
+      {
+        path: USER_DASHBOARD_ROUTES.LESSON_TRACKER,
+        element: <LessonTracker />,
       },
       {
         path: USER_DASHBOARD_ROUTES.SKILL_ASSESSMENT,

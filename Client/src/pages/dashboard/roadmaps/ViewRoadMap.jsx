@@ -10,6 +10,7 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+// NOTE: There's no api for this
 const ViewRoadMap = () => {
   const { id } = useParams();
   usePageTitle("Roadmap Tracking");
@@ -18,6 +19,7 @@ const ViewRoadMap = () => {
   const { isSmallScreen } = useScreenSize();
 
   const { data: roadmapData, isLoading } = GetRoadmaps(id);
+
   const { mutate: enrollDomain, isPending: enrolling } = EnrollInCareerDomain();
 
   useEffect(() => {
