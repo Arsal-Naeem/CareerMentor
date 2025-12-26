@@ -1,7 +1,7 @@
 {
   "frontend": {
     "welcome": {
-      "message": "👋 Hey! Welcome to our platform! I’m Buddy, your learning companion 🚀",
+      "message": "👋 Hey! Welcome to our platform! I’m Lumo, your learning companion 🚀",
       "options": ["Next"]
     },
     "intro": {
@@ -49,7 +49,7 @@
 
   "backend": {
     "welcome": {
-      "message": "👋 Hey! Welcome to our platform! I’m Buddy, your learning companion 🚀",
+      "message": "👋 Hey! Welcome to our platform! I’m Lumo, your learning companion 🚀",
       "options": ["Next"]
     },
     "intro": {
@@ -70,7 +70,13 @@
     "experienced": {
       "askSkills": {
         "message": "Which of these backend skills do you already know?",
-        "options": ["Node.js", "Databases", "Express.js", "Authentication", "None"]
+        "options": [
+          "Node.js",
+          "Databases",
+          "Express.js",
+          "Authentication",
+          "None"
+        ]
       },
       "responses": {
         "Node.js": {

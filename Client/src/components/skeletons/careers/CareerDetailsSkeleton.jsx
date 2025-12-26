@@ -3,7 +3,7 @@ import React from "react";
 
 export const CareerDetailSkeleton = () => {
   return (
-    <div className="flex flex-col gap-4 md:gap-5 lg:gap-8 px-6 py-10 md:px-12 lg:px-24 w-full max-w-5xl mx-auto min-h-screen">
+    <div className="flex flex-col gap-4 md:gap-5 lg:gap-8 px-6 py-10 md:px-12 lg:px-24 w-full min-h-screen">
       {/* Header Image Skeleton */}
       <Skeleton className="h-[220px] md:h-[280px] lg:h-[310px] w-full rounded-md" />
 

@@ -1,12 +1,17 @@
-import { acceptedImageTypes } from "@/components/modals/ProjectModal";
-import {
-  EmailSchema,
-  FirstNameValidation,
-  LastNameValidation,
-  PasswordSchema,
-} from "./commonValidators";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import {
+  DateSchema,
+  EmailSchema,
+  FirstNameValidation,
+  ImagePreviewSchema,
+  ImageSchemaWithPreview,
+  LastNameValidation,
+  PasswordSchema,
+  StringRequiredSchema,
+  TagsSchema,
+  UrlSchema,
+} from "./commonValidators";
 
 export const SignupFormSchema = yupResolver(
   yup.object({
@@ -43,10 +48,10 @@ export const ResendOtpFormSchema = yupResolver(
 
 export const EventFormSchema = yupResolver(
   yup.object({
-    name: yup.string().trim().required("Event name is required"),
+    name: StringRequiredSchema("Event Name"),
     description: yup.mixed().nullable().required("Description is required"),
-    date: yup.date().nullable().required("Event date is required"),
-    venue: yup.string().trim().required("Venue is required"),
+    date: DateSchema("Event Date"),
+    venue: StringRequiredSchema("Venue"),
     startTime: yup.string().required("Start time is required"),
     endTime: yup
       .string()
@@ -99,42 +104,16 @@ export const ChangePasswordSchema = yupResolver(
   })
 );
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
-
 export const BlogFormSchema = yup.object({
-  title: yup.string().trim().required("Blog title is required"),
+  title: StringRequiredSchema("Blog Title"),
 
-  coverImage: yup
-    .mixed()
-    .nullable()
-    .test("image-required", "Cover image is required", function (file) {
-      const { coverImagePreview } = this.parent;
-      if (coverImagePreview) return true;
-      if (!file) return false;
-      return true;
-    })
-    .test(
-      "file-type",
-      "Cover image must be a JPG, PNG, GIF, or WEBP",
-      (file) => {
-        if (!file) return true;
-        return acceptedImageTypes.includes(file.type);
-      }
-    )
-    .test("file-size", "Cover image must be less than 10MB", (file) => {
-      if (!file) return true;
-      return file.size <= MAX_FILE_SIZE;
-    }),
+  coverImage: ImageSchemaWithPreview(),
 
-  coverImagePreview: yup.string().nullable(),
+  coverImagePreview: ImagePreviewSchema,
 
   description: yup.mixed().required("Description is required"),
 
-  tags: yup
-    .array()
-    .of(yup.string())
-    .min(3, "Please add at least 3 tags")
-    .required(),
+  tags: TagsSchema(),
 });
 
 export const CareerFormSchema = BlogFormSchema.pick([
@@ -142,5 +121,28 @@ export const CareerFormSchema = BlogFormSchema.pick([
   "coverImagePreview",
   "description",
 ]).shape({
-  name: yup.string().trim().required("Career Name is required"),
+  name: StringRequiredSchema("Career Name"),
+});
+
+export const ProjectFormSchema = BlogFormSchema.pick([
+  "coverImage",
+  "coverImagePreview",
+]).shape({
+  projectName: StringRequiredSchema("Project Name"),
+  description: StringRequiredSchema("Project Description"),
+  techStack: TagsSchema("Tech Stack"),
+  url: UrlSchema(),
+});
+
+export const CertificationFormSchema = yup.object({
+  name: StringRequiredSchema("Certification Name"),
+  organization: StringRequiredSchema("Issuing Organization"),
+  description: yup.string().optional(),
+  issueDate: DateSchema("Issue Date"),
+  certificateImage: ImageSchemaWithPreview(
+    "certificationImagePreview",
+    "Certificate Image"
+  ),
+  certificationImagePreview: ImagePreviewSchema,
+  credentialUrl: UrlSchema("Credential URL"),
 });

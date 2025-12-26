@@ -18,10 +18,6 @@ const DomainTracker = () => {
       <div className="px-5 md:px-10 pt-5 pb-10 flex flex-col gap-7">
         <BreadCrumb />
         <Tracker />
-        {/* projects 
-        <Projects />
-        {/* certifications 
-        <Certifications />*/}
       </div>
     </DashboardLayout>
   );

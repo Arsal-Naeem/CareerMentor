@@ -1,3 +1,5 @@
+import { allowedAttributes, allowedTags } from "@/constants";
+
 export const truncateText = (text, maxLength = 32) => {
   if (!text) return "";
   return text.length > maxLength
@@ -53,3 +55,39 @@ export const replaceNullWithPlaceholder = (value, replaceBy) => {
   }
   return value;
 };
+
+export function sanitizeHTML(html) {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(html, "text/html");
+
+  function sanitizeNode(node) {
+    // Remove unwanted tags
+    if (node.nodeType === 1) {
+      // ELEMENT_NODE
+      if (!allowedTags.includes(node.tagName.toLowerCase())) {
+        node.remove();
+        return;
+      }
+
+      // Remove unwanted attributes
+      Array.from(node.attributes).forEach((attr) => {
+        const allowed = allowedAttributes[node.tagName.toLowerCase()] || [];
+        if (!allowed.includes(attr.name)) {
+          node.removeAttribute(attr.name);
+        }
+
+        // Remove javascript: links
+        if (attr.name === "href" && attr.value.startsWith("javascript:")) {
+          node.removeAttribute(attr.name);
+        }
+      });
+    }
+
+    // Recursively sanitize children
+    node.childNodes.forEach((child) => sanitizeNode(child));
+  }
+
+  doc.body.childNodes.forEach((child) => sanitizeNode(child));
+
+  return doc.body.innerHTML;
+}

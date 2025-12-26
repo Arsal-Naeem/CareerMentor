@@ -1,3 +1,4 @@
+import { acceptedImageTypes } from "@/constants";
 import * as yup from "yup";
 
 const EMAIL_REGEX =
@@ -38,4 +39,55 @@ export const PasswordSchema = (ref = "", name = "Password") => {
     );
   }
   return validation;
+};
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+export const ImageSchemaWithPreview = (
+  previewKey = "coverImagePreview",
+  imageKey = "Image"
+) =>
+  yup
+    .mixed()
+    .nullable()
+    .test("image-required", `${imageKey} is required`, function (file) {
+      if (this.parent[previewKey]) return true;
+      if (!file) return false;
+      return true;
+    })
+    .test(
+      "file-type",
+      `${imageKey} must be a JPG, PNG, GIF, or WEBP`,
+      (file) => {
+        if (!file) return true;
+        return acceptedImageTypes.includes(file.type);
+      }
+    )
+    .test("file-size", `${imageKey} must be less than 10MB`, (file) => {
+      if (!file) return true;
+      return file.size <= MAX_FILE_SIZE;
+    });
+
+export const ImagePreviewSchema = yup.string().nullable();
+
+export const TagsSchema = (messageKey = "Tags") => {
+  return yup
+    .array()
+    .of(yup.string())
+    .min(1, `Please enter atleast 1 ${messageKey.toLowerCase()}`)
+    .required(`${messageKey} is required.`);
+};
+
+export const StringRequiredSchema = (fieldName = "") => {
+  return yup.string().trim().required(`${fieldName} is required.`);
+};
+
+export const UrlSchema = (fieldName = "Project URL") => {
+  return yup
+    .string()
+    .url("Enter a valid URL")
+    .required(`${fieldName} is required.`);
+};
+
+export const DateSchema = (fieldName = "Date") => {
+  return yup.date().nullable().required(`${fieldName} is required.`);
 };

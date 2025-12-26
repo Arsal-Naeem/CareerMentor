@@ -6,16 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
-import { format } from "date-fns";
-import {
-  AlertCircle,
-  CalendarDays,
-  ChevronLeft,
-  ChevronRight,
-  Star,
-} from "lucide-react";
-import ModulesSkeletons from "../skeletons/skillTracking/modules/ModulesSkeletons";
 import { GetUserEnrolledModule } from "@/apiService/ModuleTracking";
+import { format } from "date-fns";
+import { AlertCircle, CalendarDays, Star } from "lucide-react";
+import { CustomPagination } from "../CustomPagination";
+import ModulesSkeletons from "../skeletons/skillTracking/modules/ModulesSkeletons";
 
 const formatDate = (iso) => (iso ? format(new Date(iso), "MMM d, yyyy") : "—");
 
@@ -29,14 +24,29 @@ const Modules = () => {
   const modules = userModules?.modules || [];
   const totalPages = userModules?.totalPages || 1;
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
   // Early returns
   if (isLoading) {
     return <ModulesSkeletons />;
   }
 
   if (isError) {
-    return <p className="text-red-500 text-sm">Failed to load modules.</p>;
+    return (
+      <div className="flex flex-col items-center justify-center mt-20">
+        <AlertCircle size={48} className="text-red-500 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          Oops! Something went wrong.
+        </h3>
+        <p className="text-sm text-gray-500 text-center max-w-xs">
+          We encountered an error while fetching your modules. Please try again.
+        </p>
+      </div>
+    );
   }
+
   if (modules.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center mt-20">
@@ -59,7 +69,7 @@ const Modules = () => {
   }
 
   return (
-    <div className="px-2 sm:px-4 lg:px-6">
+    <div>
       {/* Domain Header */}
       <h2 className="text-lg sm:text-xl font-semibold mb-6">
         {userModules.careerDomain || "Modules"} ({userModules.totalModules})
@@ -98,7 +108,7 @@ const Modules = () => {
                       <h3 className="text-sm font-semibold text-gray-900 truncate">
                         {mod.title}
                       </h3>
-                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                      <div className="flex items-center gap-1 text-xs text-gray-500 mt-0.5 whitespace-nowrap">
                         <CalendarDays size={14} />
                         <span>{formatDate(mod.enrolledAt)}</span>
                       </div>
@@ -106,7 +116,7 @@ const Modules = () => {
                   </div>
 
                   {/* Badge */}
-                  <Badge className="text-xs bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded-full">
+                  <Badge className="text-xs bg-yellow-200 text-yellow-800 px-2 py-0.5 rounded-full hover:bg-yellow-300 hover:text-yellow-900">
                     {mod.badge}
                   </Badge>
                 </div>
@@ -157,34 +167,11 @@ const Modules = () => {
       </div>
 
       {/* Pagination */}
-      <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4 mt-6">
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => setPage((p) => p - 1)}
-          disabled={page <= 1}
-          className="flex items-center gap-2 px-3 py-1 text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <ChevronLeft size={16} />
-          <span className="hidden sm:inline">Previous</span>
-        </Button>
-
-        <span className="text-sm text-gray-600 font-medium">
-          Page <span className="font-semibold">{page}</span> of{" "}
-          <span className="font-semibold">{totalPages}</span>
-        </span>
-
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => setPage((p) => p + 1)}
-          disabled={page >= totalPages}
-          className="flex items-center gap-2 px-3 py-1 text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <span className="hidden sm:inline">Next</span>
-          <ChevronRight size={16} />
-        </Button>
-      </div>
+      <CustomPagination
+        totalPages={totalPages}
+        currentPage={page}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 };

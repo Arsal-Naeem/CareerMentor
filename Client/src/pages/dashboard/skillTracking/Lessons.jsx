@@ -62,11 +62,7 @@ const Lessons = () => {
       {allLocked && showBuddyWelcome && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-xl p-8 shadow-lg max-w-md w-full text-center relative">
-            <img
-              src={tabletImg}
-              alt="Buddy Mascot"
-              className="w-20 mx-auto mb-4"
-            />
+            <img src={tabletImg} alt="Lumo" className="w-20 mx-auto mb-4" />
             <h2 className="text-xl font-semibold mb-2">
               Hey, welcome to the module!
             </h2>
@@ -84,8 +80,8 @@ const Lessons = () => {
         </div>
       )}
 
-      {/* Main Lessons Content */}
       <BuddyLessons />
+
       <div className="p-6 space-y-6">
         {/* Back Button */}
         <div className="flex items-center justify-between">
@@ -111,7 +107,7 @@ const Lessons = () => {
                   {module.description}
                 </p>
               </div>
-              <Badge className="text-sm bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+              <Badge className="text-sm bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1 rounded-full">
                 {module.badge || "Module"}
               </Badge>
             </div>
@@ -143,11 +139,9 @@ const Lessons = () => {
           </CardContent>
         </Card>
 
-        {/* Lessons List */}
         <div className="flex items-center justify-between mb-4">
-          {/* Left: Lessons Title */}
           <h2 className="text-lg font-semibold text-gray-800">Lessons</h2>
-
+          {/* Quiz List */}
           <div className="flex gap-3">
             {quizzes.map((quiz) => (
               <Button
@@ -171,6 +165,7 @@ const Lessons = () => {
           </div>
         </div>
 
+        {/* Lessons List */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {module.lessons.map((lesson) => (
             <Card

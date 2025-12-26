@@ -36,13 +36,13 @@ export const SearchBar = ({
                 iconClassName
               )}
             />
-            <Input
+            <input
               type="text"
               className={clsx(
-                "w-full bg-custom-off-white border-none text-sm md:text-base text-black font-normal placeholder:text-custom-gray-dark placeholder:font-normal",
-                "outline-none focus:outline-none",
-                "ring-0 focus:ring-0 focus:ring-offset-0",
-                "shadow-none focus:shadow-none",
+                "w-full bg-custom-off-white !border-none text-sm md:text-base text-black font-normal placeholder:text-custom-gray-dark placeholder:font-normal",
+                "!outline-none !focus:outline-none",
+                "!ring-0 !focus:ring-0 !focus:ring-offset-0",
+                "!shadow-none !focus:shadow-none",
                 inputClassName
               )}
               placeholder={placeholder}

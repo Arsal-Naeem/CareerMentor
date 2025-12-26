@@ -31,7 +31,7 @@ const Events = () => {
 
         {/* search and filter */}
         <div className="flex items-center gap-2 md:gap-3">
-          <SearchBar placeholderText="Search Careers.." />
+          <SearchBar variant="default" placeholder="Search Events.." />
           <FilterButton />
         </div>
         <h1 className="text-3xl text-black font-medium">Upcoming Events</h1>

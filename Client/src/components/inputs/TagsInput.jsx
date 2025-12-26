@@ -52,11 +52,13 @@ export function TagInput({
         />
       </InputWrapper>
 
-      <ShowTags
-        containerClassName="flex-wrap"
-        tags={value}
-        onDelete={removeTag}
-      />
+      {value.length > 0 && (
+        <ShowTags
+          containerClassName="flex-wrap"
+          tags={value}
+          onDelete={removeTag}
+        />
+      )}
     </div>
   );
 }
@@ -69,7 +71,7 @@ export const ShowTags = ({
 }) => {
   return (
     <div className={clsx("flex items-center gap-1", containerClassName)}>
-      {tags.slice(0, 3).map((tag) => (
+      {tags?.slice(0, 3).map((tag) => (
         <Badge
           key={tag}
           variant="secondary"

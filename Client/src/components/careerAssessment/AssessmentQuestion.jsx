@@ -18,8 +18,8 @@ import {
   getQuestionsByCategory,
   postResults,
 } from "@/apis/assessment/assessment.api";
+import AssessmentQuestionSkeleton from "../skeletons/assessment/QuestionSkeleton";
 
-// TODO : add results view option even when the user is giving quiz
 export const AssessmentQuestion = () => {
   const { setBreadcrumbText } = useGlobalContext();
   const {
@@ -129,7 +129,7 @@ export const AssessmentQuestion = () => {
     if (currentIndex > 0) setCurrentIndex((prev) => prev - 1);
   };
 
-  if (!currentQuestion) return <p>Loading questions...</p>;
+  if (!currentQuestion) return <AssessmentQuestionSkeleton />;
 
   // show skeleton
   if (isPredicting) {

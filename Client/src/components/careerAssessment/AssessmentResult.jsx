@@ -8,6 +8,7 @@ import { OrangeProgressBar } from "../OrangeProgressBar";
 import { getCurrentResult } from "@/apis/assessment/assessment.api";
 import { getItemFromStorage } from "@/utils/helpers/storage/localStorage";
 import { useAssessmentContext } from "@/context/AssessmentContext";
+import { AssessmentResultSkeleton } from "../skeletons/assessment/ResultSkeleton";
 
 export const AssessmentResult = () => {
   const navigate = useNavigate();
@@ -54,9 +55,10 @@ export const AssessmentResult = () => {
     setStep("history");
   };
 
-  // TODO : show skeleton and handle no result found UI too
-  if (loading) return <p>Loading your results...</p>;
-  if (!result) return <p>No result found.</p>;
+  if (loading) return <AssessmentResultSkeleton />;
+
+  if (!result)
+    return <NoAssessmentResult onStartNew={handleStartNewAssessment} />;
 
   const { badges, recommendedCareers } = result.prediction;
 
@@ -123,6 +125,26 @@ export const AssessmentResult = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+const NoAssessmentResult = ({ onStartNew }) => {
+  return (
+    <div className="h-full px-6 md:px-10 py-4 md:py-7 flex flex-col items-center justify-center gap-6 text-center">
+      <h1 className="text-black text-3xl lg:text-5xl font-bold">
+        No Assessment Result Found
+      </h1>
+      <p className="text-black font-medium text-xl md:text-2xl max-w-2xl">
+        We couldn't find any results for your assessment. You can start a new
+        assessment to discover your career path suggestions.
+      </p>
+      <SecondaryButton
+        title="Start New Assessment"
+        variant="dark"
+        textSmall
+        onClickHandler={onStartNew}
+      />
     </div>
   );
 };

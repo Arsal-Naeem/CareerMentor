@@ -5,190 +5,123 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useEffect, useState } from "react";
+import { ProjectFormSchema } from "@/validations";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { InputField } from "../InputField/InputField";
+import { TagInput } from "../inputs/TagsInput";
+import { UploadImage } from "../inputs/UploadImage";
+import { useEffect } from "react";
 
-export const acceptedImageTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-];
-
-// TODO : Fix stylings
 export default function ProjectModal({
   mode = "add",
-  defaultValues = {},
+  initialData,
   open,
   setOpen,
   onSubmit,
 }) {
-  //   const [open, setOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    projectName: "",
-    description: "",
-    techStack: "",
-    url: "",
-    image: null,
+  const { control, handleSubmit, reset, setValue, watch } = useForm({
+    defaultValues: {
+      projectName: "",
+      description: "",
+      techStack: [],
+      url: "",
+      coverImage: null,
+      coverImagePreview: null,
+    },
+    mode: "all",
+    resolver: yupResolver(ProjectFormSchema),
   });
 
-  const [errors, setErrors] = useState({});
-  const [imageError, setImageError] = useState("");
-
-  // Pre-fill form in edit mode
   useEffect(() => {
-    if (mode === "edit" && defaultValues) {
-      setFormData({ ...formData, ...defaultValues });
-    }
-  }, [mode, defaultValues]);
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-
-    if (name === "image") {
-      const file = files[0];
-      if (file && !acceptedImageTypes.includes(file.type)) {
-        setImageError(
-          "Unsupported image format. Please upload jpg, png, webp, or gif."
-        );
-        setFormData((prev) => ({ ...prev, image: null }));
-      } else {
-        setImageError("");
-        setFormData((prev) => ({ ...prev, image: file }));
-      }
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.projectName.trim())
-      newErrors.projectName = "Project name is required.";
-    if (!formData.description.trim())
-      newErrors.description = "Description is required.";
-    if (!formData.techStack.trim())
-      newErrors.techStack = "Tech stack is required.";
-    if (!formData.url.trim()) newErrors.url = "URL is required.";
-    if (!formData.image && mode === "add")
-      newErrors.image = "Project image is required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      // You can now call your backend or callback
-      onSubmit(formData);
-      setOpen(false);
-      setFormData({
-        projectName: "",
-        description: "",
-        techStack: "",
-        url: "",
-        image: null,
+    if (initialData) {
+      reset({
+        projectName: initialData.projectName ?? "",
+        description: initialData.description ?? "",
+        techStack: initialData.techStack ?? [],
+        url: initialData.url ?? "",
+        coverImage: null,
+        coverImagePreview: initialData.coverImage ?? null,
       });
     }
+  }, [initialData, reset]);
+
+  const onFormSubmit = (data) => {
+    onSubmit(data);
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[600px]">
-        <DialogHeader>
+        <DialogHeader className="px-2">
           <DialogTitle>
             {mode === "edit" ? "Edit Project" : "Add Project"}
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          {/* Project Name */}
-          <div>
-            <Label htmlFor="projectName">Project name</Label>
-            <Input
-              id="projectName"
+        <form className="flex flex-col gap-4 h-full">
+          <div className="flex flex-col gap-4 overflow-y-auto h-96 px-2">
+            <InputField
               name="projectName"
-              placeholder="Enter project name"
-              value={formData.projectName}
-              onChange={handleChange}
+              htmlFor="projectName"
+              label="Project Name"
+              placeholder="Ecommerce App"
+              control={control}
+              labelClassName="!font-medium"
+              showAsterisk
             />
-            {errors.projectName && (
-              <p className="text-red-500 text-sm">{errors.projectName}</p>
-            )}
-          </div>
 
-          {/* Description */}
-          <div>
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
+            <InputField
+              isTextArea
               name="description"
-              placeholder="Enter project description"
-              value={formData.description}
-              onChange={handleChange}
+              htmlFor="description"
+              label="Description"
+              placeholder="Describe your project"
+              control={control}
+              labelClassName="!font-medium"
+              showAsterisk
             />
-            {errors.description && (
-              <p className="text-red-500 text-sm">{errors.description}</p>
-            )}
-          </div>
 
-          {/* Tech Stack */}
-          <div>
-            <Label htmlFor="techStack">Tech Stack</Label>
-            <Input
-              id="techStack"
+            <InputField
               name="techStack"
+              htmlFor="techStack"
+              label="Tech Stack"
               placeholder="e.g. React, Node.js"
-              value={formData.techStack}
-              onChange={handleChange}
+              component={TagInput}
+              labelClassName="!font-medium"
+              control={control}
             />
-            {errors.techStack && (
-              <p className="text-red-500 text-sm">{errors.techStack}</p>
-            )}
-          </div>
 
-          {/* URL */}
-          <div>
-            <Label htmlFor="url">URL</Label>
-            <Input
-              id="url"
+            <InputField
               name="url"
+              htmlFor="url"
+              label="URL"
               placeholder="https://yourproject.com"
-              value={formData.url}
-              onChange={handleChange}
+              type="url"
+              labelClassName="!font-medium"
+              control={control}
             />
-            {errors.url && <p className="text-red-500 text-sm">{errors.url}</p>}
-          </div>
 
-          {/* Project Image */}
-          <div>
-            <Label htmlFor="image">Project Image</Label>
-            <div className="border border-dashed border-gray-300 rounded-md p-4 text-center">
-              <p className="text-sm text-gray-500 mb-2">
-                Drag and Drop to upload or{" "}
-                <span className="text-blue-600 underline cursor-pointer">
-                  Browse
-                </span>
-              </p>
-              <Input
-                id="image"
-                name="image"
-                type="file"
-                accept="image/*"
-                onChange={handleChange}
-              />
-              {imageError && (
-                <p className="text-red-500 text-sm">{imageError}</p>
-              )}
-              {errors.image && (
-                <p className="text-red-500 text-sm">{errors.image}</p>
-              )}
-            </div>
+            <InputField
+              name="coverImage"
+              label="Cover Image"
+              component={UploadImage}
+              control={control}
+              preview={watch("coverImagePreview")}
+              setValue={setValue}
+              labelClassName="!font-medium"
+              uploaderClassName="!border-custom-black !text-custom-black"
+              showAsterisk
+            />
           </div>
+        </form>
 
-          {/* Submit Button */}
-          <Button className="w-full mt-4" onClick={handleSubmit}>
+        <div className="mt-4 px-2">
+          <Button
+            type="submit"
+            className="w-full"
+            onClick={handleSubmit(onFormSubmit)}
+          >
             {mode === "edit" ? "Update Project" : "Save Project"}
           </Button>
         </div>

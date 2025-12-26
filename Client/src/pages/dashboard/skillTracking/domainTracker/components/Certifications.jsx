@@ -20,6 +20,7 @@ const certificationDropdownMenuItems = [
   },
 ];
 
+// TODO: Match the ui with the add certification form values
 export const Certifications = () => {
   return (
     <div className="flex flex-col gap-5">

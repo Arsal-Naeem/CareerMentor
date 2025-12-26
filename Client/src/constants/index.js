@@ -24,6 +24,13 @@ import Brain from "@/assets/icons/brain.svg";
 import CircleCheck from "@/assets/icons/circle-check.svg";
 import Timer from "@/assets/icons/timer.svg";
 
+export const acceptedImageTypes = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/gif",
+];
+
 export const floatingTestimonialsData = [
   {
     position: "top-20 left-36",
@@ -597,3 +604,45 @@ export const adminSidebarItems = [
     href: "/admin/dashboard/careers",
   },
 ];
+
+export const allowedTags = [
+  "p",
+  "strong",
+  "em",
+  "u",
+  "s",
+  "code",
+  "a",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "ul",
+  "ol",
+  "li",
+  "img",
+  "table",
+  "tbody",
+  "tr",
+  "td",
+  "th",
+  "blockquote",
+  "pre",
+  "hr",
+  "div",
+  "span",
+];
+
+export const allowedAttributes = {
+  a: ["href", "target", "rel"],
+  img: ["src", "alt", "width", "height"],
+  div: [
+    "class",
+    "data-list-kind",
+    "data-list-checked",
+    "data-list-collapsable",
+  ],
+  span: ["data-mention", "data-id"],
+};

@@ -110,39 +110,10 @@ const Domains = () => {
     <div>
       {isLoading ? (
         // 🔹 Skeleton loader
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="flex flex-col bg-white rounded-2xl shadow-md overflow-hidden"
-            >
-              <Skeleton className="h-40 w-full" />
-              <div className="p-4 space-y-2">
-                <Skeleton className="h-5 w-3/4" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-              </div>
-              <div className="px-4 pb-4">
-                <Skeleton className="h-9 w-full rounded-md" />
-              </div>
-            </div>
-          ))}
-        </div>
+        <DomainsSkeleton />
       ) : enrolledDomains.length === 0 ? (
         // 🔹 Empty state
-        <div className="flex flex-col items-center justify-center py-20 text-center">
-          <img
-            src="/public/domainImageFallback.svg"
-            alt="No domains"
-            className="w-20 h-20 mb-4 opacity-80"
-          />
-          <h2 className="text-lg font-semibold">
-            You're not enrolled in any field yet
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Start exploring and enroll in a domain to begin your journey 🚀
-          </p>
-        </div>
+        <NoDomainsFound />
       ) : (
         // 🔹 Actual data
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -201,9 +172,52 @@ const Domains = () => {
   );
 };
 
+const DomainsSkeleton = () => {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      {[...Array(4)].map((_, i) => (
+        <div
+          key={i}
+          className="flex flex-col bg-white rounded-2xl shadow-md overflow-hidden"
+        >
+          <Skeleton className="h-40 w-full" />
+          <div className="p-4 space-y-2">
+            <Skeleton className="h-5 w-3/4" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+          </div>
+          <div className="px-4 pb-4">
+            <Skeleton className="h-9 w-full rounded-md" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const NoDomainsFound = () => {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 text-center">
+      <img
+        src="/public/domainImageFallback.svg"
+        alt="No domains"
+        className="w-20 h-20 mb-4 opacity-80"
+      />
+      <h2 className="text-lg font-semibold">
+        You're not enrolled in any field yet
+      </h2>
+      <p className="text-sm text-muted-foreground">
+        Start exploring and enroll in a domain to begin your journey 🚀
+      </p>
+    </div>
+  );
+};
+
 const IndividualSkills = () => {
   const navigate = useNavigate();
   const { isSmallScreen } = useScreenSize();
+
+  const isLoadingSkills = false;
 
   return (
     <div className="flex flex-col gap-3 w-full">
@@ -220,62 +234,63 @@ const IndividualSkills = () => {
         </DropdownMenu>
       </div>
       <div className="flex flex-col gap-4 mt-5 w-full">
-        {individualSkills.map((skill, index) => (
-          <div key={index} className="flex items-center justify-between w-full">
-            <div className="w-7/12 lg:w-5/6">
-              <h2 className="font-normal text-base md:text-lg">{skill.name}</h2>
-              <OrangeProgressBar value={skill.value} />
+        {isLoadingSkills ? (
+          <IndividualSkillsSkeleton />
+        ) : (
+          individualSkills.map((skill, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between w-full"
+            >
+              <div className="w-7/12 lg:w-5/6">
+                <h2 className="font-normal text-base md:text-lg">
+                  {skill.name}
+                </h2>
+                <OrangeProgressBar value={skill.value} />
+              </div>
+              <div className="flex items-center gap-2 w-fit">
+                <OutlinedActionButton
+                  title="Take Quiz"
+                  handleClick={() =>
+                    navigate("/user/dashboard/skill-tracker/skill-assessment")
+                  }
+                  className="px-3"
+                  icon={
+                    <BookOpenCheck
+                      size={isSmallScreen ? 15 : 18}
+                      color="black"
+                    />
+                  }
+                />
+                <Trash2 color="black" size={18} className="cursor-pointer" />
+              </div>
             </div>
-            <div className="flex items-center gap-2 w-fit">
-              <OutlinedActionButton
-                title="Take Quiz"
-                handleClick={() =>
-                  navigate("/user/dashboard/skill-tracker/skill-assessment")
-                }
-                className="px-3"
-                icon={
-                  <BookOpenCheck size={isSmallScreen ? 15 : 18} color="black" />
-                }
-              />
-              <Trash2 color="black" size={18} className="cursor-pointer" />
-            </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
     </div>
   );
 };
 
-const DomainsSkeleton = () => {
+const IndividualSkillsSkeleton = ({ count = 3 }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-md p-6">
-      {/* Title skeleton */}
-      <Skeleton className="h-6 w-40 mb-6" />
-
-      {/* Responsive skeleton grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={i}
-            className="flex flex-col bg-gray-50 rounded-xl overflow-hidden"
-          >
-            {/* Image skeleton */}
-            <Skeleton className="h-40 w-full" />
-
-            {/* Text skeleton */}
-            <div className="p-4 flex flex-col gap-2">
-              <Skeleton className="h-5 w-3/4" />
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-5/6" />
-            </div>
-
-            {/* Button skeleton */}
-            <div className="px-4 pb-4">
-              <Skeleton className="h-8 w-full rounded-md" />
-            </div>
+    <div className="flex flex-col gap-4 mt-5 w-full">
+      {Array.from({ length: count }).map((_, index) => (
+        <div key={index} className="flex items-center justify-between w-full">
+          {/* Skill name and progress bar */}
+          <div className="w-7/12 lg:w-5/6 flex flex-col gap-2">
+            <Skeleton className="h-5 w-3/5 md:h-6 md:w-2/5 rounded-md" />
+            <Skeleton className="h-3 w-full rounded-full" />
           </div>
-        ))}
-      </div>
+
+          {/* Buttons */}
+          <div className="flex items-center gap-2 w-fit">
+            <Skeleton className="h-10 w-24 rounded-md" />
+            {/* Take Quiz button */}
+            <Skeleton className="h-10 w-10 rounded-full" /> {/* Trash icon */}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };

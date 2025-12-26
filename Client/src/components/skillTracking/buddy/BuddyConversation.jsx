@@ -72,7 +72,7 @@ export const BuddyConversation = () => {
       case "intro":
         return {
           message:
-            "👋 Hey there! I’m Piddu, your friendly learning buddy.\nI’ll help you build your path as a developer!",
+            "👋 Hey there! I’m Lumo, your friendly learning buddy.\nI’ll help you build your path as a developer!",
           options: ["Let's Start"],
         };
 
@@ -168,7 +168,7 @@ export const BuddyConversation = () => {
               className="relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48"
             >
               <div className="absolute w-full h-full bg-blue-100 rounded-full blur-2xl opacity-40"></div>
-              <Buddy pose={buddyPose} alt="Piddu Mascot" size="large" />
+              <Buddy pose={buddyPose} alt="Lumo" size="large" />
             </motion.div>
           </motion.div>
         )}
@@ -184,7 +184,7 @@ export const BuddyConversation = () => {
           backgroundColor: showChat ? "#E07A5F" : "#5A9BD4",
           color: "white",
         }}
-        title={showChat ? "Put Piddu to sleep" : "Wake up Piddu"}
+        title={showChat ? "Put Lumo to sleep" : "Wake up Lumo"}
       >
         {showChat ? "😴" : "💬"}
       </motion.button>

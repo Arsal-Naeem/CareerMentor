@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { InputWrapper } from "../InputWrapper/InputWrapper";
+import clsx from "clsx";
 
 export const BasicTextInput = ({
   name = "",
@@ -34,8 +35,10 @@ export const BasicTextInput = ({
       error={error}
       showAsterisk={showAsterisk}
       labelClassName={rest.labelClassName}
+      inputWrapperClassName={rest.inputWrapperClassName}
+      {...rest}
     >
-      <div className="relative">
+      <div className={clsx("relative", rest.wrapperClassName)}>
         <Component
           id={name}
           placeholder={placeholder}
@@ -44,8 +47,9 @@ export const BasicTextInput = ({
           // aria-invalid={isError ? true : false}
           disabled={disabled}
           label={label}
-          className={`${isError ? "border-red-500" : ""}`}
-          {...rest}
+          className={clsx("w-full", rest.wrapperClassName, {
+            "border-red-500": isError,
+          })}
         />
         {type == "password" && (
           <button

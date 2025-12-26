@@ -7,12 +7,14 @@ import { OrangeProgressBar } from "@/components/OrangeProgressBar";
 import TrackerSkeletons from "@/components/skeletons/skillTracking/tracker/TrackerSkeletons";
 import { BuddyConversation } from "@/components/skillTracking/buddy/BuddyConversation";
 import Modules from "@/components/skillTracking/Modules";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { domainSkillDropdownItems } from "@/constants";
-import { Ellipsis } from "lucide-react";
+import { AlertCircle, Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -34,6 +36,14 @@ export const Tracker = () => {
     }
   }, [data, isLoading, isError]);
 
+  const onProjectSubmit = (payload) => {
+    // console.log("Project form data", payload);
+  };
+
+  const onCertificationSubmit = (payload) => {
+    console.log("Certification form data", payload);
+  };
+
   return (
     <div className="flex flex-col gap-10">
       {showBuddy && (
@@ -46,7 +56,7 @@ export const Tracker = () => {
       )}
 
       <div className="flex flex-col lg:flex-row justify-around gap-10">
-        <DomainTracker
+        <DomainInfo
           setIsAddProjectModalOpen={setIsAddProjectModalOpen}
           setIsAddCertificationModalOpen={setIsAddCertificationModalOpen}
         />
@@ -59,23 +69,22 @@ export const Tracker = () => {
         mode="add"
         open={isAddProjectModalOpen}
         setOpen={setIsAddProjectModalOpen}
+        onSubmit={onProjectSubmit}
       />
       <CertificationModal
         mode="add"
         open={isAddCertificationModalOpen}
         setOpen={setIsAddCertificationModalOpen}
+        onSubmit={onCertificationSubmit}
       />
     </div>
   );
 };
 
-const DomainTracker = ({
+const DomainInfo = ({
   setIsAddProjectModalOpen,
   setIsAddCertificationModalOpen,
 }) => {
-  const { id: domainId } = useParams();
-
-  // --- Mock data (replace with API later) ---
   const modules = [
     {
       id: 1,
@@ -109,6 +118,12 @@ const DomainTracker = ({
   const completedModules = modules.filter((m) => m.isCompleted).length;
   const totalModules = modules.length;
 
+  const isLoading = false;
+
+  if (isLoading) {
+    return <DomainInfoSkeleton />;
+  }
+
   return (
     <div className="w-full md:w-[400px] flex flex-col gap-3">
       <div
@@ -122,7 +137,7 @@ const DomainTracker = ({
         <div className="bg-white rounded-full h-52 w-52 flex items-center justify-center overflow-hidden shadow">
           <img
             src="/buddy.png"
-            alt="Buddy"
+            alt="Lumo"
             className="object-contain h-full w-full"
           />
         </div>
@@ -161,11 +176,43 @@ const DomainTracker = ({
   );
 };
 
+const DomainInfoSkeleton = () => {
+  return (
+    <div className="w-full md:w-[400px] flex flex-col gap-3">
+      {/* Main Card */}
+      <div className="w-full rounded-2xl p-10 flex flex-col items-center justify-center gap-4 bg-gray-50">
+        {/* Buddy Image Skeleton */}
+        <Skeleton className="bg-white rounded-full h-44 w-44" />
+
+        {/* Career Domain Title Skeleton */}
+        <Skeleton className="h-6 w-32 md:w-40 rounded-md" />
+
+        {/* Stats Skeleton */}
+        <div className="flex justify-between w-full gap-5 text-black text-sm font-normal">
+          <div className="flex-1 flex flex-col gap-2">
+            <Skeleton className="h-4 w-20 rounded-md" />
+            <Skeleton className="h-4 w-24 rounded-md" />
+            <Skeleton className="h-4 w-28 rounded-md" />
+          </div>
+          <div className="flex-1 flex flex-col gap-2 items-end">
+            <Skeleton className="h-4 w-10 rounded-md" />
+            <Skeleton className="h-4 w-10 rounded-md" />
+            <Skeleton className="h-4 w-10 rounded-md" />
+          </div>
+        </div>
+      </div>
+
+      {/* Buttons Skeleton */}
+      <Skeleton className="h-12 w-full rounded-full" />
+      <Skeleton className="h-12 w-full rounded-full" />
+    </div>
+  );
+};
+
 const SkillTracker = () => {
   const navigate = useNavigate();
   const { id: domainId } = useParams();
 
-  // API hook
   const { data, isLoading, isError } = GetUserEnrolledModule(domainId);
 
   const activeModules = data?.userModules?.activeModules || [];
@@ -190,18 +237,36 @@ const SkillTracker = () => {
 
   if (isError) {
     return (
-      <div className="w-full md:w-3/4 bg-custom-light-white rounded-md p-5 h-[400px] flex items-center justify-center">
-        <p className="text-red-500 text-sm">Failed to load modules.</p>
+      <div className="flex flex-col items-center justify-center w-full">
+        <AlertCircle size={48} className="text-red-500 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          Oops! Something went wrong.
+        </h3>
+        <p className="text-sm text-gray-500 text-center max-w-xs">
+          We encountered an error while fetching your active modules. Please try
+          again.
+        </p>
       </div>
     );
   }
 
   if (displayModules.length === 0) {
     return (
-      <div className="flex items-center justify-center h-[300px] bg-white rounded-xl shadow-sm">
-        <p className="text-gray-500 text-sm">
-          No active modules found. Enroll to get started!
+      <div className="flex flex-col items-center justify-center w-full">
+        <AlertCircle size={48} className="text-gray-400 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          You don't have any active skill modules
+        </h3>
+        <p className="text-sm text-gray-500 text-center max-w-xs">
+          To get started, please enroll in any of the skill modules available in
+          your selected domain.
         </p>
+        <Button
+          variant="outline"
+          className="mt-4 px-4 py-2 text-sm text-[#59A4C0] border-[#59A4C0] hover:bg-[#59A4C0]/10"
+        >
+          Explore Modules
+        </Button>
       </div>
     );
   }
@@ -237,27 +302,26 @@ const SkillTracker = () => {
                 {mod.description}
               </p>
 
-              <div className="flex items-center justify-between mt-2">
-                <div className="flex flex-col gap-1 w-full">
+              <div className="flex flex-col gap-1 w-full">
+                <div className="flex items-center justify-between">
                   <OrangeProgressBar value={progressPercent} />
-                  <span className="text-xs text-muted-foreground">
-                    {mod.totalXp} XP
-                  </span>
-                </div>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Ellipsis
-                      color="black"
-                      size={18}
-                      className="cursor-pointer ml-2"
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Ellipsis
+                        color="black"
+                        size={18}
+                        className="cursor-pointer ml-2"
+                      />
+                    </DropdownMenuTrigger>
+                    <ActionDropdown
+                      items={domainSkillDropdownItems}
+                      onAction={(action) => handleActions(action, mod.id)}
                     />
-                  </DropdownMenuTrigger>
-                  <ActionDropdown
-                    items={domainSkillDropdownItems}
-                    onAction={(action) => handleActions(action, mod.id)}
-                  />
-                </DropdownMenu>
+                  </DropdownMenu>
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {mod.totalXp} XP
+                </span>
               </div>
             </div>
           );

@@ -3,11 +3,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Buddy } from "./buddy";
 
 const BuddyLessons = () => {
- const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       from: "buddy",
-      text: "👋 Hey there! I’m Piddu again — ready to help you with this module!",
+      text: "👋 Hey there! I’m Lumo again — ready to help you with this module!",
     },
   ]);
   const [input, setInput] = useState("");
@@ -44,7 +44,7 @@ const BuddyLessons = () => {
                 🤖
               </div>
               <h2 className="text-gray-800 font-semibold text-sm">
-                Piddu — Module Guide
+                Lumo — Module Guide
               </h2>
             </div>
 
