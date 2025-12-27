@@ -10,6 +10,7 @@ import {
 import { ActionDropdown } from "@/components/dropdowns/ActionDropdown";
 import { projectDropdownItems } from "@/constants";
 
+// TODO:
 export const Projects = () => {
   const handleActions = (action) => {
     switch (action) {

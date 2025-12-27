@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
+// TODO
 const QuizModal = ({ open, onClose, quiz }) => {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
