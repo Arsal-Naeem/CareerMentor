@@ -36,6 +36,10 @@ import QuizSession from "./quiz/quizSession.js";
 import blog_tag_mapping from "./blog/blogTagMapping.js";
 import blogs from "./blog/blogModel.js";
 import tag from "./blog/tagModel.js";
+import Events from "./events/eventModel.js";
+import EventEnrollment from "./events/eventEnrollment.js";
+import EventTag from "./events/eventTag.js";
+import EventTagMapping from "./events/eventTagMapping.js";
 
 // 🔁 Define relationships here
 
@@ -47,6 +51,28 @@ blogs.belongsTo(User, { foreignKey: "user_id", as: "authorInfo" });
 blogs.belongsToMany(tag, { through: blog_tag_mapping, foreignKey: "blog_id" });
 tag.belongsToMany(blogs, { through: blog_tag_mapping, foreignKey: "tag_id" });
 
+// Event ↔ Enrollment
+Events.hasMany(EventEnrollment, { foreignKey: "event_id" });
+EventEnrollment.belongsTo(Events, { foreignKey: "event_id" });
+
+Events.belongsTo(User, { as: "Organizer", foreignKey: "organizer_id" });
+User.hasMany(Events, { foreignKey: "organizer_id" });
+
+// User ↔ Enrollment
+User.hasMany(EventEnrollment, { foreignKey: "user_id" });
+EventEnrollment.belongsTo(User, { foreignKey: "user_id" });
+// Many-to-Many: Event ↔ EventTag
+Events.belongsToMany(EventTag, {
+  through: EventTagMapping,
+  foreignKey: "event_id",
+  otherKey: "tag_id",
+});
+
+EventTag.belongsToMany(Events, {
+  through: EventTagMapping,
+  foreignKey: "tag_id",
+  otherKey: "event_id",
+});
 
 // Category → Question
 category.hasMany(AssessmentQuestion, {
@@ -324,9 +350,16 @@ Lesson.hasMany(UserLessonProgress, { foreignKey: "lessonId", as: "userProgress" 
 UserLessonProgress.belongsTo(Lesson, { foreignKey: "lessonId", as: "lesson" });
 
 export {
+  //blogs
   blogs,
   tag,
   blog_tag_mapping,
+  //Events  
+  Events,
+  EventEnrollment,
+  EventTag,
+  EventTagMapping,
+  //User
   User,
   AssessmentQuestion,
   AssessmentOptions,

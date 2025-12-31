@@ -8,6 +8,7 @@ import domainProgressRoutes from "./domainProgressRoutes.js";
 import lessonRoutes from "./lessonRoutes.js";
 import quizRoutes from "./quizRoutes.js";
 import roadMapRoutes from "./roadMapRoutes.js";
+import eventRoutes from "./eventRoutes.js";
 
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router.use("/lessons", lessonRoutes)
 router.use("/quiz", quizRoutes)
 
 router.use("/roadmaps", roadMapRoutes)
+
+router.use("/events", eventRoutes)
 
 export default router;

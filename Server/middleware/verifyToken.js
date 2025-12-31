@@ -31,3 +31,23 @@ export const isAdmin = (req, res, next) => {
   }
   next();
 };
+
+export const checkTokenOptional = (req, res, next) => {
+  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    req.userId = null;
+    req.role = null;
+    return next();
+  }
+
+  try {
+    const decode = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decode.userId;
+    req.role = decode.role;
+    next();
+  } catch (err) {
+    req.userId = null;
+    req.role = null;
+    next();
+  }
+};
