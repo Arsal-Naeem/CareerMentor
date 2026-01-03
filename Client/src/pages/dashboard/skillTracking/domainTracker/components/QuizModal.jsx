@@ -10,29 +10,24 @@ import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-// TODO
 const QuizModal = ({ open, onClose, quiz }) => {
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState([]);
   const [preparing, setPreparing] = useState(true);
 
-  const { data, isLoading } = StartQuiz(quiz?.id, {
-    enabled: !!quiz,
-  });
+  const { data, isLoading } = StartQuiz(quiz?.id, { enabled: !!quiz });
 
-  // Parse quiz question string into array of question objects
   useEffect(() => {
-    if (data?.question) {
-      const rawQuestions = data.question.split(/\n(?=Question \d+:)/g);
-      const parsed = rawQuestions.map((q) => {
-        const [questionLine, ...options] = q.split("\n").filter(Boolean);
-        return {
-          text: questionLine.replace(/^Question \d+:\s*/, ""),
-          options: options.map((opt) => opt.trim()),
-        };
-      });
-      console.log("Parsed Questions:", parsed);
+    if (data?.question && Array.isArray(data.question)) {
+      const parsed = data.question.map((q) => ({
+        text: q.questionText,
+        options: Object.entries(q.options).map(([key, value]) => ({
+          key,
+          text: value,
+        })),
+        correctAnswer: q.correctAnswer, // key like "A", "B"
+      }));
       setQuestions(parsed);
       setPreparing(false);
     }
@@ -43,7 +38,7 @@ const QuizModal = ({ open, onClose, quiz }) => {
   if (isLoading || preparing)
     return (
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-md flex flex-col items-center justify-center py-16">
+        <DialogContent className="max-w-md w-full flex flex-col items-center justify-center py-16">
           <Loader2 className="animate-spin w-12 h-12 text-[#59A4C0] mb-4" />
           <p className="text-gray-700 text-center">Preparing your quiz...</p>
         </DialogContent>
@@ -52,9 +47,9 @@ const QuizModal = ({ open, onClose, quiz }) => {
 
   const currentQuestion = questions[currentIndex];
 
-  const handleSelectAnswer = (option) => {
+  const handleSelectAnswer = (optionKey) => {
     const newAnswers = [...userAnswers];
-    newAnswers[currentIndex] = option;
+    newAnswers[currentIndex] = optionKey;
     setUserAnswers(newAnswers);
   };
 
@@ -62,12 +57,20 @@ const QuizModal = ({ open, onClose, quiz }) => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      // Quiz completed
+      // Quiz completed, calculate score
+      let correctCount = 0;
       questions.forEach((q, i) => {
-        // console.log(`Q${i + 1}: ${q.text}`);
-        // console.log(`Selected Answer: ${userAnswers[i] || "No answer"}`);
+        if (userAnswers[i] === q.correctAnswer) correctCount++;
+        console.log(
+          `Q${i + 1}: ${q.text} | Your answer: ${
+            userAnswers[i] || "No answer"
+          } | Correct: ${q.correctAnswer}`
+        );
       });
-      alert("Quiz completed! Check console for results.");
+      console.log(`Total: ${questions.length}, Correct: ${correctCount}`);
+      alert(
+        `Quiz completed! You got ${correctCount}/${questions.length} correct. Check console for details.`
+      );
       onClose();
     }
   };
@@ -76,7 +79,7 @@ const QuizModal = ({ open, onClose, quiz }) => {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
+      <DialogContent className="max-w-lg w-full max-h-[80vh] flex flex-col overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold text-gray-900">
             {quiz.quizTitle}
@@ -86,8 +89,8 @@ const QuizModal = ({ open, onClose, quiz }) => {
         <Separator className="my-3" />
 
         {currentQuestion && (
-          <div className="space-y-6 overflow-y-auto flex-1 pr-2">
-            {/* Question Progress Bar */}
+          <div className="flex flex-col space-y-6">
+            {/* Progress */}
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-700">
                 Question {currentIndex + 1}/{questions.length}
@@ -99,10 +102,7 @@ const QuizModal = ({ open, onClose, quiz }) => {
             <div className="w-full bg-[#FFD272] rounded-full h-3 overflow-hidden">
               <div
                 className="h-3 transition-all duration-300"
-                style={{
-                  width: `${progressPercent}%`,
-                  backgroundColor: "#59A4C0",
-                }}
+                style={{ width: `${progressPercent}%`, backgroundColor: "#59A4C0" }}
               />
             </div>
 
@@ -112,38 +112,41 @@ const QuizModal = ({ open, onClose, quiz }) => {
             </p>
 
             {/* Options */}
-            <div className="grid gap-3">
-              {currentQuestion.options.map((opt, idx) => (
+            <div className="flex flex-col gap-3">
+              {currentQuestion.options.map((opt) => (
                 <Button
-                  key={idx}
+                  key={opt.key}
                   variant={
-                    userAnswers[currentIndex] === opt ? "default" : "outline"
+                    userAnswers[currentIndex] === opt.key ? "default" : "outline"
                   }
-                  className="w-full text-left break-words whitespace-pre-wrap"
-                  onClick={() => handleSelectAnswer(opt)}
+                  className="w-full text-left break-words whitespace-normal"
+                  onClick={() => handleSelectAnswer(opt.key)}
                 >
-                  {opt}
+                  {opt.text}
                 </Button>
               ))}
             </div>
 
             {/* Navigation */}
-            <div className="flex justify-between gap-2 mt-4">
+            <div className="flex justify-between gap-2 mt-4 flex-wrap">
               {currentIndex > 0 && (
                 <Button
                   variant="outline"
-                  className="flex-1"
+                  className="flex-1 min-w-[120px]"
                   onClick={() => setCurrentIndex(currentIndex - 1)}
                 >
                   Previous
                 </Button>
               )}
-              <Button className="flex-1" onClick={handleNext}>
+              <Button
+                className="flex-1 min-w-[120px]"
+                onClick={handleNext}
+              >
                 {currentIndex === questions.length - 1 ? "Finish Quiz" : "Next"}
               </Button>
             </div>
 
-            {/* Close Button */}
+            {/* Close */}
             <Button
               variant="ghost"
               className="w-full mt-2 text-gray-700"

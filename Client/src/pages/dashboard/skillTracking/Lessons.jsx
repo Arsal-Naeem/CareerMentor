@@ -56,7 +56,9 @@ const Lessons = () => {
   }
   console.log("quizData", quizData);
 
-  const quizzes = Object.values(quizData).filter((q) => typeof q === "object");
+// Safe handling for initial undefined
+const quizzes = Object.values(quizData || {}).filter((q) => typeof q === "object");
+
 
   const module = lessonsData;
   const allLocked = module.lessons?.every((lesson) => lesson.locked);

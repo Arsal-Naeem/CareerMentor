@@ -28,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 
 const formatDate = (iso) => (iso ? format(new Date(iso), "MMM d, yyyy") : "—");
 
@@ -46,6 +47,14 @@ const Modules = () => {
 
   const [selectedModule, setSelectedModule] = useState(null);
   const [isViewOpen, setIsViewOpen] = useState(false);
+  // Add this state at the top alongside selectedModule/isViewOpen
+  const [isProjectOpen, setIsProjectOpen] = useState(false);
+
+  const handleProject = (module) => {
+    console.log("Selected module:", module);
+    setSelectedModule(module); // reuse selectedModule for context
+    setIsProjectOpen(true);
+  };
 
   useEffect(() => {
     if (modules.length > 0) {
@@ -196,7 +205,7 @@ const Modules = () => {
                     <span>{mod.totalXp} XP</span>
                   </div>
                   <Select
-                    value={statusMap[mod.id]}
+                    value={statusMap[mod.id] || "pending"}
                     onValueChange={(value) => handleStatusChange(mod.id, value)}
                     disabled={isPending}
                   >
@@ -225,6 +234,7 @@ const Modules = () => {
                     textSmall
                     className="w-1/2 text-center"
                     variant="dark"
+                    onClickHandler={() => handleProject(mod)} // open dialog for this module
                   />
                 </div>
               </CardContent>
@@ -240,6 +250,8 @@ const Modules = () => {
         onPageChange={handlePageChange}
       />
 
+      {/* View Module Dialog */}
+
       <Dialog open={isViewOpen} onOpenChange={setIsViewOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
@@ -252,6 +264,40 @@ const Modules = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Project Dialog */}
+
+      {selectedModule && (
+        <Dialog open={isProjectOpen} onOpenChange={setIsProjectOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                Create Project for "{selectedModule?.title}"
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="text-sm text-gray-700 py-4">
+              This module allows you to create a practice project to strengthen
+              your skills. You can experiment, apply what you've learned, and
+              track your progress here.
+            </div>
+
+            <div className="flex justify-end gap-2 mt-4">
+              <Button variant="outline" onClick={() => setIsProjectOpen(false)}>
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  toast.success("Project creation is not implemented yet");
+                  setIsProjectOpen(false);
+                }}
+              >
+                Create Project
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

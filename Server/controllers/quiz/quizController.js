@@ -61,3 +61,5 @@ export const startQuizSession = async (req, res) => {
     return errorResponse(res, error, "Internal Server Error");
   }
 };
+
+export const submitQuizAnswer = async (req, res) => {}

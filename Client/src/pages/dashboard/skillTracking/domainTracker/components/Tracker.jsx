@@ -20,7 +20,6 @@ import { domainSkillDropdownItems } from "@/constants";
 import { AlertCircle, Ellipsis } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "sonner";
 
 export const Tracker = () => {
   const { id: domainId } = useParams();
@@ -234,17 +233,7 @@ const SkillTracker = () => {
       case "deactivate":
         changeStatus(
           { moduleId, status: "pending" },
-          {
-            onSuccess: () => {
-              toast.success("Module removed from active");
-            },
-            onError: (error) => {
-              toast.error(
-                error?.response?.data?.message ||
-                  "Failed to update module status"
-              );
-            },
-          }
+         
         );
         break;
     }
