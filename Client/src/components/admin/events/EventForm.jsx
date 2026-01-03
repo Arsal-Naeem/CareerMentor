@@ -58,6 +58,18 @@ const EventForm = ({
 
           <div className="space-y-3 col-span-1 lg:col-span-2">
             <InputField
+              name="shortDesc"
+              label="Short Description"
+              placeholder="Enter Short Description"
+              control={control}
+              isTextArea
+              rows={3}
+              showAsterisk
+            />
+          </div>
+
+          <div className="space-y-3 col-span-1 lg:col-span-2">
+            <InputField
               name="description"
               label="Description"
               component={Editor}

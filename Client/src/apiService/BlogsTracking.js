@@ -54,7 +54,6 @@ export const AddBlog = (blogData) => {
     },
     onSuccess: (data) => {
       toast.success(data.message || "Blog added successfully");
-
       queryClient.invalidateQueries(["adminBlogs"]);
     },
     onError: (error) => {
@@ -96,10 +95,10 @@ export const FetchBlogsForUsers = ({
 export const FetchSingleBlogForUsers = (slug) => {
   return useQuery({
     queryKey: ["singleBlog", slug],
-    queryFn: async () => {      
+    queryFn: async () => {
       const url = API_ROUTES.BLOGS.FETCH_SINGLE_BLOG(slug);
       const res = await axiosReq(API_MODES.GET, url);
       return res.data;
     },
   });
-}
+};

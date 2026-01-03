@@ -9,7 +9,7 @@ import { UploadImage } from "../inputs/UploadImage";
 import { Button } from "../ui/button";
 import { BlogFormSchema } from "@/validations";
 
-export const AddEditBlogForm = ({ initialData, onSubmit }) => {
+export const AddEditBlogForm = ({ initialData, onSubmit, isLoading }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
@@ -41,11 +41,11 @@ export const AddEditBlogForm = ({ initialData, onSubmit }) => {
   const onFormSubmit = (data) => {
     const payload = {
       title: data.title,
-      description: JSON.stringify(data.description),
+      description: data.description,
       tags: data.tags,
     };
 
-    console.log("Form data:", data);
+    // console.log("Form data:", data);
 
     if (data.coverImage instanceof File) {
       payload.coverImage = data.coverImage;
@@ -77,6 +77,17 @@ export const AddEditBlogForm = ({ initialData, onSubmit }) => {
       />
 
       <InputField
+        name="shortDesc"
+        label="Short Description"
+        control={control}
+        labelClassName="!font-medium"
+        placeholder="Enter Short Description"
+        rows={3}
+        isTextArea
+        showAsterisk
+      />
+
+      <InputField
         name="description"
         label="Blog Description"
         control={control}
@@ -101,6 +112,7 @@ export const AddEditBlogForm = ({ initialData, onSubmit }) => {
           type="button"
           variant="outline"
           onClick={() => navigate("/admin/dashboard/blogs")}
+          disabled={isLoading}
         >
           Cancel
         </Button>
@@ -108,8 +120,13 @@ export const AddEditBlogForm = ({ initialData, onSubmit }) => {
         <Button
           type="submit"
           className="bg-custom-light-blue hover:bg-custom-light-blue"
+          disabled={isLoading}
         >
-          {isEditMode ? "Update Blog" : "Publish Blog"}
+          {isLoading
+            ? "Publishing..."
+            : isEditMode
+            ? "Update Blog"
+            : "Publish Blog"}
         </Button>
       </div>
     </form>

@@ -3,7 +3,6 @@ import {
   AdminBlogsSkeleton,
   EmptyBlogsState,
 } from "@/components/admin/blogs/AdminBlogComponents";
-import { mockBlogs } from "@/components/admin/blogs/constants";
 import { EventsHeader } from "@/components/admin/events/EventsComponents";
 import AdminBlogCard from "@/components/blogs/AdminBlogCard";
 import { SearchBar } from "@/components/search/SearchBar";
@@ -38,14 +37,12 @@ const AdminBlogs = () => {
   const { data: tagsResponse } = GetBlogTags();
   const tags = tagsResponse?.tags || [];
 
-  console.log("Blogs Data:", data, "tags:", tags);
-
   const handleEdit = (post) => {
     navigate(`/admin/dashboard/blogs/edit/${post.id}`);
   };
 
   const handleDelete = (id) => {
-    console.log("Delete Blog ID:", id);
+    // console.log("Delete Blog ID:", id);
   };
 
   const handleAddNew = () => {
