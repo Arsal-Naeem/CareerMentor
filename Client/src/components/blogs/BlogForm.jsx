@@ -9,7 +9,12 @@ import { UploadImage } from "../inputs/UploadImage";
 import { Button } from "../ui/button";
 import { BlogFormSchema } from "@/validations";
 
-export const AddEditBlogForm = ({ initialData, onSubmit, isLoading }) => {
+export const AddEditBlogForm = ({
+  initialData,
+  onSubmit,
+  isLoading,
+  loadingText = "Adding...",
+}) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
@@ -17,10 +22,12 @@ export const AddEditBlogForm = ({ initialData, onSubmit, isLoading }) => {
   const { control, handleSubmit, reset, setValue, watch } = useForm({
     defaultValues: {
       title: "",
+      shortDesc: "",
       coverImage: null,
       coverImagePreview: null,
       description: null,
       tags: [],
+      timeToRead: "",
     },
     mode: "all",
     resolver: yupResolver(BlogFormSchema),
@@ -30,28 +37,30 @@ export const AddEditBlogForm = ({ initialData, onSubmit, isLoading }) => {
     if (initialData) {
       reset({
         title: initialData.title ?? "",
+        shortDesc: initialData.shortDesc ?? "",
         coverImage: null,
         coverImagePreview: initialData.coverImage ?? null, // URL
         description: initialData.description ?? null,
         tags: initialData.tags ?? [],
+        timeToRead: initialData.timeToRead ?? "",
       });
     }
   }, [initialData, reset]);
 
   const onFormSubmit = (data) => {
-    const payload = {
-      title: data.title,
-      description: data.description,
-      tags: data.tags,
-    };
+    const formData = new FormData();
 
-    // console.log("Form data:", data);
+    formData.append("title", data.title);
+    formData.append("shortDesc", data.shortDesc || "");
+    formData.append("longDesc", JSON.stringify(data.description));
+    formData.append("timeToRead", data.timeToRead || "");
+    formData.append("tags", JSON.stringify(data.tags));
 
     if (data.coverImage instanceof File) {
-      payload.coverImage = data.coverImage;
+      formData.append("coverImage", data.coverImage);
     }
 
-    onSubmit(payload);
+    onSubmit(formData);
   };
 
   return (
@@ -107,6 +116,15 @@ export const AddEditBlogForm = ({ initialData, onSubmit, isLoading }) => {
         showAsterisk
       />
 
+      <InputField
+        name="timeToRead"
+        label="Time to Read (minutes)"
+        control={control}
+        placeholder="e.g., 5"
+        labelClassName="!font-medium"
+        type="number"
+      />
+
       <div className="flex justify-end gap-3 pt-4">
         <Button
           type="button"
@@ -123,7 +141,7 @@ export const AddEditBlogForm = ({ initialData, onSubmit, isLoading }) => {
           disabled={isLoading}
         >
           {isLoading
-            ? "Publishing..."
+            ? loadingText
             : isEditMode
             ? "Update Blog"
             : "Publish Blog"}

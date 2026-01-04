@@ -87,7 +87,7 @@ const EventDetails = () => {
             {/* Event Intro Paragraph */}
             <p className="text-base leading-relaxed">{data?.shortDesc}</p>
 
-            {/* <ProseKitRenderer contentString={stringifiedContent} /> */}
+            {/* <ProseKitRenderer contentString={data?.longDesc} /> */}
           </div>
         </div>
       )}

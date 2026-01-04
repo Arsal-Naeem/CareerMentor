@@ -31,7 +31,6 @@ const ModuleTrackingBox = () => {
     page,
     limit
   );
-  console.log("Modules Data:", data);
   const createModuleMutation = CreateAdminModule(domainId);
   const deleteModuleMutation = DeleteAdminModule(domainId);
 

@@ -1,10 +1,18 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { truncateText } from "@/utils/helpers";
 import { Pencil, Trash2 } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { DeleteCareer } from "@/apiService/Careers";
 
 export const AdminCareerCard = ({ career }) => {
   const navigate = useNavigate();
+  const deleteCareerMutation = DeleteCareer();
+
+  const handleDelete = () => {
+    deleteCareerMutation.mutate(career.id);
+  };
+
   return (
     <div
       key={career.id}
@@ -13,14 +21,20 @@ export const AdminCareerCard = ({ career }) => {
       {/* Left: Image + Name */}
       <div className="flex items-center gap-4">
         <img
-          src={career.image}
+          src={career.imageUrl}
           alt={career.name}
           className="h-16 w-16 rounded-lg object-cover border"
         />
 
-        <h3 className="text-lg font-medium text-custom-black-dark group-hover:text-custom-orange-dark transition truncate">
-          {career.name}
-        </h3>
+        <div>
+          <h3 className="text-lg font-medium text-custom-black-dark group-hover:text-custom-orange-dark transition truncate">
+            {career.metaTitle}
+          </h3>
+
+          <p className="text-sm font-light text-custom-black-dark">
+            {truncateText(career.metaDescription, 60)}
+          </p>
+        </div>
       </div>
 
       {/* Right: Actions */}
@@ -36,6 +50,8 @@ export const AdminCareerCard = ({ career }) => {
         <button
           className="p-2 rounded-md border border-red-300 text-red-500 hover:bg-red-500 hover:text-white transition"
           title="Delete"
+          onClick={handleDelete}
+          disabled={deleteCareerMutation.isPending}
         >
           <Trash2 size={18} />
         </button>

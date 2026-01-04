@@ -44,19 +44,23 @@ export const GetBlogTags = () => {
 };
 
 //Adding blog
-export const AddBlog = (blogData) => {
+export const AddBlog = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async () => {
+    mutationFn: async (formData) => {
       const url = ADMIN_API_ROUTES.BLOGS_TRACKING.ADD_BLOG;
-      const res = await axiosReq(API_MODES.POST, url, blogData);
+      const res = await axiosReq(API_MODES.POST, url, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return res.data;
     },
     onSuccess: (data) => {
       toast.success(data.message || "Blog added successfully");
       queryClient.invalidateQueries(["adminBlogs"]);
+      queryClient.invalidateQueries(["blogsForUsers"]);
     },
     onError: (error) => {
+      console.log("Error creating blog", error);
       toast.error("Failed to add blog");
     },
   });

@@ -5,37 +5,47 @@ import {
 import { SearchBar } from "@/components/search/SearchBar";
 import usePageTitle from "@/hooks/usePageTitle";
 import AdminDashboardLayout from "@/layouts/AdmindashboardLayout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { mockEvents } from "../../../components/admin/events/constants";
+import { GetAllEvents, DeleteEvent } from "@/apiService/Events";
+import { CustomPagination } from "@/components/CustomPagination";
+import useDebounce from "@/hooks/debouncing";
 
 const AdminEvents = () => {
   usePageTitle("Admin Events");
 
   const navigate = useNavigate();
 
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [status, setStatus] = useState("all");
+  const [registrationType, setRegistrationType] = useState("all");
 
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setEvents(mockEvents);
-      setLoading(false);
-    }, 1200);
-    return () => clearTimeout(t);
-  }, []);
+  const debouncedSearch = useDebounce(search);
 
-  const filteredEvents = events.filter((event) => {
-    const matchesSearch =
-      event.name.toLowerCase().includes(search.toLowerCase()) ||
-      event.venue?.toLowerCase().includes(search.toLowerCase()) ||
-      event.tags?.some((t) => t.toLowerCase().includes(search.toLowerCase()));
-    return matchesSearch;
+  const { data, isLoading } = GetAllEvents({
+    page,
+    limit: 9,
+    search: debouncedSearch,
+    status,
+    registration_type: registrationType,
   });
 
+  const deleteEvent = DeleteEvent();
+
+  const events = data?.events || [];
+
   const handleEventDelete = (eventId) => {
-    // console.log("Event id to delete", eventId);
+    deleteEvent.mutate(eventId);
+  };
+
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setPage(1);
   };
 
   return (
@@ -48,17 +58,24 @@ const AdminEvents = () => {
 
           <SearchBar
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
             wrapperClassName="flex-1 max-w-md"
             variant="compact"
+            onSearch={handleSearchChange}
           />
 
           <EventsGrid
-            events={filteredEvents}
-            isLoading={loading}
+            events={events}
+            isLoading={isLoading}
             onDelete={handleEventDelete}
           />
         </div>
+        {Boolean(data?.pagination) && events.length > 0 && (
+          <CustomPagination
+            currentPage={page}
+            onPageChange={handlePageChange}
+            totalPages={data.pagination.totalPages}
+          />
+        )}
       </div>
     </AdminDashboardLayout>
   );

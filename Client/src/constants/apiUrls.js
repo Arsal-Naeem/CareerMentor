@@ -116,5 +116,23 @@ export const ADMIN_API_ROUTES = {
   },
   EVENTS: {
     GET_ALL_EVENTS: `${adminController}/events/all-events`,
+    CREATE_EVENT: `${adminController}/events/create-event`,
+    GET_EVENT: (eventId) => `${adminController}/events/event/${eventId}`,
+    UPDATE_EVENT: (eventId) =>
+      `${adminController}/events/update-event/${eventId}`,
+    DELETE_EVENT: (eventId) =>
+      `${adminController}/events/delete-event/${eventId}`,
+    UPDATE_EVENT_STATUS: (eventId) =>
+      `${adminController}/events/update-event-status/${eventId}`,
+  },
+  CAREER_EXPLORER: {
+    GET_ALL_CAREERS: `${adminController}/career-explorer/all-careers`,
+    CREATE_CAREER: `${adminController}/career-explorer/add-career`,
+    GET_CAREER: (careerId) =>
+      `${adminController}/career-explorer/career/${careerId}`,
+    UPDATE_CAREER: (careerId) =>
+      `${adminController}/career-explorer/update-career/${careerId}`,
+    DELETE_CAREER: (careerId) =>
+      `${adminController}/career-explorer/delete-career/${careerId}`,
   },
 };

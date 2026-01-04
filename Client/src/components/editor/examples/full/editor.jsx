@@ -28,30 +28,10 @@ export default function Editor({ initialContent, onChange, ...rest }) {
 
   const hasInitialized = useRef(false);
 
-  // useEffect(() => {
-  //   if (!initialContent) return;
-  //   if (hasInitialized.current) return;
-
-  //   editor.setContent(
-  //     typeof initialContent === "string"
-  //       ? JSON.parse(initialContent)
-  //       : initialContent
-  //   );
-
-  //   hasInitialized.current = true;
-  // }, [editor, initialContent]);
-
-  // const handleContentChange = useCallback(() => {
-  //   onChange?.(editor.getDocJSON());
-  // }, [editor, onChange]);
-
-  // useDocChange(handleContentChange, { editor });
-
   useEffect(() => {
     if (!initialContent) return;
     if (hasInitialized.current) return;
 
-    // initialContent is HTML string
     editor.setContent(initialContent);
 
     hasInitialized.current = true;

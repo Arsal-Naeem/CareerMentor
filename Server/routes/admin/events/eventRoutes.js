@@ -4,9 +4,11 @@ import { upload } from "../../../utils/S3.js";
 import {
   postEventController,
   getEventController,
+  getEventByIdController,
   updateEventController,
   getEnrolledUsersController,
   updateEventStatusController,
+  deleteEventController,
 } from "../../../controllers/admin/events/eventControllerAdmin.js";
 
 const router = express.Router();
@@ -80,6 +82,23 @@ router.get("/all-events", verifyToken, isAdmin, getEventController);
 
 /**
  * @swagger
+ * /admin/events/event/{eventId}:
+ *   get:
+ *     summary: Get single event by ID
+ *     tags: [Admin Events]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: string
+ */
+router.get("/event/:eventId", verifyToken, isAdmin, getEventByIdController);
+
+/**
+ * @swagger
  * /admin/events/update-event/{eventId}:
  *   patch:
  *     summary: Update event details
@@ -131,6 +150,28 @@ router.patch(
   verifyToken,
   isAdmin,
   updateEventStatusController
+);
+
+/**
+ * @swagger
+ * /admin/events/delete-event/{eventId}:
+ *   delete:
+ *     summary: Delete event
+ *     tags: [Admin Events]
+ *     security:
+ *       - BearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: string
+ */
+router.delete(
+  "/delete-event/:eventId",
+  verifyToken,
+  isAdmin,
+  deleteEventController
 );
 
 export default router;

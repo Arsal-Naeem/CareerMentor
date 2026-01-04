@@ -49,6 +49,7 @@ export const ResendOtpFormSchema = yupResolver(
 export const EventFormSchema = yupResolver(
   yup.object({
     name: StringRequiredSchema("Event Name"),
+    shortDesc: StringRequiredSchema("Short Description"),
     description: yup.mixed().nullable().required("Description is required"),
     date: DateSchema("Event Date"),
     venue: StringRequiredSchema("Venue"),
@@ -81,11 +82,12 @@ export const EventFormSchema = yupResolver(
       ),
     registrationLink: yup
       .string()
-      .required("Registration link is required")
       .url("Enter a valid URL")
-      .nullable(),
+      .nullable()
+      .optional(),
+    registrationType: yup.string().oneOf(["internal", "external"]).optional(),
     tags: yup.array().of(yup.string()).optional(),
-    status: yup.string().oneOf(["pending", "approved", "rejected"]).required(),
+    // status: yup.string().oneOf(["pending", "approved", "rejected"]).optional(),
   })
 );
 
@@ -107,6 +109,8 @@ export const ChangePasswordSchema = yupResolver(
 export const BlogFormSchema = yup.object({
   title: StringRequiredSchema("Blog Title"),
 
+  shortDesc: StringRequiredSchema("Short Description"),
+
   coverImage: ImageSchemaWithPreview(),
 
   coverImagePreview: ImagePreviewSchema,
@@ -114,6 +118,8 @@ export const BlogFormSchema = yup.object({
   description: yup.mixed().required("Description is required"),
 
   tags: TagsSchema(),
+
+  timeToRead: yup.string().optional(),
 });
 
 export const CareerFormSchema = BlogFormSchema.pick([

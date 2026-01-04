@@ -54,9 +54,9 @@ const Lessons = () => {
       />
     );
   }
-  console.log("quizData", quizData);
 
-  const quizzes = Object.values(quizData).filter((q) => typeof q === "object");
+  const quizzes =
+    quizData && Object.values(quizData).filter((q) => typeof q === "object");
 
   const module = lessonsData;
   const allLocked = module.lessons?.every((lesson) => lesson.locked);

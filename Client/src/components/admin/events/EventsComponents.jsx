@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { EventCardsSkeleton } from "./AdminEventsSkeletons";
 import DeleteConfirmModal from "@/components/modals/DeleteConfirmationModal";
 import clsx from "clsx";
+import { formatDate } from "@/components/careerAssessment/AssessmentHistory";
 
 export const EventsHeader = ({
   onAddButtonClick,
@@ -73,25 +74,36 @@ export const EventsGrid = ({ isLoading, events = [], onDelete }) => {
                   className="group bg-white border rounded-xl p-4 flex flex-col justify-center lg:flex-row gap-4 items-center lg:justify-start hover:shadow-md transition"
                 >
                   {/* Date Block */}
-                  <div className="flex-shrink-0 text-center w-20">
-                    <div className="text-xl font-bold text-custom-text-orange">
-                      {new Date(event.date).getDate()}
+                  <div className="text-center">
+                    <div className="text-xl font-bold text-custom-text-orange whitespace-nowrap">
+                      {formatDate(event.eventDate)}
                     </div>
-                    <div className="text-xs text-gray-500 uppercase">
-                      {new Date(event.date).toLocaleString("default", {
-                        month: "short",
+                    <div className="text-xs text-gray-400 whitespace-nowrap">
+                      {new Date(
+                        `1970-01-01T${event?.startTime}`
+                      ).toLocaleTimeString("en-US", {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}{" "}
+                      -{" "}
+                      {new Date(
+                        `1970-01-01T${event?.endTime}`
+                      ).toLocaleTimeString("en-US", {
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true,
                       })}
                     </div>
-                    <div className="text-xs text-gray-400">{event.time}</div>
                   </div>
 
                   {/* Event Info */}
                   <div className="text-center lg:text-left">
                     <h3 className="font-semibold text-lg group-hover:text-custom-text-orange">
-                      {event.name}
+                      {event.title}
                     </h3>
                     <p className="text-sm text-gray-600 max-w-md lg:max-w-full">
-                      {event.description}
+                      {event.shortDesc}
                     </p>
 
                     <div className="flex flex-wrap items-center justify-center lg:items-start lg:justify-start gap-2 mt-2 text-sm text-gray-500">
@@ -114,14 +126,14 @@ export const EventsGrid = ({ isLoading, events = [], onDelete }) => {
                   </div>
 
                   <div className="flex flex-wrap gap-1 max-w-xs justify-center items-center lg:justify-start">
-                    {event.tags?.slice(0, 3).map((tag, i) => (
+                    {event.EventTags?.slice(0, 3).map((tag, i) => (
                       <Badge key={i} variant="secondary">
                         {tag}
                       </Badge>
                     ))}
-                    {event.tags?.length > 3 && (
+                    {event.EventTags?.length > 3 && (
                       <Badge variant="secondary">
-                        +{event.tags.length - 3}
+                        +{event.EventTags.length - 3}
                       </Badge>
                     )}
                   </div>

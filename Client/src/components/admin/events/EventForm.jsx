@@ -2,19 +2,25 @@ import Editor from "@/components/editor/examples/full/editor";
 import { InputField } from "@/components/InputField/InputField";
 import { DatePicker } from "@/components/inputs/DatePicker";
 import { TagInput } from "@/components/inputs/TagsInput";
+import { UploadImage } from "@/components/inputs/UploadImage";
 import { Button } from "@/components/ui/button";
 import { EventFormSchema } from "@/validations";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
 const EventForm = ({
   initialValues,
   onSubmit,
   submitLabel = "Save Event",
   loading = false,
+  loadingText = "Adding...",
 }) => {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, setValue, watch, reset } = useForm({
     defaultValues: initialValues || {
       name: "",
+      shortDesc: "",
+      coverImage: null,
+      coverImagePreview: null,
       description: initialValues?.description || null,
       date: null,
       venue: "",
@@ -26,6 +32,26 @@ const EventForm = ({
     },
     resolver: EventFormSchema,
   });
+
+  useEffect(() => {
+    if (initialValues) {
+      reset({
+        name: initialValues.name ?? "",
+        shortDesc: initialValues.shortDesc ?? "",
+        coverImage: null,
+        coverImagePreview: initialValues.image_url ?? null,
+        description: initialValues.description ?? null,
+        date: initialValues.date ?? null,
+        venue: initialValues.venue ?? "",
+        startTime: initialValues.startTime ?? "",
+        endTime: initialValues.endTime ?? "",
+        registrationType: initialValues.registrationType ?? "internal",
+        registrationLink: initialValues.registrationLink ?? "",
+        tags: initialValues.tags ?? [],
+        status: initialValues.status ?? "pending",
+      });
+    }
+  }, [initialValues, reset]);
 
   const onSubmitForm = (data) => {
     onSubmit({
@@ -45,6 +71,18 @@ const EventForm = ({
           <h2 className="text-xl font-semibold text-gray-700">
             Event Information
           </h2>
+
+          <InputField
+            name="coverImage"
+            label="Cover Image"
+            component={UploadImage}
+            control={control}
+            preview={watch("coverImagePreview")}
+            setValue={setValue}
+            labelClassName="!font-medium"
+            showAsterisk
+            uploaderClassName="border-custom-orange-dark text-custom-orange-dark"
+          />
 
           <div className="space-y-3 col-span-1 lg:col-span-2">
             <InputField
@@ -154,7 +192,7 @@ const EventForm = ({
           className="w-full bg-custom-text-orange hover:bg-custom-orange"
           disabled={loading}
         >
-          {submitLabel}
+          {loading ? loadingText : submitLabel}
         </Button>
       </div>
     </form>
