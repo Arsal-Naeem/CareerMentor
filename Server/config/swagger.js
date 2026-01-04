@@ -4,9 +4,9 @@ const options = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "CareerMentor API",
+      title: "Tech Path AI API",
       version: "1.0.0",
-      description: "CareerMentor Backend API Documentation",
+      description: "Tech Path AI Backend API Documentation",
     },
 
     servers: [

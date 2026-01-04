@@ -49,7 +49,7 @@ const Signup = () => {
 
   return (
     <AuthLayout
-      mainHeading="Join Career Mentor Today"
+      mainHeading="Join Tech Path AI Today"
       text="Discover your ideal tech career — powered by AI, tailored to you."
       formText="It's free and only takes a minute to get started."
     >

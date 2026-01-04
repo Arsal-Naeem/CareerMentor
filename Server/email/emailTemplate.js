@@ -94,7 +94,6 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
 </html>
 `;
 
-
 export const welcomeEmailTemplate = `
     <!DOCTYPE html>
     <html>
@@ -159,7 +158,7 @@ export const welcomeEmailTemplate = `
     <body>
       <div class="email-container">
         <div class="header">
-          Welcome to Career Mentor!
+          Welcome to Tech Path AI!
         </div>
         <div class="content">
           <h1>Hello, {firstName}!</h1>
@@ -187,5 +186,3 @@ export const welcomeEmailTemplate = `
     </body>
     </html>
   `;
-
-

@@ -12,11 +12,11 @@ export default function About() {
           <LeftSectionHeadings
             subtitle="About"
             titleLine1="What is"
-            highlightedLine2="Career Mentor?"
+            highlightedLine2="Tech Path AI?"
           />
 
           <p className="text-custom-black-dark text-base md:text-xl leading-relaxed font-light">
-            CareerMentor is your personal career guide — built just for tech
+            Tech Path AI is your personal career guide — built just for tech
             students in Pakistan. Discover your strengths, explore exciting
             fields like AI, Web Dev, and Game Dev, and build a career roadmap
             that actually makes sense.

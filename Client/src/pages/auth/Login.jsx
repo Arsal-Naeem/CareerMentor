@@ -42,7 +42,7 @@ const Login = () => {
 
   return (
     <AuthLayout
-      mainHeading="Welcome Back! To Career Mentor"
+      mainHeading="Welcome Back! To Tech Path AI"
       text="Sign in to access your dashboard, track progress, and explore new opportunities."
       formText="Let’s continue your journey to a smarter career."
     >

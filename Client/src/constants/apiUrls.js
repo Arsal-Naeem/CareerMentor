@@ -16,7 +16,7 @@ export const API_ROUTES = {
     FORGOT_PASSWORD: `${authController}forgot-password`,
     RESEND_VERIFICATION: `${authController}send-verification-code`,
     VERIFY_EMAIL: `${authController}verify-email`,
-    VERIFY_TOKEN: `${authController}reset-password`,
+    RESET_PASSWORD: `${authController}reset-password`,
     LOGOUT: `${authController}logout`,
   },
   ASSESSMENT: {

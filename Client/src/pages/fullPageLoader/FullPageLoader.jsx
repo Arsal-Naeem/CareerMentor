@@ -25,8 +25,9 @@ export const FullPageLoader = () => {
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 0.5, duration: 0.4 }}
       >
-        <span className="font-bold">C</span>areer
-        <span className="font-bold">M</span>entor
+        <span className="font-bold">T</span>ech
+        <span className="font-bold">P</span>ath
+        <span className="font-bold">A</span>I
       </motion.h1>
     </motion.div>
   );

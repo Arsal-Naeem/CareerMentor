@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import usePageTitle from "../../hooks/usePageTitle";
 import AuthLayout from "../../layouts/AuthLayout";
-import { VerifyTokenMutation } from "@/apiService/Auth";
+import { ResetPasswordMutation } from "@/apiService/Auth";
 
 const ResetPassword = () => {
   usePageTitle("Reset Password");
@@ -21,7 +21,7 @@ const ResetPassword = () => {
     isSuccess,
     isError,
     error,
-  } = VerifyTokenMutation();
+  } = ResetPasswordMutation();
 
   const onSubmit = (data) => {
     verifyToken(
