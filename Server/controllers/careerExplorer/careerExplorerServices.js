@@ -41,5 +41,5 @@ export const GetSingleAllCareerExplorer = async (id) => {
 
   if (!career) return null;
 
-  return career.get({ plain: true }); // ✅ returns only the actual data
+  return career.get({ plain: true });
 };
