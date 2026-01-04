@@ -78,12 +78,12 @@ export const LogoutMutation = ({ onSuccess, onError } = {}) => {
   });
 };
 
-export const VerifyTokenMutation = () => {
+export const ResetPasswordMutation = () => {
   return useMutation({
     mutationFn: async ({ password, token }) => {
       const res = await axiosReq(
         API_MODES.POST,
-        `${API_ROUTES.AUTH.VERIFY_TOKEN}/${token}`,
+        `${API_ROUTES.AUTH.RESET_PASSWORD}/${token}`,
         {
           password,
         }

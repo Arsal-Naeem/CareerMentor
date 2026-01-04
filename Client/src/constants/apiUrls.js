@@ -16,7 +16,7 @@ export const API_ROUTES = {
     FORGOT_PASSWORD: `${authController}forgot-password`,
     RESEND_VERIFICATION: `${authController}send-verification-code`,
     VERIFY_EMAIL: `${authController}verify-email`,
-    VERIFY_TOKEN: `${authController}reset-password`,
+    RESET_PASSWORD: `${authController}reset-password`,
     LOGOUT: `${authController}logout`,
   },
   ASSESSMENT: {
@@ -75,6 +75,10 @@ export const API_ROUTES = {
     FETCH_BLOGS_FOR_USERS: `/blogs/all-blogs`,
     FETCH_SINGLE_BLOG: (slug) => `/blogs/single-blog/${slug}`,
   },
+  EVENTS: {
+    FETCH_EVENTS_FOR_USERS: `/events`,
+    FETCH_SINGLE_EVENT: (slug) => `/events/details/${slug}`,
+  },
 };
 
 const adminController = "/admin";
@@ -112,5 +116,26 @@ export const ADMIN_API_ROUTES = {
     GET_ALL_BLOGS: `${adminController}/blogs/all-blogs`,
     GET_BLOG_TAGS: `${adminController}/blogs/blog-tags`,
     ADD_BLOG: `${adminController}/blogs/create-blog`,
-  }
+  },
+  EVENTS: {
+    GET_ALL_EVENTS: `${adminController}/events/all-events`,
+    CREATE_EVENT: `${adminController}/events/create-event`,
+    GET_EVENT: (eventId) => `${adminController}/events/event/${eventId}`,
+    UPDATE_EVENT: (eventId) =>
+      `${adminController}/events/update-event/${eventId}`,
+    DELETE_EVENT: (eventId) =>
+      `${adminController}/events/delete-event/${eventId}`,
+    UPDATE_EVENT_STATUS: (eventId) =>
+      `${adminController}/events/update-event-status/${eventId}`,
+  },
+  CAREER_EXPLORER: {
+    GET_ALL_CAREERS: `${adminController}/career-explorer/all-careers`,
+    CREATE_CAREER: `${adminController}/career-explorer/add-career`,
+    GET_CAREER: (careerId) =>
+      `${adminController}/career-explorer/career/${careerId}`,
+    UPDATE_CAREER: (careerId) =>
+      `${adminController}/career-explorer/update-career/${careerId}`,
+    DELETE_CAREER: (careerId) =>
+      `${adminController}/career-explorer/delete-career/${careerId}`,
+  },
 };

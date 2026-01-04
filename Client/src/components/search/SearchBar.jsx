@@ -46,6 +46,7 @@ export const SearchBar = ({
                 inputClassName
               )}
               placeholder={placeholder}
+              onChange={onSearch}
               {...rest}
             />
           </div>
@@ -56,6 +57,7 @@ export const SearchBar = ({
           <Input
             className={clsx(inputClassName, "pl-10")}
             placeholder={placeholder || "Search events, venue or tags..."}
+            onChange={onSearch}
             {...rest}
           />
         </div>

@@ -56,12 +56,14 @@ const Lessons = () => {
   }
 
   // Safe handling for initial undefined
-  const quizzes = Object.values(quizData || {})
-    .filter((q) => q && typeof q === "object" && q.id)
-    .map((quiz) => ({
-      ...quiz,
-      locked: quiz.locked || quiz.isCompleted,
-    }));
+  const quizzes =
+    quizData &&
+    Object.values(quizData || {})
+      .filter((q) => q && typeof q === "object" && q.id)
+      .map((quiz) => ({
+        ...quiz,
+        locked: quiz.locked || quiz.isCompleted,
+      }));
 
   const module = lessonsData;
   const allLocked = module.lessons?.every((lesson) => lesson.locked);
@@ -171,52 +173,51 @@ const Lessons = () => {
             <QuizListSkeleton />
           ) : (
             <div className="flex gap-3">
-  {quizzes.map((quiz) => {
-    const isCompleted = quiz.isCompleted;
-    const isLessonLocked = quiz.locked && !quiz.isCompleted;
-    const isDisabled = quiz.locked;
+              {quizzes.map((quiz) => {
+                const isCompleted = quiz.isCompleted;
+                const isLessonLocked = quiz.locked && !quiz.isCompleted;
+                const isDisabled = quiz.locked;
 
-    let tooltipText = null;
+                let tooltipText = null;
 
-    if (isCompleted) {
-      tooltipText = `You already attempted ${quiz.quizTitle}`;
-    } else if (isLessonLocked) {
-      tooltipText =
-        "Please complete the remaining lessons to unlock this quiz";
-    }
-
-    return (
-      <Tooltip key={quiz.id}>
-        <TooltipTrigger asChild>
-          <span>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={isDisabled}
-              className={`flex items-center gap-2 ${
-                isDisabled ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              onClick={() => {
-                if (!isDisabled) {
-                  setSelectedQuiz(quiz);
-                  setIsQuizModalOpen(true);
+                if (isCompleted) {
+                  tooltipText = `You already attempted ${quiz.quizTitle}`;
+                } else if (isLessonLocked) {
+                  tooltipText =
+                    "Please complete the remaining lessons to unlock this quiz";
                 }
-              }}
-            >
-              {quiz.quizTitle}
-              {isDisabled && <Lock size={14} />}
-            </Button>
-          </span>
-        </TooltipTrigger>
 
-        {tooltipText && (
-          <TooltipContent side="top">{tooltipText}</TooltipContent>
-        )}
-      </Tooltip>
-    );
-  })}
-</div>
+                return (
+                  <Tooltip key={quiz.id}>
+                    <TooltipTrigger asChild>
+                      <span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={isDisabled}
+                          className={`flex items-center gap-2 ${
+                            isDisabled ? "opacity-50 cursor-not-allowed" : ""
+                          }`}
+                          onClick={() => {
+                            if (!isDisabled) {
+                              setSelectedQuiz(quiz);
+                              setIsQuizModalOpen(true);
+                            }
+                          }}
+                        >
+                          {quiz.quizTitle}
+                          {isDisabled && <Lock size={14} />}
+                        </Button>
+                      </span>
+                    </TooltipTrigger>
 
+                    {tooltipText && (
+                      <TooltipContent side="top">{tooltipText}</TooltipContent>
+                    )}
+                  </Tooltip>
+                );
+              })}
+            </div>
           )}
         </div>
 

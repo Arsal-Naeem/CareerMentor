@@ -2,7 +2,12 @@ import {
   errorResponse,
   successResponse,
 } from "../../../utils/handlers/reponseHandler.js";
-import { createBlogService,getAllBlogsService,getBlogBySlugService, getBlogTagsService } from "./blogServices.js";
+import {
+  createBlogService,
+  getAllBlogsService,
+  getBlogBySlugService,
+  getBlogTagsService,
+} from "./blogServices.js";
 
 export const createBlogController = async (req, res) => {
   try {
@@ -10,29 +15,54 @@ export const createBlogController = async (req, res) => {
     const { title, shortDesc, longDesc, timeToRead, tags } = req.body;
     const file = req.file;
 
+    let parsedLongDesc = longDesc;
+    let parsedTags = tags;
+
+    try {
+      if (typeof longDesc === "string") {
+        parsedLongDesc = JSON.parse(longDesc);
+      }
+    } catch (e) {
+      parsedLongDesc = longDesc;
+    }
+
+    try {
+      if (typeof tags === "string") {
+        parsedTags = JSON.parse(tags);
+      }
+    } catch (e) {
+      parsedTags = tags;
+    }
+
     // ✅ Basic validations
-    if (!title?.trim() || !shortDesc?.trim() || !longDesc) {
-      return errorResponse(res, "Title, short description, and long description are required");
+    if (!title?.trim() || !shortDesc?.trim() || !parsedLongDesc) {
+      return errorResponse(
+        res,
+        "Title, short description, and long description are required"
+      );
     }
     if (!file) return errorResponse(res, "Cover image is required");
 
-    // ✅ Pass tags as-is; service will normalize
+    // ✅ Pass parsed data to service
     const newBlog = await createBlogService({
       userId,
       title,
       shortDesc,
-      longDesc,
+      longDesc: parsedLongDesc,
       timeToRead,
-      tags,
+      tags: parsedTags,
       file,
     });
 
-    return successResponse(res, {
-      blogId: newBlog.id,
-      title: newBlog.title,
-      coverImage: newBlog.coverImage,
-    }, "Blog created successfully");
-
+    return successResponse(
+      res,
+      {
+        blogId: newBlog.id,
+        title: newBlog.title,
+        coverImage: newBlog.coverImage,
+      },
+      "Blog created successfully"
+    );
   } catch (err) {
     console.error(err);
     return errorResponse(res, err.message || "Something went wrong");
@@ -41,7 +71,7 @@ export const createBlogController = async (req, res) => {
 
 export const getAllBlogsController = async (req, res) => {
   try {
-    const { page = 1, limit = 9, search = "", tagName= null } = req.query;
+    const { page = 1, limit = 9, search = "", tagName = null } = req.query;
 
     const data = await getAllBlogsService({
       page: Number(page),
@@ -81,9 +111,9 @@ export const getBlogTagsController = async (req, res) => {
   try {
     const tags = await getBlogTagsService();
 
-    return successResponse(res, {tags}, "Blog tags fetched successfully");
+    return successResponse(res, { tags }, "Blog tags fetched successfully");
   } catch (err) {
     console.error(err);
     return errorResponse(res, err.message || "Something went wrong");
   }
-}
+};

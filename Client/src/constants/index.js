@@ -37,7 +37,7 @@ export const floatingTestimonialsData = [
     imageSrc:
       "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
     imageAlt: "Student testimonial",
-    text: "Career Mentor has the best\nroadmaps for us students.",
+    text: "Tech Path AI has the best\nroadmaps for us students.",
     avatarBgColor: "bg-blue-100",
     textSize: "text-xs",
     textColor: "text-custom-gray-dark",
@@ -61,7 +61,7 @@ export const floatingTestimonialsData = [
     imageSrc:
       "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face",
     imageAlt: "Student testimonial",
-    text: "Career Mentor helped me\ngrow so much.",
+    text: "Tech Path AI helped me\ngrow so much.",
     avatarBgColor: "bg-orange-100",
     textSize: "text-sm",
     textColor: "text-gray-600",
@@ -73,7 +73,7 @@ export const floatingTestimonialsData = [
     imageSrc:
       "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
     imageAlt: "Student testimonial",
-    text: "Signing up for Career Mentor is\nthe best decision of my life.",
+    text: "Signing up for Tech Path AI is\nthe best decision of my life.",
     avatarBgColor: "bg-purple-100",
     textSize: "text-sm",
     textColor: "text-gray-600",
@@ -134,13 +134,13 @@ export const features = [
 
 export const testimonials = [
   {
-    text: "CareerMentor helped me identify my true passion in AI, and now I’m confidently building my skills toward a Data Scientist career!",
+    text: "Tech Path AI helped me identify my true passion in AI, and now I’m confidently building my skills toward a Data Scientist career!",
     name: "Anas from NUST",
     image: PersonOne,
     borderColor: "#FFC36A",
   },
   {
-    text: "Before CareerMentor, I was confused between Web Development and UI/UX. The personalized guidance helped me choose the right path!",
+    text: "Before Tech Path AI, I was confused between Web Development and UI/UX. The personalized guidance helped me choose the right path!",
     name: "Aisha from FAST",
     image: PersonTwo,
     borderColor: "#FFD36E",
@@ -152,7 +152,7 @@ export const testimonials = [
     borderColor: "#A6E3F7",
   },
   {
-    text: "CareerMentor helped me identify my true passion and confidently build a career in tech.",
+    text: "Tech Path AI helped me identify my true passion and confidently build a career in tech.",
     name: "Anas from GIKI",
     image: PersonFour,
     borderColor: "#8CD4FF",

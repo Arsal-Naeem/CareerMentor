@@ -13,6 +13,7 @@ import { uploadFileToS3 } from "../../../utils/S3.js";
 export const postEventServices = async ({
   title,
   shortDesc,
+  longDesc,
   eventDate,
   startTime,
   endTime,
@@ -32,6 +33,7 @@ export const postEventServices = async ({
       {
         title,
         shortDesc,
+        longDesc,
         eventDate,
         startTime,
         endTime,
@@ -143,6 +145,7 @@ export const updateEventServices = async ({ eventId, body, file }) => {
     const {
       title,
       shortDesc,
+      longDesc,
       eventDate,
       startTime,
       endTime,
@@ -160,6 +163,7 @@ export const updateEventServices = async ({ eventId, body, file }) => {
       {
         title: title || event.title,
         shortDesc: shortDesc ?? event.shortDesc,
+        longDesc: longDesc ?? event.longDesc,
         eventDate: eventDate || event.eventDate,
         startTime: startTime || event.startTime,
         endTime: endTime || event.endTime,
@@ -305,6 +309,57 @@ export const updateEventStatusService = async ({ eventId, status }) => {
       status: event.status,
       updatedEnrollments: newEnrollmentStatus,
     };
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
+};
+
+// GET SINGLE EVENT BY ID
+export const getEventByIdService = async (eventId) => {
+  const event = await Events.findByPk(eventId, {
+    include: [
+      {
+        model: EventTag,
+        attributes: ["id", "name"],
+        through: { attributes: [] },
+        required: false,
+      },
+    ],
+  });
+
+  if (!event) return null;
+
+  return {
+    ...event.toJSON(),
+    EventTags: event.EventTags.map((t) => t.name),
+  };
+};
+
+// DELETE EVENT
+export const deleteEventService = async (eventId) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const event = await Events.findByPk(eventId, { transaction });
+    if (!event) throw new Error("Event not found");
+
+    // Delete tag mappings
+    await EventTagMapping.destroy({
+      where: { event_id: eventId },
+      transaction,
+    });
+
+    // Delete enrollments
+    await EventEnrollment.destroy({
+      where: { event_id: eventId },
+      transaction,
+    });
+
+    // Delete event
+    await event.destroy({ transaction });
+
+    await transaction.commit();
+    return { eventId };
   } catch (error) {
     await transaction.rollback();
     throw error;

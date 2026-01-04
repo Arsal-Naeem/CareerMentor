@@ -9,7 +9,7 @@ import { AssessmentHistorySkeleton } from "../skeletons/assessment/HistorySkelet
 import { BreadCrumb } from "./BreadCrumb";
 
 // Optional utility for formatting ISO date strings
-const formatDate = (iso) =>
+export const formatDate = (iso) =>
   new Date(iso).toLocaleDateString("en-GB", {
     year: "numeric",
     month: "short",

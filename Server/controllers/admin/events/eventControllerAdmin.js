@@ -1,10 +1,15 @@
-import { errorResponse, successResponse } from "../../../utils/handlers/reponseHandler.js";
+import {
+  errorResponse,
+  successResponse,
+} from "../../../utils/handlers/reponseHandler.js";
 import {
   postEventServices,
   getEventServices,
+  getEventByIdService,
   updateEventServices,
   getEnrolledUsersService,
   updateEventStatusService,
+  deleteEventService,
 } from "./eventServiceAdmin.js";
 
 // Create new event
@@ -22,16 +27,37 @@ export const postEventController = async (req, res) => {
       registration_link,
     } = req.body;
 
+    // Parse tags if it's a JSON string
+    let parsedTags = tags;
+    try {
+      if (typeof tags === "string") {
+        parsedTags = JSON.parse(tags);
+      }
+    } catch (e) {
+      parsedTags = tags;
+    }
+
     if (!title || !eventDate || !startTime || !endTime) {
-      return errorResponse(res, "Title, date, start and end time are required", 400);
+      return errorResponse(
+        res,
+        "Title, date, start and end time are required",
+        400
+      );
     }
 
     if (!registration_type) {
       return errorResponse(res, "Please select event registration type", 400);
     }
 
-    if (registration_type === "external" && (!registration_link || !registration_link.trim())) {
-      return errorResponse(res, "Registration link is required for external events", 400);
+    if (
+      registration_type === "external" &&
+      (!registration_link || !registration_link.trim())
+    ) {
+      return errorResponse(
+        res,
+        "Registration link is required for external events",
+        400
+      );
     }
 
     const result = await postEventServices({
@@ -41,7 +67,7 @@ export const postEventController = async (req, res) => {
       startTime,
       endTime,
       venue,
-      tags,
+      tags: parsedTags,
       registration_type,
       registration_link: registration_link || null,
       file: req.file,
@@ -58,7 +84,13 @@ export const postEventController = async (req, res) => {
 // Get events with filters, pagination
 export const getEventController = async (req, res) => {
   try {
-    const { page = 1, limit = 10, search = "", status = "all", registration_type = "all" } = req.query;
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      status = "all",
+      registration_type = "all",
+    } = req.query;
 
     const data = await getEventServices({
       page: Number(page),
@@ -72,6 +104,28 @@ export const getEventController = async (req, res) => {
   } catch (error) {
     console.error("Error fetching events:", error);
     return errorResponse(res, error.message || "Unable to fetch events", 500);
+  }
+};
+
+// Get single event by ID
+export const getEventByIdController = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    if (!eventId) {
+      return errorResponse(res, "Event ID is required", 400);
+    }
+
+    const event = await getEventByIdService(eventId);
+
+    if (!event) {
+      return errorResponse(res, "Event not found", 404);
+    }
+
+    return successResponse(res, { event }, "Event fetched successfully");
+  } catch (error) {
+    console.error("Error fetching event:", error);
+    return errorResponse(res, error.message || "Unable to fetch event", 500);
   }
 };
 
@@ -112,7 +166,11 @@ export const getEnrolledUsersController = async (req, res) => {
     return successResponse(res, data, "Enrolled users fetched successfully");
   } catch (error) {
     console.error("Error fetching enrolled users:", error);
-    return errorResponse(res, error.message || "Unable to fetch enrolled users", 500);
+    return errorResponse(
+      res,
+      error.message || "Unable to fetch enrolled users",
+      500
+    );
   }
 };
 
@@ -122,13 +180,36 @@ export const updateEventStatusController = async (req, res) => {
     const { eventId } = req.params;
     const { status } = req.body;
 
-    if (!eventId || !status) return errorResponse(res, "Event ID and status are required", 400);
+    if (!eventId || !status)
+      return errorResponse(res, "Event ID and status are required", 400);
 
     const result = await updateEventStatusService({ eventId, status });
 
     return successResponse(res, result, "Event status updated successfully");
   } catch (error) {
     console.error("Error updating event status:", error);
-    return errorResponse(res, error.message || "Unable to update event status", 500);
+    return errorResponse(
+      res,
+      error.message || "Unable to update event status",
+      500
+    );
+  }
+};
+
+// Delete event
+export const deleteEventController = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    if (!eventId) {
+      return errorResponse(res, "Event ID is required", 400);
+    }
+
+    await deleteEventService(eventId);
+
+    return successResponse(res, {}, "Event deleted successfully");
+  } catch (error) {
+    console.error("Error deleting event:", error);
+    return errorResponse(res, error.message || "Unable to delete event", 500);
   }
 };

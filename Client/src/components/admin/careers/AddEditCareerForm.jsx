@@ -8,7 +8,12 @@ import { CareerFormSchema } from "@/validations";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 
-export const AddEditCareerForm = ({ initialData, onSubmit }) => {
+export const AddEditCareerForm = ({
+  initialData,
+  onSubmit,
+  isLoading,
+  loadingText = "Adding...",
+}) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditMode = Boolean(id);
@@ -19,6 +24,7 @@ export const AddEditCareerForm = ({ initialData, onSubmit }) => {
       coverImage: null,
       coverImagePreview: null,
       description: null,
+      shortDesc: "",
     },
     mode: "all",
     resolver: yupResolver(CareerFormSchema),
@@ -28,8 +34,9 @@ export const AddEditCareerForm = ({ initialData, onSubmit }) => {
     if (initialData) {
       reset({
         name: initialData.name ?? "",
+        shortDesc: initialData.shortDesc ?? "",
         coverImage: null,
-        coverImagePreview: initialData.coverImage ?? null, // URL
+        coverImagePreview: initialData.coverImage ?? null,
         description: initialData.description ?? null,
       });
     }
@@ -38,7 +45,8 @@ export const AddEditCareerForm = ({ initialData, onSubmit }) => {
   const onFormSubmit = (data) => {
     const payload = {
       name: data.name,
-      description: JSON.stringify(data.description),
+      shortDesc: data.shortDesc,
+      description: data.description,
     };
 
     if (data.coverImage instanceof File) {
@@ -72,6 +80,17 @@ export const AddEditCareerForm = ({ initialData, onSubmit }) => {
       />
 
       <InputField
+        name="shortDesc"
+        label="Short Description"
+        control={control}
+        placeholder="Enter Short Description"
+        labelClassName="!font-medium"
+        isTextArea
+        rows={4}
+        showAsterisk
+      />
+
+      <InputField
         name="description"
         label="Blog Description"
         control={control}
@@ -94,8 +113,15 @@ export const AddEditCareerForm = ({ initialData, onSubmit }) => {
           variant="secondary"
           type="submit"
           className="!bg-custom-orange-light/100 text-white !font-light opacity-100"
+          disabled={isLoading}
         >
-          <p>{isEditMode ? "Update Career" : "Add Career"}</p>
+          <p>
+            {isLoading
+              ? loadingText
+              : isEditMode
+              ? "Update Career"
+              : "Add Career"}
+          </p>
         </Button>
       </div>
     </form>

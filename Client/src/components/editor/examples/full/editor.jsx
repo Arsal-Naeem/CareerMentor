@@ -32,17 +32,14 @@ export default function Editor({ initialContent, onChange, ...rest }) {
     if (!initialContent) return;
     if (hasInitialized.current) return;
 
-    editor.setContent(
-      typeof initialContent === "string"
-        ? JSON.parse(initialContent)
-        : initialContent
-    );
+    editor.setContent(initialContent);
 
     hasInitialized.current = true;
   }, [editor, initialContent]);
 
   const handleContentChange = useCallback(() => {
-    onChange?.(editor.getDocJSON());
+    const html = editor.getDocHTML();
+    onChange?.(html);
   }, [editor, onChange]);
 
   useDocChange(handleContentChange, { editor });

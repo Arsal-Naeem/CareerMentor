@@ -8,8 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const initialData = {
   title: "Sample Blog Title",
-  description:
-    '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"This is a sample blog description."}]}]}',
+  description: "<p>This is a sample blog description.</p>",
   coverImage:
     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLf2mXAcFRF-oD0L5-9kHMZ-9bFSWcrBXLfw&s",
   tags: ["Sample", "Blog", "Test"],
@@ -37,7 +36,11 @@ const EditBlog = () => {
             subtitle=""
           />
 
-          <AddEditBlogForm initialData={initialData} onSubmit={handleSubmit} />
+          <AddEditBlogForm
+            initialData={initialData}
+            onSubmit={handleSubmit}
+            loadingText="Updating..."
+          />
         </div>
       </div>
     </AdminDashboardLayout>

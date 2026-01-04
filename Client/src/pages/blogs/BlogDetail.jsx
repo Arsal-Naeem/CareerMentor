@@ -35,7 +35,7 @@ const BlogDetail = () => {
           {/* Blog Header */}
           <ImageHeader
             imagePath={blog.coverImage}
-            imageClassName="max-h-[400px]"
+            // imageClassName="max-h-[400px]"
             customBody={
               <>
                 <span className="text-sm md:text-base text-black bg-white rounded-full w-fit px-4 py-1 font-medium">
@@ -58,7 +58,7 @@ const BlogDetail = () => {
                     })}
                   </span>
                 </div>
-                
+
                 {/* Tags Section */}
                 {blog.tags && blog.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mt-3">

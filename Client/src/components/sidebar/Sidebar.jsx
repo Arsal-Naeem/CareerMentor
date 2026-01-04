@@ -28,7 +28,7 @@ export default function Sidebar({ items, variant = "sidebar" }) {
           to="/"
         >
           <img src={Logo} alt="career mentor" className="w-6 h-6" />
-          Career Mentor
+          Tech Path AI
         </Link>
 
         {/* Nav Links */}

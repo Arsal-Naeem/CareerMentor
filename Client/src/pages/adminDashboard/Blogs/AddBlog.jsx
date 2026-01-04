@@ -4,13 +4,21 @@ import usePageTitle from "@/hooks/usePageTitle";
 import AdminDashboardLayout from "@/layouts/AdmindashboardLayout";
 import { Book } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { AddBlog as AddBlogMutation } from "@/apiService/BlogsTracking";
 
 const AddBlog = () => {
   usePageTitle("Add New Blog");
+
   const navigate = useNavigate();
 
-  const handleSubmit = (data) => {
-    // console.log("Add blog form data", data);
+  const { mutate: addBlog, isPending } = AddBlogMutation();
+
+  const handleSubmit = (formData) => {
+    addBlog(formData, {
+      onSuccess: () => {
+        navigate("/admin/dashboard/blogs");
+      },
+    });
   };
 
   return (
@@ -28,7 +36,7 @@ const AddBlog = () => {
             showIconOnButton={false}
           />
 
-          <AddEditBlogForm onSubmit={handleSubmit} />
+          <AddEditBlogForm onSubmit={handleSubmit} isLoading={isPending} />
         </div>
       </div>
     </AdminDashboardLayout>

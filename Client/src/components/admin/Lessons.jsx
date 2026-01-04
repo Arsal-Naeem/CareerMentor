@@ -17,7 +17,6 @@ const Lesson = () => {
   const navigate = useNavigate();
   const { data, isLoading, isError, refetch } =
     GetAllAdminLessonModules(moduleId);
-  console.log("Module Data:", data);
   const deleteLessonMutation = DeleteAdminLesson();
 
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);

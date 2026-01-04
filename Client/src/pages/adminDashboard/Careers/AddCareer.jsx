@@ -5,14 +5,32 @@ import AdminDashboardLayout from "@/layouts/AdmindashboardLayout";
 import { Compass } from "lucide-react";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { AddCareer as AddCareerMutation } from "@/apiService/Careers";
 
 const AddCareer = () => {
   usePageTitle("Add New Career");
 
   const navigate = useNavigate();
 
+  const { mutate: addCareer, isPending } = AddCareerMutation();
+
   const handleSubmit = (data) => {
-    // console.log("Add career form data", data);
+    const formData = new FormData();
+
+    formData.append("title", data.name);
+    formData.append("shortDesc", data.shortDesc || "");
+    formData.append("longDesc", JSON.stringify(data.description));
+    formData.append("status", data.status || "published");
+
+    if (data.coverImage instanceof File) {
+      formData.append("coverImage", data.coverImage);
+    }
+
+    addCareer(formData, {
+      onSuccess: () => {
+        navigate("/admin/dashboard/careers");
+      },
+    });
   };
 
   return (
@@ -29,7 +47,11 @@ const AddCareer = () => {
             subtitle=""
           />
 
-          <AddEditCareerForm onSubmit={handleSubmit} />
+          <AddEditCareerForm
+            onSubmit={handleSubmit}
+            isLoading={isPending}
+            loadingText="Adding..."
+          />
         </div>
       </div>
     </AdminDashboardLayout>

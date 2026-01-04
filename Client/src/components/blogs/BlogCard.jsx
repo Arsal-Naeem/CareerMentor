@@ -4,7 +4,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export const BlogCard = ({ post, className = "", variant = "default" }) => {
-  console.log("BlogCard post:", post);
   const navigate = useNavigate();
   const { isSmallScreen } = useScreenSize();
 
