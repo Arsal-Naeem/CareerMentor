@@ -30,7 +30,7 @@ const AdminBlogs = () => {
     limit,
     search: debouncedSearch,
     tagName: selectedTag,
-  });
+  }); 
 
   const blogs = data?.blogs || [];
   const pagination = data?.pagination;
