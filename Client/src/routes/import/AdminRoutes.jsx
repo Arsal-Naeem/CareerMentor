@@ -6,13 +6,13 @@ const AdminDashboard = lazy(() =>
 const AdminBlogs = lazy(() =>
   import("@/pages/adminDashboard/Blogs/AdminBlogs")
 );
-const AddBlog = lazy(() => import("@/pages/adminDashboard/blogs/AddBlog"));
-const EditBlog = lazy(() => import("@/pages/adminDashboard/blogs/EditBlog"));
+const AddBlog = lazy(() => import("@/pages/adminDashboard/Blogs/AddBlog"));
+const EditBlog = lazy(() => import("@/pages/adminDashboard/Blogs/EditBlog"));
 const AdminEvents = lazy(() =>
   import("@/pages/adminDashboard/events/AdminEvents")
 );
-const AddEvent = lazy(() => import("@/pages/adminDashboard/events/AddEvent"));
-const EditEvent = lazy(() => import("@/pages/adminDashboard/events/EditEvent"));
+const AddEvent = lazy(() => import("@/pages/adminDashboard/Events/AddEvent"));
+const EditEvent = lazy(() => import("@/pages/adminDashboard/Events/EditEvent"));
 const CareerExplorer = lazy(() =>
   import("@/pages/adminDashboard/Careers/AdminCareers")
 );
