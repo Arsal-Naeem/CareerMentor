@@ -128,6 +128,7 @@ export const loginController = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ where: { email } });
+    console.log("existingUser", existingUser);
     if (!existingUser) {
       return res.status(400).json({
         success: false,
