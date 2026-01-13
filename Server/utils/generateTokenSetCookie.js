@@ -10,7 +10,6 @@ const generateTokenSetCookie = (res, userId,role) => {
   res.cookie("token", token, {
     httpOnly: true, //XSS atack protection
     secure: process.env.NODE_ENV === "production", // Set to true if using HTTPS
-    sameSite: "Strict", // Adjust as needed (Lax, Strict, None)
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 

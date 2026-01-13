@@ -154,7 +154,8 @@ export const loginController = async (req, res) => {
       });
     }
 
-    generateTokenSetCookie(res, existingUser.id, existingUser.role);
+    const token = generateTokenSetCookie(res, existingUser.id, existingUser.role);
+    console.log("token", token);
 
     existingUser.lastLogin = new Date();
     await existingUser.save();
