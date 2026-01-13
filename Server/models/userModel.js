@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../config/connectDB.js";
 
 const User = sequelize.define(
-  "User",
+  "user",
   {
     firstName: {
       type: DataTypes.STRING,
