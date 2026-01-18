@@ -9,7 +9,7 @@ import { predictModules } from "../../openai/predictCareer.js";
 import { Op } from "sequelize";
 
 export const EnrollInModule = async (userId, userResponse, domainId) => {
-  console.log("🧾 Received enrollment request:", { userId, domainId });
+  //console.log("🧾 Received enrollment request:", { userId, domainId });
 
   const filteredResponses = (userResponse || []).map((r) => ({
     question: r.question,
@@ -47,7 +47,7 @@ export const EnrollInModule = async (userId, userResponse, domainId) => {
     userResponse: filteredResponses,
   };
 
-  console.log("🧹 Cleaned Data for AI:", cleanedData);
+  //console.log("🧹 Cleaned Data for AI:", cleanedData);
 
   const recommendedModuleIds = await predictModules(
     cleanedData.modules,

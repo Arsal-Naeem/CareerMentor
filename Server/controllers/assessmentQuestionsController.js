@@ -32,7 +32,7 @@ const getBadge = (score) => {
 //Create and Start new session with questions
 
 export const startSession = async (req, res) => {
-  console.log("startSession", req.userId);
+  //console.log("startSession", req.userId);
   const userId = req.userId;
   const categoryIds = [1, 2, 3]; // Cognitive, Creative, Self-Awareness
   const bloomLevels = [
@@ -438,12 +438,12 @@ export const predictionResult = async (req, res) => {
 export const currentPredictionResult = async (req, res) => {
   const { sessionId } = req.params;
 
-  console.log("sessionId", sessionId);
+  //console.log("sessionId", sessionId);
 
   try {
     const session = await AssessmentSession.findOne({ where: { sessionId } });
 
-    console.log("session", session);
+    //console.log("session", session);
 
     if (!session) {
       return res.status(404).json({ message: "Session not found" });

@@ -10,7 +10,6 @@ import swaggerSpec from "./config/swagger.js";
 
 import routes from "./routes/routes.js";
 import adminRoutes from "./routes/admin/adminRoute.js";
-import assessmentsRoutes from "./routes/assessmentsRoute.js";
 
 import startApp from "./config/sync.js";
 import { errorHandler } from "./middleware/errorHandler.js";
@@ -29,7 +28,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
@@ -49,6 +48,6 @@ app.listen(PORT, () => {
   //seedDomainModules();
   console.log(`Server is running on port ${PORT}`);
   console.log(
-    `📚 Swagger docs available at: http://localhost:${PORT}/api-docs`
+    `📚 Swagger docs available at: http://localhost:${PORT}/api-docs`,
   );
 });

@@ -224,11 +224,11 @@ export const updateBlogService = async ({
     const blog = await blogs.findOne({ where: { slug }, transaction });
     if (!blog) throw new Error("Blog not found");
 
-    console.log("file:", file);
+    //console.log("file:", file);
 
     if (file) {
       coverImageUrl = await uploadFileToS3(file, "blogs", title);
-      console.log("Uploaded new cover image to S3:", coverImageUrl);
+      //console.log("Uploaded new cover image to S3:", coverImageUrl);
     }
 
     const normalizedTags = normalizeTags(tags);

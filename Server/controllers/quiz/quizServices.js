@@ -78,7 +78,7 @@ export const GetQuizSessions = async (userId, moduleId) => {
 };
 
 export const StartQuizSession = async (quizSessionId, userId) => {
-  console.log("Starting quiz session:", { quizSessionId, userId });
+  //console.log("Starting quiz session:", { quizSessionId, userId });
 
   const quizSession = await QuizSession.findOne({
     where: { id: quizSessionId, userId },

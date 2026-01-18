@@ -67,7 +67,7 @@ export const getModuleAndLessons = async (req, res) => {
       200
     );
   } catch (error) {
-    console.log(error);
+    console.log("error in getModuleAndLessons",error);
     errorResponse(res, error.message, "Internal Server Error");
   }
 };
@@ -84,7 +84,7 @@ export const getSingleLesson = async (req, res) => {
 
     return successResponse(res, data, "Lesson fetched successfully", 200);
   } catch (error) {
-    console.log(error);
+    console.log("error in getSingleLesson",error);
     errorResponse(res, error.message, "Internal Server Error");
   }
 };
@@ -99,7 +99,7 @@ export const deleteLesson = async (req, res) => {
     const result = await DeleteLesson(lessonId);
     return successResponse(res, result, "Lesson deleted successfully", 200);
   } catch (error) {
-    console.log(error);
+    console.log("error in deleteLesson",error);
     errorResponse(res, error.message, "Internal Server Error");
   }
 };

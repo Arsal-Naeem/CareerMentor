@@ -19,8 +19,8 @@ export const createModule = async (req, res) => {
       prerequisiteModuleId,
     } = req.body;
 
-    console.log(req.body);
-    console.log("Domain ID:", domainId);
+    //console.log(req.body);
+    //console.log("Domain ID:", domainId);
 
     if (totalXp < 130)
       return errorResponse(
@@ -115,7 +115,7 @@ export const createModuleProject = async (req, res) => {
     );
 
   } catch (error) {
-    console.log(error);
+    console.log("Something went wrong on createModuleProject",error);
     errorResponse(res, error.message, "Internal Server Error");
   }
 }

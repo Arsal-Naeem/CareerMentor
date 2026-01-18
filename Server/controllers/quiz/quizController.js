@@ -68,12 +68,12 @@ export const submitQuizAnswer = async (req, res) => {
   const userId = req.userId;
   const { totalQuestions, correctAnswers } = req.body;
 
-  console.log("submitQuizAnswer called with:", {
-    quizSessionId,
-    userId,
-    totalQuestions,
-    correctAnswers,
-  });
+  // console.log("submitQuizAnswer called with:", {
+  //   quizSessionId,
+  //   userId,
+  //   totalQuestions,
+  //   correctAnswers,
+  // });
 
   try {
     const result = await SubmitQuizAnswer({

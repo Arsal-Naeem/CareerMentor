@@ -58,7 +58,7 @@ export const signUpController = async (req, res) => {
       user: userData,
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error on authController",error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -76,7 +76,7 @@ export const verifyEmailController = async (req, res) => {
     });
   }
 
-  console.log("Verification code received:", code);
+  //console.log("Verification code received:", code);
 
   try {
     const user = await User.findOne({
@@ -108,7 +108,7 @@ export const verifyEmailController = async (req, res) => {
       user: userData,
     });
   } catch (error) {
-    console.log(error);
+    console.log("Something went wrong on verifyEmail",error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -118,7 +118,7 @@ export const verifyEmailController = async (req, res) => {
 
 export const loginController = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
+  //console.log(email, password);
   try {
     if (!email || !password) {
       return res.status(400).json({
@@ -128,7 +128,7 @@ export const loginController = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ where: { email } });
-    console.log("existingUser", existingUser);
+    //console.log("existingUser", existingUser);
     if (!existingUser) {
       return res.status(400).json({
         success: false,
@@ -155,7 +155,7 @@ export const loginController = async (req, res) => {
     }
 
     const token = generateTokenSetCookie(res, existingUser.id, existingUser.role);
-    console.log("token", token);
+    //console.log("token", token);
 
     existingUser.lastLogin = new Date();
     await existingUser.save();

@@ -10,7 +10,7 @@ export const enrollInModule = async (req, res) => {
     const { userResponse } = req.body;
     const  {domainId}  = req.params;
 
-    console.log("EnrollInModule Request Body:", { userId, userResponse, domainId });
+    //console.log("EnrollInModule Request Body:", { userId, userResponse, domainId });
 
     const enrollIntoModules = await EnrollInModule(
       userId,

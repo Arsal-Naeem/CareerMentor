@@ -66,7 +66,7 @@ export const createBlogController = async (req, res) => {
       "Blog created successfully"
     );
   } catch (err) {
-    console.error(err);
+    console.error("Something went wrong on createBlogController",err);
     return errorResponse(res, err.message || "Something went wrong");
   }
 };
@@ -84,7 +84,7 @@ export const getAllBlogsController = async (req, res) => {
 
     return successResponse(res, data, "Get all blogs - Admin");
   } catch (err) {
-    console.error(err);
+    console.error("Something went wrong on getAllBlogsController",err);
     return errorResponse(
       res,
       err.message || "Something went wrong while getting blogs"
@@ -104,7 +104,7 @@ export const getBlogBySlugController = async (req, res) => {
 
     return successResponse(res, blog, "Blog fetched successfully");
   } catch (err) {
-    console.error(err);
+    console.error("Something went wrong on getBlogBySlugController",err);
     return errorResponse(res, err.message || "Something went wrong");
   }
 };
@@ -115,7 +115,7 @@ export const getBlogTagsController = async (req, res) => {
 
     return successResponse(res, { tags }, "Blog tags fetched successfully");
   } catch (err) {
-    console.error(err);
+    console.error("Something went wrong on getBlogTagsController",err);
     return errorResponse(res, err.message || "Something went wrong");
   }
 };
@@ -155,7 +155,7 @@ export const updateBlogController = async (req, res) => {
       "Blog updated successfully"
     );
   } catch (err) {
-    console.error(err);
+    console.error("Something get wrong on updateBlogController",err);
     return errorResponse(res, err.message || "Something went wrong");
   }
 };
@@ -167,7 +167,7 @@ export const deleteBlogController = async (req, res) => {
     await deleteBlogService(id);
     return successResponse(res, null, "Blog deleted successfully");
   } catch (err) {
-    console.error(err);
+    console.error("Something went wrong on deleteBlogController",err);
     return errorResponse(res, err.message || "Something went wrong");
   }
 };

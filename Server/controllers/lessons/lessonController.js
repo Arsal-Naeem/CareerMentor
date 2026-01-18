@@ -70,7 +70,7 @@ export const patchLessonProgress = async (req, res) => {
   const { status, sequence } = req.body;
   const { lessonId } = req.params;
 
-  console.log("Sequence received in request body:", sequence);
+  //console.log("Sequence received in request body:", sequence);
 
   try {
     if (!status || !lessonId || !userId) {

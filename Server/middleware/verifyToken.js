@@ -23,7 +23,7 @@ export const verifyToken = (req, res, next) => {
 };
 
 export const isAdmin = (req, res, next) => {
-  console.log("User Role:", req.role);
+  //console.log("User Role:", req.role);
   if (req.role !== "admin") {
     return res
       .status(403)
