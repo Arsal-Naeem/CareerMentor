@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const ModuleProject = sequelize.define(
-  "module_project",
+  "module_projects",
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,

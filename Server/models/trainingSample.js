@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../config/connectDB.js";
 
-const trainingSample = sequelize.define("TrainingSample", {
+const trainingSample = sequelize.define("trainingsamples", {
    sessionId: DataTypes.STRING,
     remember: DataTypes.FLOAT,
     understand: DataTypes.FLOAT,

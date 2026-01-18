@@ -2,12 +2,12 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 
-const AssessmentSessionAns = sequelize.define("assessmentSessionAns", {
+const AssessmentSessionAns = sequelize.define("assessmentsessionans", {
   sessionId: {
     type: DataTypes.UUID,
     allowNull: false,
     references: {
-      model: 'assessmentSession', // Assuming the assessment session model is named 'assessmentSessions'
+      model: 'assessmentsession', // Assuming the assessment session model is named 'assessmentSessions'
       key: 'sessionId',
     },
   },
@@ -15,7 +15,7 @@ const AssessmentSessionAns = sequelize.define("assessmentSessionAns", {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'assessmentQuestion', // Assuming the assessment question model is named 'assessmentQuestions'
+      model: 'assessmentquestion', // Assuming the assessment question model is named 'assessmentQuestions'
       key: 'id',
     },
   },

@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const skillEvalCategory = sequelize.define(
-  "skill_Eval_Category",
+  "skill_eval_categories",
   {
     id: {
       type: DataTypes.INTEGER,

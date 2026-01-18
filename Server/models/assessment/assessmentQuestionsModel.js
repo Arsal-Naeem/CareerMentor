@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
-const AssessmentQuestion = sequelize.define("assessmentQuestion", {
+const AssessmentQuestion = sequelize.define("assessmentquestion", {
   text: {
     type: DataTypes.TEXT,
     allowNull: false,

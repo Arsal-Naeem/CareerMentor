@@ -4,7 +4,7 @@ import EventTag from "./eventTag.js";
 import Events from "./eventModel.js";
 
 const EventTagMapping = sequelize.define(
-  "EventTagMapping",
+  "event_tag_mapping",
   {
     event_id: {
       type: DataTypes.INTEGER,

@@ -3,13 +3,13 @@ import { sequelize } from "../../config/connectDB.js";
 import category from "./assessmentCategoryModel.js";
 
 const AssessmentSessionQuestion = sequelize.define(
-  "assessmentSessionQuestion",
+  "assessmentsessionquestion",
   {
     sessionId: {
       type: DataTypes.UUID,
       allowNull: false,
       references: {
-        model: "assessmentSession",
+        model: "assessmentsession",
         key: "sessionId",
       },
       onDelete: "CASCADE",
@@ -18,7 +18,7 @@ const AssessmentSessionQuestion = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "assessmentQuestion",
+        model: "assessmentquestion",
         key: "id",
       },
       onDelete: "CASCADE",

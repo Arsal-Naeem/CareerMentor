@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const DomainModuleMapping = sequelize.define(
-  "DomainModuleMapping",
+  "domain_module_mappings",
   {
     id: {
       type: DataTypes.UUID,

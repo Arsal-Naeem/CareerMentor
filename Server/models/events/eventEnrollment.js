@@ -4,7 +4,7 @@ import User from "../userModel.js";
 import Events from "./eventModel.js";
 
 const EventEnrollment = sequelize.define(
-  "EventEnrollment",
+  "event_enrollments",
   {
     id: {
       type: DataTypes.INTEGER,

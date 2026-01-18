@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const CareerDomain = sequelize.define(
-  "careerDomain",
+  "careerdomains",
   {
     id: {
       type: DataTypes.INTEGER,

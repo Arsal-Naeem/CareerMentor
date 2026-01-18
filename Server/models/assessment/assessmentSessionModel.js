@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const AssessmentSession = sequelize.define(
-  "assessmentSession",
+  "assessmentsession",
   {
     sessionId: {
       type: DataTypes.UUID,
@@ -13,7 +13,7 @@ const AssessmentSession = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Users",
+        model: "users",
         key: "id",
       },
     },

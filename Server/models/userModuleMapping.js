@@ -4,7 +4,7 @@ import Module from "./skilltracking/module.js";
 import { sequelize } from "../config/connectDB.js";
 
 const UserModuleMapping = sequelize.define(
-  "UserModuleMapping",
+  "user_module_mappings",
   {
     id: {
       type: DataTypes.INTEGER,

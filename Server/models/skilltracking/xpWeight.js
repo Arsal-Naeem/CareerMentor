@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const XpWeight = sequelize.define(
-  "XpWeight",
+  "xp_weights",
   {
     id: {
       type: DataTypes.INTEGER,

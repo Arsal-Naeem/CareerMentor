@@ -3,7 +3,7 @@ import { sequelize } from "../../config/connectDB.js";
 
 
 const Career = sequelize.define(
-  "Career",
+  "careers",
   {
     id: {
       type: DataTypes.INTEGER,

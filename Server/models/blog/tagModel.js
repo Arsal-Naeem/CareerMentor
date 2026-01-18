@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
-const tag = sequelize.define("tag", {
+const tag = sequelize.define("tags", {
   name: {
     type: DataTypes.STRING,
     unique: true,

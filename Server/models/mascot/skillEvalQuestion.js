@@ -6,7 +6,7 @@ import skillEvalType from "./skillEvalType.js";
 import skillEvalCategory from "./skillEvalCategory.js";
 
 const SkillEvalQuestion = sequelize.define(
-  "SkillEvalQuestion",
+  "skill_eval_questions",
   {
     id: {
       type: DataTypes.INTEGER,

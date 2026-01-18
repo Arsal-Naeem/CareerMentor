@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const UserLessonProgress = sequelize.define(
-  "UserLessonProgress",
+  "user_lesson_progress",
   {
     id: {
       type: DataTypes.UUID,

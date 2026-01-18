@@ -5,7 +5,7 @@ import SkillEvalQuestion from "./skillEvalQuestion.js";
 import User from "../userModel.js";
 
 const SkillEvalResponse = sequelize.define(
-  "SkillEvalResponse",
+  "skill_eval_responses",
   {
     id: {
       type: DataTypes.INTEGER,

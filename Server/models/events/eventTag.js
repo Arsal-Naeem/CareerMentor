@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const EventTag = sequelize.define(
-  "EventTag",
+  "event_tags",
   {
     id: {
       type: DataTypes.INTEGER,

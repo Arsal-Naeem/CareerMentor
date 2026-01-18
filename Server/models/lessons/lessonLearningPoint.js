@@ -2,7 +2,7 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../../config/connectDB.js";
 
 const LessonLearningPoint = sequelize.define(
-  "LessonLearningPoint",
+  "lesson_learning_points",
   {
     id: {
       type: DataTypes.UUID,
